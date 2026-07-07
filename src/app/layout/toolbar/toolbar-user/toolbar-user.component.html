@@ -1,0 +1,36 @@
+<div class="toolbar-user" (furyClickOutside)="onClickOutside()" fxFlex="grow">
+  <button class="button" mat-button (click)="toggleDropdown()" [class.open]="isOpen" fxFlex="grow">
+    <div class="button-content">
+      <div class="avatar-wrap">
+        <img class="avatar" src="assets/dist/img/logo/Logo-ayuntamiento-2022-300x233.png" alt="Logo ayuntamiento">
+      </div>
+      <div class="user-info" fxHide fxShow.gt-sm>
+        <span class="name">{{detalle.nombreCompleto}}</span>
+        <span class="nombreRol">"{{detalle.nombreRol}}"</span>
+      </div>
+      <mat-icon class="icon" fxHide fxShow.gt-sm>keyboard_arrow_down</mat-icon>
+    </div>
+  </button>
+
+  <div class="dropdown" [class.open]="isOpen">
+    <div class="content">
+      <div class="list">
+        <div class="list-iteme">
+          <span class="grupo" style="font-size: 15px;">Pertenece al grupo: 
+            <span style="color: #ffffff;">"{{detalle.nombreGrupo}}"</span></span>
+        </div>
+
+        <mat-divider></mat-divider>
+        <div class="list-item" mat-button matRipple (click)="openDialog()">
+          <mat-icon class="list-item-icon">security</mat-icon>
+          <span>Cambiar Contraseña</span>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="list-item" matRipple [routerLink]="['/login']">
+          <mat-icon class="list-item-icon">exit_to_app</mat-icon>
+          <span>Cerrar Sesión</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,415 @@
+// InmueblesWebApp — card color rules (layout palette extension)
+
+// ── Bootstrap .card ──────────────────────────────────────────────
+.card {
+  background-color: $card-bg-base;
+  color: $card-text;
+  border-color: $card-border-soft;
+}
+
+.card-header,
+.card-footer {
+  background-color: $card-bg-base;
+  color: $card-text;
+  border-color: $card-border-soft;
+}
+
+.card-body {
+  background-color: inherit;
+  color: inherit;
+}
+
+// ── Fury card (Material elevated) ────────────────────────────────
+.fury-card {
+  border: 1px solid $card-border-soft;
+}
+
+.fury-card-header {
+  background: $card-elevated-bg;
+  color: $card-text;
+}
+
+.fury-card-header-heading {
+  color: $card-text;
+}
+
+.fury-card-content {
+  background: inherit;
+  color: $card-text;
+}
+
+// ── Material Angular cards ───────────────────────────────────────
+.mat-card,
+.mat-mdc-card,
+mat-card {
+  background-color: $card-elevated-bg !important;
+  color: $card-text;
+  border: 1px solid $card-border-soft;
+}
+
+.mat-card.cardBorder,
+.mat-mdc-card.cardBorder {
+  border: 1px solid $card-border;
+}
+
+// ── Panel principal ──────────────────────────────────────────────
+.perm-wrapper.card--panel {
+  background: $card-bg-base;
+  color: $card-text;
+  border-color: $card-border-soft;
+
+  .perm-head {
+    background: $card-bg-base;
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.03), transparent);
+
+    &::before {
+      background: linear-gradient(
+        to bottom,
+        mix(#ffffff, $layout-secondary, 15%),
+        mix(#000000, $layout-secondary, 30%)
+      );
+    }
+  }
+
+  .perm-head-icon {
+    background: rgba($card-accent-blue, 0.2);
+    border-color: rgba(255, 255, 255, 0.08);
+    color: $card-text;
+  }
+
+  .perm-breadcrumb,
+  .perm-chip {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.10);
+    color: $card-text;
+
+    &.active {
+      background: radial-gradient(circle, rgba($card-accent-teal, 0.25) 0%, rgba(255, 255, 255, 0.10) 100%);
+      color: $card-text;
+    }
+  }
+
+  .eyebrow,
+  .muted {
+    color: $card-text-muted;
+  }
+}
+
+// ── Surface / contenido interno ──────────────────────────────────
+.surface {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.02));
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+.surface .card,
+.surface .insta-card,
+.insta-card {
+  background-color: $card-inner-bg;
+  border-color: $card-border;
+  color: $card-text;
+}
+
+.monitor-card-header,
+.surface .card .card-header,
+.insta-card .card-header {
+  background-color: $card-surface-header;
+  color: #ffffff;
+  border-bottom-color: $card-border-header-soft;
+}
+
+.card-header .icon-block,
+.monitor-card-header .icon-block {
+  background: rgba(94, 102, 113, 0.45);
+  border-color: rgba(113, 121, 132, 0.8);
+  color: #ffffff;
+}
+
+// ── Dashboard / gráficas ─────────────────────────────────────────
+.box,
+.panel {
+  background-color: $card-surface-mid;
+  color: $card-text;
+
+  .title,
+  h1, h2, h3, h4, h5, h6 {
+    color: #ffffff;
+  }
+
+  .subtitle {
+    color: #c8cbd1;
+  }
+
+  .chip,
+  .badge {
+    background: rgba(255, 255, 255, 0.08);
+    color: #e6e8ee;
+  }
+
+  .time-pill {
+    background: #ffffff;
+    color: #000000;
+  }
+
+  .panel-banner-accent {
+    border-color: #ffffff;
+  }
+
+  .value-success {
+    color: #71ff00;
+  }
+}
+
+// ── Detalle / métricas ───────────────────────────────────────────
+.inm-card {
+  background: rgba(14, 20, 32, 0.72);
+  border-color: rgba(130, 160, 255, 0.22);
+  color: $card-text;
+
+  .label {
+    color: #9aa6d8;
+  }
+
+  .value {
+    color: #f0f3ff;
+  }
+
+  .meta {
+    color: #9ca7c9;
+  }
+
+  .chip {
+    background: rgba(14, 20, 32, 0.9);
+    border-color: rgba(130, 160, 255, 0.25);
+    color: #c8d2f0;
+
+    &.muted {
+      border-color: rgba(255, 255, 255, 0.08);
+      color: #aeb9d9;
+    }
+  }
+}
+
+// ── Estado renta ─────────────────────────────────────────────────
+.dash-renta-card {
+  border-color: rgba(148, 163, 255, 0.35);
+  background: rgba(8, 12, 22, 0.82);
+
+  &::before,
+  .accent-bar {
+    background: #818cf8;
+  }
+
+  .amount-block {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.10);
+
+    .label {
+      color: #dbe4ff;
+    }
+
+    .value {
+      color: #ffffff;
+    }
+  }
+
+  .month-muted {
+    color: rgba(255, 255, 255, 0.62);
+  }
+
+  .month-value {
+    color: #f8fafc;
+  }
+
+  &.pagada {
+    border-color: rgba(74, 222, 128, 0.35);
+    background: rgba(20, 45, 32, 0.55);
+
+    &::before,
+    .accent-bar {
+      background: #4ade80;
+    }
+
+    .status-badge {
+      color: #bbf7d0;
+      background: rgba(34, 197, 94, 0.20);
+      border-color: rgba(74, 222, 128, 0.45);
+    }
+  }
+
+  &.pendiente {
+    border-color: rgba(251, 191, 36, 0.42);
+    background: rgba(48, 34, 12, 0.58);
+
+    &::before,
+    .accent-bar {
+      background: #fbbf24;
+    }
+
+    .status-badge {
+      color: #fde68a;
+      background: rgba(245, 158, 11, 0.24);
+      border-color: rgba(251, 191, 36, 0.55);
+    }
+  }
+}
+
+// ── Contrato ─────────────────────────────────────────────────────
+.dash-contrato-card {
+  border-color: rgba(129, 140, 248, 0.42);
+  background: rgba(8, 12, 24, 0.88);
+
+  &::before,
+  .accent-bar {
+    background: #6366f1;
+  }
+
+  .eyebrow {
+    color: rgba(199, 210, 254, 0.75);
+  }
+
+  .title,
+  .number {
+    color: #f8fafc;
+  }
+
+  .subtitle {
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  .chip-moneda {
+    color: #c7d2fe;
+    border-color: rgba(129, 140, 248, 0.45);
+    background: rgba(49, 46, 129, 0.45);
+  }
+}
+
+// ── Lista compacta ───────────────────────────────────────────────
+.dash-list-card {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(148, 163, 255, 0.28);
+
+  .title {
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .subtitle {
+    color: rgba(255, 255, 255, 0.62);
+  }
+
+  .meta {
+    color: rgba(255, 255, 255, 0.88);
+  }
+}
+
+// ── Overrides de estilos inline legacy en fury-card ──────────────
+fury-card-header-heading[style*="color: #d5238b"],
+fury-card-header-heading[style*="color:#d5238b"],
+fury-card-header-heading[style*="color: #174173"],
+fury-card-header-heading[style*="color:#174173"],
+fury-card-header-heading[style*="color: #646C9A"],
+fury-card-header-heading[style*="color: #646c9a"] {
+  color: $card-text !important;
+}
+
+.fury-page-layout-content label[style*="color: #d5238b"],
+.fury-page-layout-content label[style*="color:#d5238b"] {
+  color: $card-text !important;
+}
+
+fury-card-header-subheading[style*="color: #959494"],
+fury-card-header-subheading[style*="color:#959494"] {
+  color: $card-text-secondary !important;
+}
+
+fury-card-header[style*="background-color: white"],
+fury-card-header[style*="background-color:white"],
+fury-card-content[style*="background-color: white"],
+fury-card-content[style*="background-color:white"] {
+  background-color: $card-elevated-bg !important;
+}
+
+fury-card[style*="background-color: #174173"],
+fury-card[style*="background-color:#174173"] {
+  background-color: $card-bg-base !important;
+  color: $card-text !important;
+}
+
+// ── Form fields — tipografía y línea inferior ─────────────────────
+$form-field-font-size: 17px;
+$form-field-line-height: 1.5;
+
+.mat-form-field,
+.mat-mdc-form-field {
+  font-size: $form-field-font-size;
+  line-height: $form-field-line-height;
+
+  mat-label,
+  .mat-form-field-label,
+  .mat-mdc-floating-label,
+  .mdc-floating-label {
+    font-size: $form-field-font-size;
+  }
+}
+
+input.mat-input-element,
+textarea.mat-input-element,
+.mat-select-value,
+.mat-select-value-text,
+.mat-mdc-input-element,
+.mat-mdc-select-value-text,
+.mat-form-field .form-control {
+  font-size: $form-field-font-size;
+  line-height: $form-field-line-height;
+}
+
+.mat-form-field-subscript-wrapper,
+.mat-mdc-form-field-subscript-wrapper {
+  .mat-error,
+  .mat-hint,
+  .mat-mdc-form-field-error,
+  .mat-mdc-form-field-hint {
+    font-size: 14px;
+  }
+}
+
+.mat-form-field {
+  .mat-form-field-underline {
+    background-color: #ffffff !important;
+  }
+
+  .mat-form-field-underline::before,
+  .mat-form-field-underline::after {
+    background-color: #ffffff !important;
+    border-top-color: #ffffff !important;
+  }
+
+  .mat-form-field-ripple {
+    background-color: #ffffff !important;
+  }
+
+  &.mat-focused .mat-form-field-ripple {
+    background-color: #ffffff !important;
+    opacity: 1;
+  }
+
+  &.mat-form-field-disabled {
+    .mat-form-field-underline,
+    .mat-form-field-underline::before,
+    .mat-form-field-underline::after {
+      background-color: rgba(255, 255, 255, 0.38) !important;
+      border-top-color: rgba(255, 255, 255, 0.38) !important;
+    }
+  }
+}
+
+.mat-form-field-appearance-outline {
+  .mat-form-field-outline-start,
+  .mat-form-field-outline-gap,
+  .mat-form-field-outline-end {
+    border-color: #ffffff !important;
+  }
+
+  &.mat-focused .mat-form-field-outline-thick {
+    color: #ffffff !important;
+  }
+}

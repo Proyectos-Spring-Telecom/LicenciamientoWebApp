@@ -1,0 +1,43 @@
+@import "var";
+
+:host {
+  bottom: 0;
+  display: block;
+}
+
+.footer {
+  height: $footer-height;
+  position: relative;
+  z-index: $footer-z-index;
+  padding-left: $spacing;
+  padding-right: $spacing;
+
+  .close{
+    color: white;
+  }
+  .name {
+    letter-spacing: 0;
+    color: white;
+  }
+
+  .name_footer{
+    letter-spacing: 0;
+    color: #ffffff;
+    transition: all 0.6s ease;
+  }
+
+  .name_footer:hover{
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+
+  .action {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.08));
+    border: 1px solid rgba(255, 255, 255, 0.34);
+    color: #ffffff;
+    .icon {
+      font-size: 18px;
+      height: 18px;
+      width: 18px;
+    }
+  }
+}

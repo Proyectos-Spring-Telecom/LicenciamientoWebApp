@@ -1,0 +1,13 @@
+<div *ngIf="visible$ | async" class="footer" fxLayout="row" [@fadeInUp]>
+  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="24px" fxFlex="grow">
+    <!-- <a href="http://cuernavaca.gob.mx/" target="_blanck"
+       class="action" fxFlex="none" id="get-fury" mat-raised-button>
+      <mat-icon class="icon">shopping_cart</mat-icon>
+      Cuernavaca, Morelos
+    </a> -->
+
+    <div class="name" fxShow.gt-sm>
+      Copyright © 2022 <a class="name_footer"> Ayuntamiento de Cuernavaca.</a> Reservados todos los derechos.
+    </div>
+  </div>
+</div>

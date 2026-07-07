@@ -1,0 +1,463 @@
+<fury-page-layout mode="card">
+  <fury-page-layout-header>
+    <fury-breadcrumbs [@fadeInRight] style="position: fixed;" current="Detalle: {{Cliente}}" link="{{titulo}}">
+    </fury-breadcrumbs>
+  </fury-page-layout-header>
+
+  <fury-page-layout-content [@fadeInUp]><br>
+    <fury-card [fxFlex.gt-sm]="col2" class="advanced-forms route-animations-elements" [@fadeInUp] fxFlex="grow">
+      <article style="margin-left: 1%;" class="contenedor-elementos__articulo" fxFlex="grow" fxLayout="row"
+        fxLayoutAlign="space-between center" [style.background]="background" [style.color]="color">
+        <div fxLayout="column">
+          <fury-card-header-heading style="font-size: 32px; color: #d5238b">
+            <mat-icon style="font-size: 30px; color: #bfbfbf;">wb_incandescent</mat-icon> &nbsp;Potencia Acumulada
+          </fury-card-header-heading>
+        </div>
+        <h1 class="datos">Transmisión de datos: 03 minutos</h1>
+      </article>
+      <mat-divider></mat-divider>
+      <main class="contenedor">
+        <section class="contenedor-elementos" fxLayout="column">
+          <br>
+          <article style="margin-left: 5%;" class="contenedor-elementos__articulo" fxFlex="grow" fxLayout="row"
+            fxLayoutAlign="space-between center" [style.background]="background" [style.color]="color">
+            <div fxLayout="column">
+              <div class="Diario">Consumo Diario</div>
+              <div class="Date">Datos obtenidos por hora</div>
+            </div>
+            <h1 class="totalDate">{{datosDiarios}}</h1>
+          </article>
+          <br> <mat-divider></mat-divider> <br>
+          <article style="margin-left: 5%;" class="contenedor-elementos__articulo" fxFlex="grow" fxLayout="row"
+            fxLayoutAlign="space-between center" [style.background]="background" [style.color]="color">
+            <div fxLayout="column">
+              <div class="Semanal">Semanal</div>
+              <div class="Date">Datos obtenidos por días</div>
+            </div>
+            <h1 class="totalDate">{{datosSemanal}}</h1>
+          </article>
+          <br> <mat-divider></mat-divider> <br>
+          <article style="margin-left: 5%;" class="contenedor-elementos__articulo" fxFlex="grow" fxLayout="row"
+            fxLayoutAlign="space-between center" [style.background]="background" [style.color]="color">
+            <div fxLayout="column">
+              <div class="Mensual">Mensual</div>
+              <div class="Date">Datos obtenidos por semanas</div>
+            </div>
+            <h1 class="totalDate">{{datosMensual}}</h1>
+          </article><br>
+        </section>
+
+        <section class="contenedor-elementos">
+          <div class="chart-demo">
+            <dx-chart id="chart" [dataSource]="countriesInfo" palette="soft" title="">
+              <!-- <dxo-loading-indicator [show]="true"></dxo-loading-indicator> -->
+              <dxi-series valueField="oil" name="Encendidas" color="#0fc20f"></dxi-series>
+              <dxi-series valueField="gas" name="Apagadas" color="#e21309"></dxi-series>
+              <dxo-common-series-settings argumentField="state" type="bar" [ignoreEmptyPoints]="true">
+              </dxo-common-series-settings>
+              <dxo-legend verticalAlignment="bottom" horizontalAlignment="center"></dxo-legend>
+              <dxo-export [enabled]="true"></dxo-export>
+            </dx-chart>
+          </div>
+        </section>
+      </main>
+    </fury-card>
+  </fury-page-layout-content>
+
+  <br> <br>
+
+  <fury-page-layout-content [@fadeInUp]>
+    <fury-card [fxFlex.gt-sm]="col2" class="advanced-forms route-animations-elements" [@fadeInUp] fxFlex="grow">
+      <article style="margin-left: 1%;" class="contenedor-elementos__articulo" fxFlex="grow" fxLayout="row"
+        fxLayoutAlign="space-between center" [style.background]="background" [style.color]="color">
+        <div>
+          <fury-card-header-heading style="font-size: 32px; color: #d5238b">
+            <mat-icon style="font-size: 30px; color: #bfbfbf;">power</mat-icon> &nbsp;Últimos Datos
+          </fury-card-header-heading>
+        </div>
+        <h1 class="datos">.</h1>
+      </article>
+      <mat-divider></mat-divider> <br>
+      <div style="margin-left: 1%; margin-right: 1%;" fxFlex="noshrink" [fxLayoutGap]="gap" fxLayout.gt-lg="row">
+        <div [fxLayoutGap]="gap" [fxFlex]="col(2)" fxLayout.gt-sm="row">
+          <fury-card class="route-animations-elements" fxFlex="grow" fxLayoutAlign="space-between center">
+            <div style="margin-left: 3%;">
+              <div class="texto">Última Posición</div>
+              <div class="value">26/07/2021 09:46:59 a.m.</div>
+            </div>
+            <h1 style="margin-right: 3%;">
+              <span class="blue">
+                <mat-icon class="iconos_boots">room</mat-icon>
+              </span>
+            </h1>
+          </fury-card>
+          <br>
+          <fury-card style="margin-left: 1%; margin-right: 1%;" class="route-animations-elements" fxFlex="grow" fxLayoutAlign="space-between center">
+            <div style="margin-left: 3%;" fxLayout="column">
+              <div class="texto">Última Potencia</div>
+              <div class="value">26/07/2021 09:46:59 a.m.</div>
+            </div>
+            <h1 style="margin-right: 3%;">
+              <span class="red">
+                <mat-icon class="iconos_boots2">flash_on</mat-icon>
+              </span>
+            </h1>
+          </fury-card>
+          <br>
+          <fury-card style="margin-left: 1%; margin-right: 1%;" class="route-animations-elements" fxFlex="grow" fxLayoutAlign="space-between center">
+            <div style="margin-left: 3%;" fxLayout="column">
+              <div class="texto">Último Estado</div>
+              <div class="value">26/07/2021 09:46:59 a.m.</div>
+            </div>
+            <h1 style="margin-right: 3%;">
+              <span class="green">
+                <mat-icon class="iconos_boots3">settings_brightness</mat-icon>
+              </span>
+            </h1>
+          </fury-card>
+        </div>
+      </div><br>
+    </fury-card>
+  </fury-page-layout-content>
+
+  <br> <br>
+
+  <fury-page-layout-content [@fadeInUp]>
+    <fury-card [fxFlex.gt-sm]="col2" class="advanced-forms route-animations-elements" [@fadeInUp] fxFlex="grow">
+      <article style="margin-left: 1%;" class="contenedor-elementos__articulo" fxFlex="grow" fxLayout="row"
+        fxLayoutAlign="space-between center" [style.background]="background" [style.color]="color">
+        <div fxLayout="column">
+          <fury-card-header-heading style="font-size: 32px; color: #d5238b">
+            <mat-icon style="font-size: 30px; color: #bfbfbf;">pin_drop</mat-icon> &nbsp;Dirección
+          </fury-card-header-heading>
+        </div>
+        <h1 class="datos">.</h1>
+      </article>
+      <mat-divider></mat-divider><br>
+      <div style="margin-left: 1.3rem; margin-right: 1%;" fxFlex="noshrink" fxLayout="row" [fxLayoutGap]="gap" fxLayout.gt-lg="row">
+        <div fxLayout="row" [fxLayoutGap]="gap" [fxFlex]="col(2)" fxLayout.gt-sm="row">
+          <div class="route-animations-elements" fxFlex="grow" fxLayoutAlign="row">
+            <i class="fas fa-credit-card"></i> &nbsp;&nbsp;
+            <div class="informacion">Imei:</div>
+            <div class="respuesta">{{information}}</div>
+            <!-- <div class="respuesta_null" *ngIf="informacion == null">Sin Información </div> -->
+          </div>
+          <div class="route-animations-elements" fxFlex="grow" fxLayoutAlign="row">
+            <i class="fas fa-user"></i> &nbsp;&nbsp;
+            <div class="informacion">Cliente:</div>
+            <div class="respuesta">{{information}}</div>
+            <!-- <div class="respuesta_null" *ngIf="informacion == null">Sin Información </div> -->
+          </div>
+          <div class="route-animations-elements" fxFlex="grow" fxLayoutAlign="row">
+            <i class="fas fa-id-card-alt"></i> &nbsp;&nbsp;
+            <div class="informacion">Contrato:</div>
+            <div class="respuesta">{{information}}</div>
+            <!-- <div class="respuesta_null" *ngIf="informacion == null">Sin Información </div> -->
+          </div>
+        </div>
+      </div><br>
+      <div style="margin-left: 1.3rem; margin-right: 1%;" fxFlex="noshrink" fxLayout="row" [fxLayoutGap]="gap" fxLayout.gt-lg="row">
+        <div fxLayout="row" [fxLayoutGap]="gap" [fxFlex]="col(2)" fxLayout.gt-sm="row">
+          <div class="route-animations-elements" fxFlex="grow" fxLayoutAlign="row">
+            <i class="fas fa-map-marked-alt"></i> &nbsp;&nbsp;
+            <div class="informacion">Estado:</div>
+            <div class="respuesta">{{information}}</div>
+            <!-- <div class="respuesta_null" *ngIf="informacion == null">Sin Información </div> -->
+          </div>
+          <div class="route-animations-elements" fxFlex="grow" fxLayoutAlign="row">
+            <i class="fas fa-map-signs"></i> &nbsp;&nbsp;
+            <div class="informacion">Municipio:</div>
+            <div class="respuesta">{{information}}</div>
+            <!-- <div class="respuesta_null" *ngIf="informacion == null">Sin Información </div> -->
+          </div>
+          <div class="route-animations-elements" fxFlex="grow" fxLayoutAlign="row">
+            <i class="fas fa-sort-numeric-up-alt"></i> &nbsp;&nbsp;
+            <div class="informacion">Colonia:</div>
+            <div class="respuesta">{{information}}</div>
+            <!-- <div class="respuesta_null" *ngIf="informacion == null">Sin Información </div> -->
+          </div>
+        </div>
+      </div><br>
+      <div style="margin-left: 1.3rem; margin-right: 1%;" fxFlex="noshrink" fxLayout="row" [fxLayoutGap]="gap" fxLayout.gt-lg="row">
+        <div fxLayout="row" [fxLayoutGap]="gap" [fxFlex]="col(2)" fxLayout.gt-sm="row">
+          <div class="route-animations-elements" fxFlex="grow" fxLayoutAlign="row">
+            <i class="fas fa-map-pin"></i> &nbsp;&nbsp;
+            <div class="informacion">Calle y Número:</div>
+            <div class="respuesta">{{information}}</div>
+            <!-- <div class="respuesta_null" *ngIf="informacion == null">Sin Información </div> -->
+          </div>
+          <div class="route-animations-elements" fxFlex="grow" fxLayoutAlign="row">
+            <i class="fas fa-hashtag"></i> &nbsp;&nbsp;
+            <div class="informacion">C.P.:</div>
+            <div class="respuesta">{{information}}</div>
+            <!-- <div class="respuesta_null" *ngIf="informacion == null">Sin Información </div> -->
+          </div>
+          <div class="route-animations-elements" fxFlex="grow" fxLayoutAlign="row">
+            <!-- <i class="fas fa-credit-card" style="color: #d5238b;"></i> &nbsp;&nbsp; -->
+            <div class="informacion"></div>
+          </div>
+        </div>
+      </div><br>
+    </fury-card>
+  </fury-page-layout-content>
+
+  <br> <br>
+
+  <fury-page-layout-content [@fadeInUp]>
+    <mat-card>
+      <div class="card-body">
+        <div class="container col-lg-12 col-xl-12 col-sm-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="encabezado">
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                  <fury-card-header-heading style="font-size: 32px; color: #d5238b">
+                    <mat-icon style="font-size: 30px; color: #bfbfbf;">settings_brightness</mat-icon> &nbsp;Últimos 20
+                    Estados
+                  </fury-card-header-heading>
+                  <app-boton-exportar-tabla [tipoBoton]="'grid'" [nombreArchivo]="'Últimos_20_Estados'"
+                    [datos]="datosReporte" [buttonDisabled]="isDisabled">
+                  </app-boton-exportar-tabla>
+                </div>
+              </div>
+              <br> <mat-divider></mat-divider> <br>
+            </div>
+            <ng-container>
+              <div class="data-grid">
+                <dx-data-grid id="gridContainer" [dataSource]="listaPotencias" [columnHidingEnabled]="true"
+                  [showBorders]="true" [rowAlternationEnabled]="true">
+                  <dxo-paging [pageSize]="5"></dxo-paging>
+                  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 50, 100]" [showInfo]="true">
+                  </dxo-pager>
+                  <dxo-group-panel [emptyPanelText]="mensajeAgrupar" [visible]="true">
+                  </dxo-group-panel>
+                  <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
+                  <dxo-header-filter [visible]="showHeaderFilter">
+                  </dxo-header-filter>
+                  <ng-container>
+                    <dxi-column caption="Data1" cellTemplate="acciones" alignment="center">
+                    </dxi-column>
+                  </ng-container>
+                  <dxi-column dataField="rfc" caption="Data2" alignment="center">
+                    <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+                  </dxi-column>
+                  <dxi-column dataField="nombreComercial" caption="Data3" alignment="center">
+                    <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+                  </dxi-column>
+                  <dxi-column dataField="giro" caption="Data4" alignment="center">
+                    <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+                  </dxi-column>
+                  <dxi-column dataField="nombreCapturista" caption="Data5" alignment="center">
+                    <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+                  </dxi-column>
+                  <dxi-column dataField="urlLicencia" caption="Data6" alignment="center" cellTemplate="cellTemplate"
+                    alignment="center">
+                  </dxi-column>
+                  <!-- <dxi-column dataField="nombreEstatus" [width]="190" caption="Último Estado" alignment="center"
+                    cellTemplate="color">
+                    <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+                  </dxi-column> -->
+                  <div *dxTemplate="let data of 'cellTemplate'" style="display: inline-block;">
+                    <img [src]="data.value" style="max-width: 120px; max-height: 400px;" />
+                  </div>
+                  <div *dxTemplate="let row of 'acciones'">
+                    <ng-container *ngxPermissionsOnly="[permisoActualizarLuminarias]">
+                      <dx-button valueExpr="id" id="actualizarButton" class="btnAcciones"
+                        (click)="EditarLocal(row.data.id)">
+                        <i class="fas fa-pen"></i>
+                      </dx-button>&nbsp;&nbsp;&nbsp;
+                    </ng-container>
+                    <ng-container *ngxPermissionsOnly="[permisoVisualizarDetalleLuminaria]">
+                      <dx-button valueExpr="id" id="actualizarButton" class="btnAccion"
+                        (click)="detalleLocal(row.data.id)">
+                        <i class="far fa-question-circle"></i>
+                      </dx-button>&nbsp;&nbsp;&nbsp;
+                    </ng-container>
+                    <ng-container *ngxPermissionsOnly="[permisoEliminarLuminaria]">
+                      <dx-button valueExpr="id" id="deleteButton" class="btnAccione" (click)="eliminarLocal(row.data)">
+                        <i class="fa fa-trash"></i>
+                      </dx-button>
+                    </ng-container>
+                    <!-- <ng-container *ngxPermissionsOnly="[permisoBajaLocal]">
+                    <dx-button valueExpr="id" id="bajaBoton" class="btnAccione" (click)="eliminarLocal(row.data)">
+                      <i class="fa fa-arrow-down"></i>
+                    </dx-button>
+                  </ng-container> -->
+                  </div>
+                  <div *dxTemplate="let p of 'color'" class="colores" style="align-items: center;">
+                    <p *ngIf="p.data.nombreEstatus === 'Rechazo o Sin respuesta'" class="rojo">{{p.data.nombreEstatus}}
+                    </p>
+                    <p *ngIf="p.data.nombreEstatus === 'Datos Correctos'" class="verde">{{p.data.nombreEstatus}}</p>
+                    <p *ngIf="p.data.nombreEstatus === 'Información Faltante'" class="naranja">{{p.data.nombreEstatus}}
+                    </p>
+                    <p *ngIf="p.data.nombreEstatus === 'Revisión'" class="azul">{{p.data.nombreEstatus}}</p>
+                  </div>
+                </dx-data-grid>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </fury-page-layout-content>
+
+  <br> <br>
+
+  <fury-page-layout-content [@fadeInUp]>
+    <mat-card>
+      <div class="card-body">
+        <div class="container col-lg-12 col-xl-12 col-sm-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="encabezado">
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                  <fury-card-header-heading style="font-size: 32px; color: #d5238b">
+                    <mat-icon style="font-size: 30px; color: #bfbfbf;">flash_on</mat-icon> &nbsp;Últimas 20 Potencias
+                  </fury-card-header-heading>
+                  <app-boton-exportar-tabla [tipoBoton]="'grid'" [nombreArchivo]="'Locales_comerciales'"
+                    [datos]="datosReporte" [buttonDisabled]="isDisabled">
+                  </app-boton-exportar-tabla>
+                </div>
+              </div>
+              <br> <mat-divider></mat-divider> <br>
+            </div>
+            <div class="data-grid">
+              <dx-data-grid id="gridContainer" [columnHidingEnabled]="true" [dataSource]="listaCapturista"
+                [showBorders]="true" [rowAlternationEnabled]="true">
+                <dxo-paging [pageSize]="7"></dxo-paging>
+                <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[7, 10, 50, 100]" [showInfo]="true">
+                </dxo-pager>
+                <dxo-group-panel [emptyPanelText]="mensajeAgrupar" [visible]="true"></dxo-group-panel>
+                <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
+                <dxo-header-filter [visible]="showHeaderFilter"></dxo-header-filter>
+                <dxi-column dataField="nombre" caption="Data1" alignment="center">
+                  <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+                </dxi-column>
+                <dxi-column dataField="apellidoPaterno" caption="Data2" alignment="center">
+                  <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+                </dxi-column>
+                <dxi-column dataField="apellidoMaterno" caption="Data3" alignment="center">
+                  <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+                </dxi-column>
+                <ng-container>
+                  <dxi-column dataField="nombreGrupo" caption="Data4" alignment="center">
+                    <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+                  </dxi-column>
+                </ng-container>
+                <dxi-column dataField="nombreSupervisor" caption="Data5" alignment="center">
+                  <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+                </dxi-column>
+                <dxi-column dataField="totalLicencias" caption="Data6" alignment="center"
+                  cellTemplate="color">
+                  <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+                </dxi-column>
+                <div *dxTemplate="let p of 'color'" class="color" style="align-items: center;">
+                  <span>{{p.data.totalLicencias}} Registros </span>
+                </div>
+                <!--No borrarlo, en espera de confirmación -->
+                <!-- <dxo-summary>
+                  <dxi-total-item style="float: left;" column="totalLicencias" summaryType="sum"
+                    valueFormat="currency" [customizeText]="customizeText">
+                  </dxi-total-item>
+                </dxo-summary>  -->
+              </dx-data-grid>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </fury-page-layout-content>
+
+  <br> <br>
+
+  <fury-page-layout mode="card">
+    <fury-page-layout-content [fxLayoutGap]="gap" fxLayout="column">
+      <div [fxLayoutGap]="gap" fxFlex="noshrink" fxLayout="column" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="start stretch">
+        <fury-card [fxFlex.gt-sm]="col2" class="advanced-forms route-animations-elements" [@fadeInUp] fxFlex="grow">
+          <fury-card-header>
+            <fury-card-header-heading style="font-size: 32px; color: #d5238b">
+              <i class="fas fa-file-image" style="font-size: 30px;"></i>&nbsp;Imagen Principal
+            </fury-card-header-heading>
+          </fury-card-header>
+          <mat-divider></mat-divider>
+          <fury-card-content fxLayout="column" style="margin-top: -1.3%;">
+            <div style="width: 100%; height: 610px;">
+              <img  class="img-fluid" src="../../../../../assets/alumbrado-publico.jpg">
+            </div>
+          </fury-card-content>
+        </fury-card>
+
+        <fury-card [fxFlex.gt-sm]="col2" class="advanced-forms route-animations-elements" [@fadeInUp] fxFlex="grow">
+          <fury-card-header>
+            <fury-card-header-heading style="font-size: 32px; color: #d5238b">
+              <i class="fas fa-map-marker-alt" style="font-size: 30px;"></i>&nbsp;Ubicación
+            </fury-card-header-heading>
+          </fury-card-header>
+          <mat-divider></mat-divider>
+          <fury-card-content fxLayout="column" style="margin-top: 2%;">
+            <div id="map" style="width: 100%; height: 590px;"></div>
+          </fury-card-content>
+        </fury-card>
+      </div>
+    </fury-page-layout-content>
+    
+    <br>
+
+    <fury-page-layout-content [fxLayoutGap]="gap" fxLayout="column">
+      <div [fxLayoutGap]="gap" fxFlex="noshrink" fxLayout="column" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="start stretch">
+        <fury-card [fxFlex.gt-sm]="col2" class="advanced-forms route-animations-elements" [@fadeInUp] fxFlex="grow">
+          <fury-card-header>
+            <fury-card-header-heading style="font-size: 32px; color: #d5238b">
+              <i class="fas fa-street-view" style="font-size: 30px;"></i>&nbsp;Street View
+            </fury-card-header-heading>
+          </fury-card-header>
+          <mat-divider></mat-divider> <br>
+          <fury-card-content fxLayout="column" style="margin-top: 2%;"> <br>
+            <div [hidden]="!isAvailable" id="street-view" style="width: 100%; height: 615px;"></div>
+            <div class="not-street text-center" style=" width: 100%; height: 550px; color: white;" *ngIf="!isAvailable">
+              <p class="street"><i class="fas fa-exclamation-triangle"></i>&nbsp;&nbsp;Street View no disponible</p>
+            </div>
+          </fury-card-content>
+        </fury-card>
+
+        <fury-card [fxFlex.gt-sm]="col2" class="advanced-forms route-animations-elements" [@fadeInUp] fxFlex="grow">
+          <fury-card-header>
+            <fury-card-header-heading style="font-size: 32px; color: #d5238b">
+              <i class="fas fa-images" style="font-size: 30px;"></i> &nbsp;Galería
+            </fury-card-header-heading>
+          </fury-card-header>
+          <mat-divider></mat-divider> <br> <br>
+          <fury-card-content fxLayout="column" class="caja2" style="margin-top: 2%;">
+            <div class="not-street text-center" style=" width: 100%; height: 550px; color: white;" *ngIf="!isAvailableIMG">
+              <p class="street"><i class="fas fa-exclamation-circle"></i>&nbsp;&nbsp;Imágenes no disponibles</p>
+            </div>
+            <img *ngIf="!ocultaBtns" src="../../../../../assets/alumbrado-publico.jpg" class="box2"
+              stalt="&nbsp;&nbsp;&nbsp;&nbsp;Imagenes No Disponibles">
+            <br> <mat-divider></mat-divider> <br>
+            <div *ngIf="!ocultaBtns" class="col-md-12" style="margin-top: 3%; text-align: center;">
+              <button id="botonBuscar" type="submit" mat-button class="btn-next" (click)="prev()">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <strong class="ml-5">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{i+1}} / 1
+              </strong>
+              <button id="botonBuscar" type="submit" mat-button class="btn-down" (click)="next()" style="margin-left: 3rem;">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </fury-card-content>
+        </fury-card>
+      </div>
+    </fury-page-layout-content>
+  </fury-page-layout>
+
+  <div style="background-color: #fafafa; text-align: center; align-items: center;">
+    <div class="result" fxLayout="column row" style="text-align: center; align-items: center;">
+      <div fxLayout.gt-sm="row margin-left: 2px;" fxLayoutGap.gt-sm="16px" style="text-align: center; align-items: center;">
+        <button mat-raised-button class="mt-3 btn btn-secondary" (click)="regresar()">
+          <i class="fas fa-angle-left"></i>&nbsp;Volver
+        </button>&nbsp;
+      </div>
+    </div>
+  </div>
+</fury-page-layout>

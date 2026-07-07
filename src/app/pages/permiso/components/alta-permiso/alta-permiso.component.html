@@ -1,0 +1,57 @@
+<fury-page-layout mode="card">
+  <fury-page-layout-header>
+    <fury-breadcrumbs [@fadeInRight] style="position: fixed;" current="{{title}}" link="{{titulo}}"></fury-breadcrumbs>
+  </fury-page-layout-header>
+
+  <fury-page-layout-content [@fadeInUp]>
+    <mat-card>
+      <fury-card-header>
+        <fury-card-header-heading style="color: #d5238b; font-size: 35px;"> <i class="fas fa-cube" style="color: #bfbfbf; font-size: 33px;"></i>&nbsp; {{title}}</fury-card-header-heading>
+        <fury-card-header-subheading></fury-card-header-subheading>
+      </fury-card-header>
+      <fury-card-content fxLayout="column">
+        <form [formGroup]="permisoForm">
+          <div class="result" fxLayout="column">
+            <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+              <mat-form-field class="fury-flex-form-field" color="primary" fxFlex.gt-sm>
+                <mat-label><i class="fas fa-cube"></i>&nbsp;Módulos</mat-label>
+                <mat-select id="modulo" formControlName="idModulo" class="form-control" p [disabled]="noSelect">
+                  <mat-option *ngFor="let modulo of modulos" [value]="modulo.id">{{modulo.nombre}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="fury-flex-form-field" color="primary" fxFlex.gt-sm>
+                <mat-label><i class="fas fa-align-left"></i>&nbsp;Nombre</mat-label>
+                <input formControlName="nombre" class="form-control" matInput>
+                <div class="error">
+                  <mat-error *ngIf="permisoForm.get('nombre').errors?.required && permisoForm.get('nombre').touched">
+                    Campo requerido
+                  </mat-error>
+                </div>
+              </mat-form-field>
+              <mat-form-field class="fury-flex-form-field" color="primary" fxFlex.gt-sm>
+                <mat-label><i class="fas fa-edit"></i>&nbsp;Descripción</mat-label>
+                <input formControlName="descripcion" class="form-control" matInput>
+                <div class="error">
+                  <mat-error *ngIf="permisoForm.get('descripcion').errors?.required && permisoForm.get('descripcion').touched">
+                    Campo requerido
+                  </mat-error>
+                </div>
+              </mat-form-field>
+            </div>
+          </div>
+          <mat-divider></mat-divider><br>
+          <div fxLayout="row"> <br>
+            <button mat-raised-button class="btn btn-success" id="guardarBoton" [disabled]="permisoForm.invalid || loading" (click)="submit()"> 
+              <span class="loader" *ngIf="loadIndicatorVisible"></span>
+              <span class="dx-button-text"> <i class="fas fa-check" *ngIf="iconSuccess"></i>&nbsp;&nbsp;{{ buttonText }}</span>
+            </button>&nbsp;&nbsp;&nbsp;
+            <button mat-raised-button class="btn btn-primary" (click)="regresar()">
+              <span class="dx-button-text"> <i class="fas fa-times"></i>&nbsp;&nbsp;{{ buttonTextCancel }}</span>
+            </button>
+            <!-- <span fxFlex></span> -->
+          </div>
+        </form>
+      </fury-card-content>
+    </mat-card>
+  </fury-page-layout-content>
+</fury-page-layout>

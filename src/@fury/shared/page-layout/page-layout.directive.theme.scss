@@ -1,0 +1,51 @@
+.fury-page-layout {
+
+}
+
+.fury-page-layout-header {
+  background: #363640;
+  color: #e6f1ff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+
+  fury-breadcrumbs {
+    .crumb, .link {
+      color: rgba(255, 255, 255, 0.67);
+
+      &:hover {
+        color: #60a5fa;
+      }
+    }
+
+    .crumb.current, .crumb.current .link {
+      color: #e6f1ff;
+    }
+  }
+}
+
+.fury-page-layout-content {
+  mat-card,
+  .mat-card,
+  .mat-mdc-card {
+    background-color: $card-elevated-bg !important;
+    color: $card-text;
+    border: 1px solid $card-border-soft;
+  }
+
+  .encabezado {
+    background-color: transparent;
+    color: $card-text;
+  }
+
+  .encabezado .h3,
+  .h3 {
+    color: $card-text;
+  }
+
+  label {
+    color: $card-text;
+  }
+
+  mat-divider {
+    border-top-color: $card-border-soft;
+  }
+}

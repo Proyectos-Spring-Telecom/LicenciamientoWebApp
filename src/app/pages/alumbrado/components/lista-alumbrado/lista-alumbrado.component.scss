@@ -1,0 +1,172 @@
+/* Botones para la seccion de Acciones */
+.btnAcciones {
+    border-color: #f39834;
+    color: #f39834;
+    transition: all 0.4s ease;
+  }
+  
+  .btnAcciones:hover {
+    background-color: #f39834;
+    color: white;
+    border-color: #f39834;
+  }
+  
+  .btnAccione {
+    border-color: #ff5252;
+    color: #ff5252;
+    transition: all 0.4s ease;
+  }
+  
+  .btnAccione:hover {
+    background-color: #ff5252;
+    color: white;
+    border-color: #ff5252;
+  }
+  
+  .btnAccion {
+    border-color: #3d8af7;
+    color: #3d8af7;
+    transition: all 0.4s ease;
+  }
+  
+  .btnAccion:hover {
+    background-color: #3d8af7;
+    color: white;
+    border-color: #3d8af7;
+  }
+  
+  /*Fin de botones*/
+  
+  .swal2-icon.swal2-error {
+    border-color: #fb434a;
+    color: #fb434a;
+  }
+  
+  .swal2-icon.swal2-success .swal2-success-ring {
+    color: #52bb56;
+    border: 0.25em solid #52bb56;
+  }
+  
+  /* Fondo de cada estatus del local */
+  .verde {
+    background-color: #0fc20f;
+    color: white;
+    font-weight: bold;
+    /* float: inline-start; */
+    /* width: 15.1rem; */
+    height: 25px;
+    border-radius: 5px;
+    margin-top: -2px;
+    /* margin-left: 3px; */
+    text-align: center;
+    /* font-weight: lighter */
+  }
+  
+  .naranja {
+    background-color: #f9c300;
+    color: white;
+    font-weight: bold;
+    /* width: 15.1rem; */
+    height: 25px;
+    border-radius: 5px;
+    margin-top: -2px;
+    /* margin-left: 3px; */
+    text-align: center;
+    /* font-weight: lighter */
+  }
+  
+  .rojo {
+    background-color: #e21309;
+    color: white;
+    /* float: inline-start; */
+    font-weight: bold;
+    /* width: 15.1rem; */
+    height: 25px;
+    border-radius: 5px;
+    margin-top: -2px;
+    /* margin-left: 3px; */
+    text-align: center;
+    /* font-weight: lighter */
+  }
+  
+  .azul {
+    background-color: #438AE3;
+    color: white;
+    /* float: inline-start; */
+    font-weight: bold;
+    /* width: 15.1rem; */
+    height: 25px;
+    border-radius: 5px;
+    margin-top: -2px;
+    /* margin-left: 3px; */
+    text-align: center;
+    /* font-weight: lighter */
+  }
+  
+  .offset-md-1{
+    text-align: center;
+    float: inline-start;
+  }
+  /*Fin de fondos*/
+  
+  .fas.fa-file-alt{
+    color: #bfbfbf;
+  }
+
+  .icon{
+    color: black
+    }
+
+    .Another {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 160px;
+      background-color: #166ba2;
+      height: 45px;
+      color: white;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      font-size: 18px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      text-transform: capitalize;
+      transition: 0.3s ease all;
+      border-radius: 5px;
+      float: right;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .Another:hover {
+      transition: 0.3s ease-in-out all;
+      background-color: #013c5a;
+    }
+
+    .before {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 160px;
+      background: #d5238b;  /* fallback for old browsers */
+      height: 45px;
+      color: white;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      font-size: 18px;
+      /* font-weight: lighter */
+      border: none;
+      cursor: pointer;
+      text-transform: capitalize;
+      transition: 0.3s ease all;
+      border-radius: 5px;
+      float: right;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .before:hover {
+      transition: 0.3s ease-in-out all;
+      background: #68013d;  /* fallback for old browsers */
+    }

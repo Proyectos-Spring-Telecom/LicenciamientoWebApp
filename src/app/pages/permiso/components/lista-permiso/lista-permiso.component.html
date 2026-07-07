@@ -1,0 +1,59 @@
+<fury-page-layout mode="card">
+  <fury-page-layout-header>
+    <fury-breadcrumbs [@fadeInRight] style="position: fixed;" current="Permisos" link="{{titulo}}"></fury-breadcrumbs>
+  </fury-page-layout-header>
+
+  <fury-page-layout-content [@fadeInUp]>
+    <mat-card>
+      <div class="encabezado">
+        <span class="h3"> <i i class="fas fa-money-check"></i>&nbsp;Permisos</span>
+        <app-boton-exportar-tabla [tipoBoton]="'grid'" [nombreArchivo]="'Permisos'" [datos]="datosReporte"
+          [buttonDisabled]="isDisabled">
+        </app-boton-exportar-tabla>
+        <ng-container *ngxPermissionsOnly="[permisoAgregarPermiso]">
+          <button type="submit" class="agregar" (click)="agregarPermiso()" style="margin-right: 15px;">
+            <i class="fas fa-plus"></i>&nbsp;&nbsp;Agregar
+          </button>
+        </ng-container>
+      </div>
+      <br> <mat-divider class="mt-3"></mat-divider> <br>
+      <ng-container>
+        <div class="data-grid">
+          <dx-data-grid id="gridContainer" [columnHidingEnabled]="true" [dataSource]="listaPermisos" [showBorders]="true" [rowAlternationEnabled]="true">
+            <dxo-paging [pageSize]="7"></dxo-paging>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[7, 10, 50, 100]" [showInfo]="true"></dxo-pager>
+            <dxo-group-panel [emptyPanelText]="mensajeAgrupar" [visible]="true"></dxo-group-panel>
+            <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
+            <dxo-header-filter [visible]="showHeaderFilter"></dxo-header-filter>
+            <ng-container *ngxPermissionsOnly="[permisoActualizarPermiso, permisoEliminarPermiso]">
+              <dxi-column caption="Acciones" cellTemplate="acciones" alignment="center" [width]="150">
+              </dxi-column>
+            </ng-container>
+            <dxi-column dataField="nombrePermiso" caption="Nombre" alignment="center" [width]="150">
+              <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+            </dxi-column>
+            <dxi-column dataField="descripcionPermiso" caption="Descripción" alignment="center">
+              <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+            </dxi-column>
+            <dxi-column dataField="nombreModulo" caption="Módulo" alignment="center">
+              <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+            </dxi-column>
+            <div *dxTemplate="let row of 'acciones'">
+              <ng-container *ngxPermissionsOnly="[permisoActualizarPermiso]">
+                <dx-button valueExpr="id" id="actualizarButton" class="btnAcciones"
+                  (click)="actualizarPermiso(row.data.idPermiso)">
+                  <i class="fas fa-pen"></i>
+                </dx-button>&nbsp;&nbsp;
+              </ng-container>
+              <ng-container *ngxPermissionsOnly="[permisoEliminarPermiso]">
+                <dx-button valueExpr="id" id="deleteButton" class="btnAccione" (click)="eliminarPermiso(row.data)">
+                  <i class="fa fa-trash"></i>
+                </dx-button>
+              </ng-container>
+            </div>
+          </dx-data-grid>
+        </div>
+      </ng-container>
+    </mat-card>
+  </fury-page-layout-content>
+</fury-page-layout>

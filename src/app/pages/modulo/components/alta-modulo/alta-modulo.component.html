@@ -1,0 +1,38 @@
+<fury-page-layout mode="card">
+  <fury-page-layout-header>
+    <fury-breadcrumbs [@fadeInRight] style="position: fixed;" current="{{title}}" link="{{titulo}}"></fury-breadcrumbs>
+  </fury-page-layout-header>
+
+  <fury-page-layout-content [@fadeInUp]>
+    <mat-card>
+      <fury-card-header>
+        <fury-card-header-heading class="h3" style="color: #d5238b; font-size: 35px;"> <i class="fas fa-cube" style="color: #bfbfbf; font-size: 33px;"></i>&nbsp; {{title}}</fury-card-header-heading>
+        <fury-card-header-subheading></fury-card-header-subheading>
+      </fury-card-header>
+      <fury-card-content fxLayout="column">
+        <form [formGroup]="moduloForm">
+          <div class="result" fxLayout="column">
+            <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+              <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                <mat-label> <i class="fas fa-align-left"></i>&nbsp;Nombre</mat-label>
+                  <input formControlName="Nombre" class="form-control" id="Nombre" matInput>
+                  <mat-error *ngIf="(moduloForm.get('Nombre').touched) && moduloForm.get('Nombre').errors?.required">Campo requerido</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <mat-divider></mat-divider><br>
+            <div fxLayout="row"> <br>
+              <button mat-raised-button class="btn btn-success" id="guardarBoton" (click)="submit()" [disabled]="moduloForm.invalid || loading"> 
+                <span class="loader" *ngIf="loadIndicatorVisible"></span>
+                <span class="dx-button-text"> <i class="fas fa-check" *ngIf="iconSuccess"></i>&nbsp;&nbsp;{{ buttonText }}</span>
+              </button>&nbsp;&nbsp;&nbsp;
+              <button mat-raised-button class="btn btn-primary" (click)="regresar()">
+                <span class="dx-button-text"> <i class="fas fa-times"></i>&nbsp;&nbsp;{{ buttonTextCancel }}</span>
+              </button>
+              <!-- <span fxFlex></span> -->
+            </div>
+        </form>
+      </fury-card-content>
+    </mat-card>
+  </fury-page-layout-content>
+</fury-page-layout>

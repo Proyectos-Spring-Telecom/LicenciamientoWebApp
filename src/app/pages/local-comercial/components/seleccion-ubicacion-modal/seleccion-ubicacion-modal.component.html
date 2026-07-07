@@ -1,0 +1,40 @@
+<div class="ubicacion-modal">
+  <header class="ubicacion-modal__head">
+    <div class="ubicacion-modal__head-copy">
+      <h2 class="ubicacion-modal__title" mat-dialog-title>
+        <i class="fas fa-map-marker-alt"></i>&nbsp;Ubicación del lugar
+      </h2>
+      <p class="ubicacion-modal-hint">
+        Haga clic en el mapa para colocar el pin. Si no queda bien, arrástrelo hasta la posición correcta.
+      </p>
+    </div>
+  </header>
+
+  <mat-dialog-content class="ubicacion-modal-content">
+    <div class="ubicacion-modal-map">
+      <google-map
+        [center]="center"
+        [zoom]="zoom"
+        [options]="mapOptions"
+        width="100%"
+        height="100%"
+        (mapClick)="onMapClick($event)">
+        <map-marker
+          *ngIf="markerPosition"
+          [position]="markerPosition"
+          [options]="markerOptions"
+          (mapDragend)="onMarkerDragEnd($event)">
+        </map-marker>
+      </google-map>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="ubicacion-modal-actions" align="end">
+    <button mat-raised-button class="dangerr" type="button" (click)="cancelar()">
+      <i class="fas fa-times"></i>&nbsp;&nbsp;Cancelar
+    </button>
+    <button mat-raised-button class="successs" type="button" [disabled]="!markerPosition" (click)="confirmar()">
+      <i class="fas fa-check"></i>&nbsp;&nbsp;Confirmar ubicación
+    </button>
+  </mat-dialog-actions>
+</div>

@@ -1,0 +1,150 @@
+/* You can add global styles to this file, and also import other style files */
+@import "./@fury/styles/core";
+@import "./app/app.theme";
+@import "./app/pages/reutilizables/styles/form-action-buttons.css";
+@import "./app/pages/reutilizables/styles/file-uploader";
+@import "./app/pages/monitoreo/shared/mon-veh-tooltip/mon-veh-tooltip";
+
+body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) > fury-root,
+body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) > *:not(.swal2-container) {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.dx-pager .dx-pages .dx-selection {
+  font-weight: 500 !important;
+  background-color: #681330 !important;
+  color: rgb(255 255 255 / 87%) !important;
+}
+
+.dx-pager .dx-page-sizes .dx-selection, .dx-pager .dx-pages .dx-selection {
+  font-weight: 500 !important;
+  background-color: #681330 !important;
+  color: rgb(255 255 255 / 87%) !important;
+}
+
+.mat-select-arrow {
+  color: rgb(255 255 255 / 54%);
+}
+
+body.swal2-shown .swal2-container {
+  background: rgba(0, 0, 0, 0.45) !important;
+  background-color: rgba(0, 0, 0, 0.45) !important;
+}
+
+.swal2-popup {
+  background: #1c252e !important;
+  color: #e6f1ff;
+}
+
+.btn-success:disabled{
+  background-color: #8fd392 !important;
+  border-color: #28a745 !important;
+  color: white !important;
+  cursor: no-drop;
+}
+
+.mat-select-value {
+  color: rgb(255 255 255 / 87%);
+}
+
+.mat-select-disabled .mat-select-value {
+  color: rgb(255 255 255 / 80%);
+}
+
+.swal2-title {
+  color: #e6f1ff !important;
+}
+
+.swal2-html-container,
+.swal2-content {
+  color: rgba(230, 241, 255, 0.85) !important;
+}
+
+.swal2-footer {
+  border-top-color: rgba(255, 255, 255, 0.12) !important;
+  color: rgba(230, 241, 255, 0.7) !important;
+}
+
+.swal2-close {
+  color: rgba(230, 241, 255, 0.7) !important;
+
+  &:hover {
+    color: #e6f1ff !important;
+  }
+}
+
+/* Botones de baja/eliminar en grids */
+.btnAccione {
+  border-color: #ff5252;
+  color: #ff5252;
+  transition: all 0.4s ease;
+}
+
+.btnAccione:hover {
+  background-color: #ff5252;
+  color: white;
+  border-color: #ff5252;
+}
+
+.ubicacion-modal-panel .mat-dialog-container {
+  padding: 0;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  box-shadow: 0 28px 60px rgba(2, 6, 23, 0.55);
+  max-height: 95vh;
+  background-color: #0f172a;
+  color: #f8fafc;
+}
+
+@media (max-width: 599px) {
+  .ubicacion-modal-panel {
+    max-width: 100vw !important;
+    width: 100vw !important;
+  }
+
+  .ubicacion-modal-panel .mat-dialog-container {
+    border-radius: 0;
+    max-height: 100vh;
+  }
+}
+
+.documento-modal-panel .mat-dialog-container {
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  max-height: 95vh;
+  background-color: #1c252e;
+  color: #ffffff;
+}
+
+.password-dialog-panel .mat-dialog-container,
+.password-dialog-panel .mat-mdc-dialog-container {
+  padding: 0 !important;
+  overflow: hidden;
+  border-radius: 26px;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.password-dialog-panel .mat-mdc-dialog-surface {
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: hidden;
+}
+
+@media (max-width: 599px) {
+  .documento-modal-panel {
+    max-width: 100vw !important;
+    width: 100vw !important;
+  }
+
+  .documento-modal-panel .mat-dialog-container {
+    border-radius: 0;
+    max-height: 100vh;
+  }
+}

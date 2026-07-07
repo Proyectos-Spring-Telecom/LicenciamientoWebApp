@@ -1,0 +1,115 @@
+<div class="ul-card ul-card--dialog">
+  <div class="ul-card__head">
+    <div class="ul-title ul-titlecase">actualizar contraseña</div>
+    <div class="ul-subtitle">usuario del sistema de licencias: "{{ user.nombreCompleto }}"</div>
+  </div>
+
+  <form class="ul-form" [formGroup]="usuarioForm" autocomplete="off">
+    <div class="ul-field">
+      <mat-label class="ul-label ul-titlecase">contraseña actual</mat-label>
+      <mat-form-field appearance="outline" class="w-100" color="primary">
+        <input
+          matInput
+          [type]="type"
+          formControlName="PasswordActual"
+          autocomplete="new-password"
+          name="clave-actual"
+          readonly
+          (focus)="habilitarInputAuth($event)"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="myFunctionPasswordCurrent()"
+          [attr.aria-label]="type === 'password' ? 'Mostrar contraseña' : 'Ocultar contraseña'"
+        >
+          <mat-icon>{{ type === 'password' ? 'visibility' : 'visibility_off' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="usuarioForm.get('PasswordActual').invalid">Campo requerido</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="ul-field">
+      <mat-label class="ul-label ul-titlecase">nueva contraseña</mat-label>
+      <mat-form-field appearance="outline" class="w-100" color="primary">
+        <input
+          matInput
+          [type]="type1"
+          formControlName="PasswordNuevo"
+          autocomplete="new-password"
+          name="clave-nueva"
+          readonly
+          (focus)="habilitarInputAuth($event)"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="myFunctionPasswordNew()"
+          [attr.aria-label]="type1 === 'password' ? 'Mostrar contraseña' : 'Ocultar contraseña'"
+        >
+          <mat-icon>{{ type1 === 'password' ? 'visibility' : 'visibility_off' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="usuarioForm.get('PasswordNuevo').invalid">Campo requerido</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="ul-field">
+      <mat-label class="ul-label ul-titlecase">confirmar contraseña</mat-label>
+      <mat-form-field appearance="outline" class="w-100" color="primary">
+        <input
+          matInput
+          [type]="type2"
+          formControlName="ConfirmarPassword"
+          autocomplete="new-password"
+          name="clave-nueva-confirmacion"
+          readonly
+          (focus)="habilitarInputAuth($event)"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="myFunctionPasswordConfirm()"
+          [attr.aria-label]="type2 === 'password' ? 'Mostrar contraseña' : 'Ocultar contraseña'"
+        >
+          <mat-icon>{{ type2 === 'password' ? 'visibility' : 'visibility_off' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="usuarioForm.get('ConfirmarPassword').invalid">Las contraseñas no coinciden</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="ul-indication">
+      <div>* La contraseña no debe ser menor a 6 caracteres y no mayor a 15 caracteres.</div>
+      <div>** Se recomienda por seguridad usar una combinación de letras mayúsculas, minúsculas, números y símbolos.</div>
+    </div>
+
+    <div class="ul-btn-row">
+      <button
+        mat-flat-button
+        type="button"
+        class="ul-submit ul-submit--secondary"
+        (click)="cerrarPopup()"
+      >
+        <span class="ul-submit__content">
+          <span class="ul-submit__label ul-titlecase">cancelar</span>
+        </span>
+      </button>
+      <button
+        mat-flat-button
+        type="button"
+        class="ul-submit"
+        [disabled]="usuarioForm.invalid"
+        [class.ul-submit--loading]="loadIndicatorVisible"
+        (click)="modificarDatos()"
+      >
+        <span class="ul-submit__content">
+          <span class="ul-submit__spinner" aria-hidden="true"></span>
+          <span class="ul-submit__label ul-titlecase">{{ buttonText }}</span>
+        </span>
+        <span class="ul-submit__shine" aria-hidden="true"></span>
+      </button>
+    </div>
+  </form>
+</div>

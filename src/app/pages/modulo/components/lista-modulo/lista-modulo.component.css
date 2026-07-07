@@ -1,0 +1,31 @@
+  /* Botones para la seccion de Acciones */
+  .btnAcciones {
+    border-color: #f39834;
+    color: #f39834;
+    transition: all 0.4s ease;
+  }
+  
+  .btnAcciones:hover {
+    background-color: #f39834;
+    color: white;
+    border-color: #f39834;
+  }
+  
+  .btnAccione {
+    border-color: #ff5252;
+    color: #ff5252;
+    background-color: none;
+    transition: all 0.4s ease;
+  }
+
+  .btnAccione:hover {
+    border-color: #ff5252;
+    color: white;
+    background-color: #ff5252;
+  }
+  /*Fin de botones*/
+  
+  .swal2-icon.swal2-error {
+    border-color: #fb434a;
+    color: #fb434a;
+  }

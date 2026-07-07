@@ -1,0 +1,59 @@
+<fury-page-layout mode="card">
+    <fury-page-layout-header>
+      <fury-breadcrumbs [@fadeInRight] current="{{title}}" link="{{titulo}}"></fury-breadcrumbs>
+    </fury-page-layout-header>
+  
+    <fury-page-layout-content [@fadeInUp]>
+  
+  
+      <mat-card>
+          <fury-card-header>
+            <fury-card-header-heading style="color: #d5238b; font-size: 35px;"> <i class="fas fa-cube" style="color: #bfbfbf; font-size: 33px;"></i>&nbsp; {{title}}</fury-card-header-heading>
+            <fury-card-header-subheading></fury-card-header-subheading>
+          </fury-card-header>
+          <fury-card-content fxLayout="column">
+            <form [formGroup]="luminariaForm">
+            <div class="result" fxLayout="column">
+              <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-align-left"></i>&nbsp;Contrato</mat-label>
+                    <input formControlName="nombre" class="form-control" matInput>
+                    <!-- <div class="error">
+                      <mat-error *ngIf="luminariaForm.get('nombre').errors?.required && luminariaForm.get('nombre').touched">Campo
+                        requerido</mat-error>
+                    </div> -->
+                  </mat-form-field>
+                <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                  <mat-label><i class="fas fa-align-left"></i>&nbsp;Cliente</mat-label>
+                  <input formControlName="nombre" class="form-control" matInput>
+                  <!-- <div class="error">
+                    <mat-error *ngIf="luminariaForm.get('nombre').errors?.required && luminariaForm.get('nombre').touched">Campo
+                      requerido</mat-error>
+                  </div> -->
+                </mat-form-field>
+                <mat-form-field class="fury-flex-form-field" color="warn" fxFlex.gt-sm>
+                  <mat-label><i class="fas fa-edit"></i>&nbsp;Email</mat-label>
+                  <input formControlName="descripcion" class="form-control" matInput>
+                  <!-- <div class="error">
+                    <mat-error *ngIf="luminariaForm.get('descripcion').errors?.required && luminariaForm.get('descripcion').touched">Campo
+                      requerido</mat-error>
+                  </div> -->
+                </mat-form-field>
+              </div>
+            </div>
+            <mat-divider></mat-divider><br>
+            <div fxLayout="row">
+              <button mat-raised-button class="primary"
+              id="guardarBoton" (click)="submit()"> <mat-icon style="margin-top: -4%;">check</mat-icon>&nbsp;&nbsp;Guardar</button>&nbsp;&nbsp;&nbsp;
+              <button mat-raised-button class="accent" 
+              (click)="regresar()"> <mat-icon style="margin-top: -4%;">clear</mat-icon>&nbsp;Cancelar</button>
+              <!-- <span fxFlex></span> -->
+            </div>
+          </form>
+          </fury-card-content>
+      </mat-card>
+    </fury-page-layout-content>
+    <!-- <dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [(visible)]="loadingVisible" [showIndicator]="true"
+      [showPane]="true" [shading]="true" [closeOnOutsideClick]="false" [message]="loadingMessage">
+  </dx-load-panel> -->
+  </fury-page-layout>

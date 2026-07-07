@@ -1,0 +1,1510 @@
+import { TitleDirective } from './../../../../../@fury/shared/title/title.directive';
+import { fadeInRightAnimation } from './../../../../../@fury/animations/fade-in-right.animation';
+import { fadeInUpAnimation } from './../../../../../@fury/animations/fade-in-up.animation';
+import { DetalleLocal, proteccionCivil } from './../../../../_entities/local-comercial/detalle-local-comercial';
+import { LocalComercial } from './../../../../_entities/local-comercial/local-comercial';
+import { AuthService } from '../../../auth/services/auth.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, AbstractControl, } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { FormGenerico } from '../../../../_entities/FormGenerico';
+import { LocalComercialService } from '../../services/local-comercial.service';
+import { ListaRol } from './../../../../_entities/local-comercial/Catalogos/roles';
+import { ListaGrupo } from './../../../../_entities/local-comercial/Catalogos/grupo'
+import { ListaTipoFoto } from './../../../../_entities/local-comercial/Catalogos/tipoFoto'
+import { listaTipoServicio } from './../../../../_entities/local-comercial/Catalogos/tipoServicio';
+import { ListaEstatus } from './../../../../_entities/local-comercial/Catalogos/estatus';
+import { ListaGiro } from './../../../../_entities/local-comercial/Catalogos/giro';
+import Swal from 'sweetalert2';
+import { FormGenerico2 } from './../../../../_entities/FormGenerico2';
+import { User } from './../../../../_entities/User';
+import { values } from 'lodash-es';
+import { ThrowStmt } from '@angular/compiler';
+import { scaleInAnimation } from 'src/@fury/animations/scale-in.animation';
+import { slideFadeAnimation } from 'src/@fury/animations/slide-fade.animation';
+import { localFormTabPanelAnimation, proteccionEmpresaFieldsAnimation } from '../../animations/local-form-tab-panel.animation';
+import { SeleccionUbicacionModalComponent } from '../seleccion-ubicacion-modal/seleccion-ubicacion-modal.component';
+import {
+  SubirDocumentoModalComponent,
+  SubirDocumentoData
+} from '../subir-documento-modal/subir-documento-modal.component';
+import {
+  DOCUMENTOS_CATASTRAL,
+  DOCUMENTOS_LICENCIAMIENTO,
+  DOCUMENTOS_PROTECCION,
+  DOCUMENTOS_SAPAC,
+  DocumentoLocalConfig,
+  mapFotosToUrls,
+  resolverIdCatalogoDesdeApi,
+  resolverValorDocumentoFormData,
+  construirHtmlCamposObligatorios,
+  tieneCoordenadasValidas,
+  tieneDocumentoAdjunto
+} from '../documentos-local.config';
+import {
+  mostrarCargandoLocalComercial,
+  ocultarCargandoLocalComercial
+} from '../../utils/local-comercial-swal.util';
+import { scrollLayoutContentToTop } from '../../utils/local-comercial-scroll.util';
+import {
+  buildLocalComercialFormData,
+  generarJsonEnvioLocalComercial
+} from '../../utils/local-comercial-form-payload.util';
+import {
+  blockNonAlphanumericKey,
+  blockNonNumericKey,
+  sanitizeNumericValue,
+  sanitizeRfcValue,
+} from '../../utils/local-form-input.util';
+
+@Component({
+  selector: 'fury-editar-local-comercial',
+  templateUrl: './editar-local-comercial.component.html',
+  styleUrls: ['./editar-local-comercial.component.css', '../../styles/local-form-tabs.css'],
+  animations: [fadeInRightAnimation, fadeInUpAnimation, scaleInAnimation, slideFadeAnimation, localFormTabPanelAnimation, proteccionEmpresaFieldsAnimation]
+})
+export class EditarLocalComercialComponent implements OnInit {
+  public nombreCompleto: any;
+  public titulo: string = 'Agregar Local Comercial';
+  public localesRegistros: LocalComercial[];
+  public localForm: FormGroup;
+  public detalleLocal: DetalleLocal[];
+  public title: string = 'Licenciamiento';
+  readonly blockNonAlphanumericKey = blockNonAlphanumericKey;
+  readonly blockNonNumericKey = blockNonNumericKey;
+  public activeTab = 0;
+  public activeTabPanelMinHeight = 0;
+  private shouldScrollAfterTabNav = false;
+  public readonly localFormTabCount = 4;
+  @ViewChild('tabPanels') tabPanelsRef: ElementRef<HTMLElement>;
+  submitted = false;
+  loadingg = false;
+  public _user: any;
+  public loading: boolean = false;
+  public addCalle: boolean = false;
+  public addCalleLicencia: boolean = false;
+  public noSelect: boolean = false;
+  public fisica: boolean = false;
+  public btnCuadroMedidor: boolean = false;
+  public btnFachada: boolean = false;
+  public btnBodega: boolean = false;
+  public btnEstacionamiento: boolean = false;
+  public tieneprograma;
+  public tieneestacionamiento;
+  public value;
+  public idLocalidadLicencia;
+  public idLocalidadSapac;
+  public idColoniaSapac;
+  public idColoniaLicencia;
+  public id: any;
+  public idLocalMod: any;
+  public param: any;
+  Swal: any;
+  private _gap = 16;
+  col2 = `1 1 calc(50% - ${this._gap / 2}px)`;
+
+  /**Sapac */
+  public estadosRegistros: FormGenerico[];
+  public municipiosRegistros: FormGenerico[];
+  public localidadesRegistros: FormGenerico[];
+  public coloniasRegistros: FormGenerico[];
+  public callesRegistros: FormGenerico[];
+  /**Licenciamiento */
+  public estadoRegistros: FormGenerico[];
+  public municipioRegistros: FormGenerico[];
+  public localidadeRegistros: FormGenerico[];
+  public coloniaRegistros: FormGenerico[];
+  public calleRegistros: FormGenerico[];
+  public detalle: User;
+  /**Catálogos */
+  public roles: ListaRol[];
+  public grupo: ListaGrupo[];
+  public foto: ListaTipoFoto[];
+  public tipos: listaTipoServicio[];
+  public estatus: ListaEstatus[];
+  public giros: ListaGiro[];
+
+  public tipoPersona: any[] = [{ valor: 1, tipo: 'Fisica' }, { valor: 2, tipo: 'Moral' }];
+  public esMoral: boolean = false;
+  public estacionamiento: any[] = [{ valor: true, tipo: 'Si' }, { valor: false, tipo: 'No' },];
+  public estacion: boolean = false;
+  public tipoEmpresa: any[] = [{ valor: true, tipo: 'Si' }, { valor: false, tipo: 'No' },];
+  public empresa: boolean = false;
+  public tipoPrograma: any[] = [{ valor: true, tipo: 'Si' }, { valor: false, tipo: 'No' },];
+  public programa: boolean = false;
+
+  botonSuccess = 'Guardar';
+  loadIndicatorVisible = false;
+  public primerSpan = true;
+  public validSpan = true;
+  public iconSuccess = true;
+  public botonValid = 'Guardar';
+  public primerIcon = true;
+  public documentosExistentes: Record<string, string> = {};
+  readonly documentosSapac = DOCUMENTOS_SAPAC;
+  readonly documentosCatastral = DOCUMENTOS_CATASTRAL;
+  readonly documentosLicenciamiento = DOCUMENTOS_LICENCIAMIENTO;
+  readonly documentosProteccion = DOCUMENTOS_PROTECCION;
+  readonly OTRO_ID = ' ';
+  private cargandoDireccionEdicion = false;
+  private sincronizandoDireccion = false;
+
+  
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private fb: FormBuilder,
+    private dialog: MatDialog,
+    private localComercialService: LocalComercialService) { }
+
+  setActiveTab(index: number): void {
+    if (index >= 0 && index < this.localFormTabCount && index !== this.activeTab) {
+      this.reservarAlturaTabPanels();
+      this.activeTab = index;
+    }
+  }
+
+  onTabPanelAnimationDone(): void {
+    this.activeTabPanelMinHeight = 0;
+    if (this.shouldScrollAfterTabNav) {
+      this.shouldScrollAfterTabNav = false;
+      scrollLayoutContentToTop();
+    }
+  }
+
+  private reservarAlturaTabPanels(): void {
+    const panels = this.tabPanelsRef?.nativeElement;
+    if (panels) {
+      this.activeTabPanelMinHeight = panels.offsetHeight;
+    }
+  }
+
+  nextTab(): void {
+    if (this.activeTab < this.localFormTabCount - 1) {
+      this.reservarAlturaTabPanels();
+      this.shouldScrollAfterTabNav = true;
+      this.activeTab++;
+    }
+  }
+
+  prevTab(): void {
+    if (this.activeTab > 0) {
+      this.reservarAlturaTabPanels();
+      this.shouldScrollAfterTabNav = true;
+      this.activeTab--;
+    }
+  }
+
+  async ngOnInit() {
+    this.initForm();
+    this.activatedRoute.params.subscribe((param) => {
+      this.id = param['id'];
+      if (this.id) {
+        this.titulo = 'Actualizar Local Comercial';
+        this.obtenerLocalComercial(this.id);
+        this.btnCuadroMedidor = true;
+        this.btnFachada = true;
+        this.btnBodega = true;
+        this.btnEstacionamiento = true;
+      }
+    });
+    await this.obtenerEstados();
+    await this.obtenerMunicipios();
+    await this.obtenerEstadosLicencia();
+    await this.obtenerMunicipiosLicencia();
+    await this.obtenerLocalidades(906);
+    await this.obtenerLocalidadesLicencia(906);
+
+    //obtener Catalogos;
+    this.obtenerServicios();
+    this.obtenerTipoFoto();
+    this.obtenerGiros();
+    this.obtenerTipoPersona(this.id);
+    this.obtenerTieneProgram();
+  }
+
+  initForm() {
+    this.localForm = this.fb.group({
+      /* Validaciones de Sapac */
+      NumeroCuenta: [''],
+      NombreSapac: [''],
+      ApellidoPaternoSapac: [''],
+      ApellidoMaternoSapac: [''],
+      RfcSapac: [''],
+      IdEntidadFederativaSapac: [''],
+      IdMunicipioSapac: [''],
+      IdLocalidadSapac: [''],
+      IdColoniaSapac: [''],
+      IdColoniaLicencia: [''],
+      IdCalleSapac: [''],
+      NombreLocalidadSapac: [''],
+      NombreColoniaSapac: [''],
+      NombreCalleSapac: [''],
+      NoInteriorSapac: [''],
+      NoExteriorSapac: [''],
+      CPSapac: [''],
+      Sector: [''],
+      Ruta: [''],
+      Folio: [''],
+      IdTipoServicio: [''],
+      Tipo: [1],
+      Medidor: [''],
+      ReciboSapac: [''],
+      CaratulaMedidor: [''],
+      CuadroMedidor: [''],
+
+      /* Validaciones de Catastral */
+      Clave: [''],
+      M2: [''],
+      Superficie: [''],
+      UsoSuelo: [''],
+      ReciboPredial: [''],
+
+      /* Validaciones Licenciamiento */
+      Registro: [''],
+      RFC: [''],
+      NombreComercial: ['', Validators.required],
+      IdGiro: [''],
+      LicenciaSuelo: [''],
+      Nombre: [''],
+      ApellidoPaterno: [''],
+      ApellidoMaterno: [''],
+      TipoPersona: [''],
+      RazonSocial: [''],
+      RepresentanteLegalNombre: [''],
+      RepresentanteLegalPaterno: [''],
+      RepresentanteLegalMaterno: [''],
+      RepresentanteLegalTelefono: [''],
+      RepresentanteLegalEmail: [''],
+      ContactoNombre: [''],
+      ContactoPaterno: [''],
+      ContactoMaterno: [''],
+      ContactoTelefono: [''],
+      ContactoEmail: [''],
+      FechaExpedicion: [''],
+      FechaRefrendo: [''],
+      IdEntidadFederativaLicencia: [''],
+      IdMunicipioLicencia: [''],
+      IdLocalidadLicencia: [''],
+      IdCalleLicencia: [''],
+      NombreLocalidadLicencia: [''],
+      NombreColoniaLicencia: [''],
+      NombreCalleLicencia: [''],
+      NoInteriorLicencia: [''],
+      NoExteriorLicencia: [''],
+      CPLicencia: [''],
+      TieneEstacionamiento: [''],
+      Lat: [''],
+      Lng: [''],
+      LicenciaFuncionamiento: [''],
+      FachadaEstablecimiento: ['', this.validarFachadaEstablecimiento.bind(this)],
+      EstacionamientoIMG: [''],
+      Bodega: [''],
+      
+      /* Validaciones P.Civil */
+      EsEmpresa: [false],
+      RazonSocialProteccionCivil: [''],
+      RegistroAcreditacion: [''],
+      RfcProteccionCivil: [''],
+      NombreProteccionCivil: [''],
+      ApellidoPaternoProteccionCivil: [''],
+      ApellidoMaternoProteccionCivil: [''],
+      TelefonoProteccionCivil: [''],
+      TienePrograma: [''],
+      VistoBueno: [''],
+    });
+  }
+
+  obtenerLocalComercial(idLicencia: number) {
+    this.cargandoDireccionEdicion = true;
+    mostrarCargandoLocalComercial('Obteniendo local comercial');
+    this.localComercialService.obtenerDetalleLocalComercial(idLicencia).subscribe(
+      async (result: DetalleLocal) => {
+        this.documentosExistentes = mapFotosToUrls(result.fotos);
+        this.actualizarValidacionFachada();
+        const idLocalidadSapac = resolverIdCatalogoDesdeApi(
+          result.direccionSapac.idLocalidadSapac,
+          result.direccionSapac.nombreLocalidadSapac,
+          this.OTRO_ID
+        );
+        const idColoniaSapac = resolverIdCatalogoDesdeApi(
+          result.direccionSapac.idColoniaSapac,
+          result.direccionSapac.nombreColoniaSapac,
+          this.OTRO_ID
+        );
+        const idCalleSapac = resolverIdCatalogoDesdeApi(
+          result.direccionSapac.idCalleSapac,
+          result.direccionSapac.nombreCalleSapac,
+          this.OTRO_ID
+        );
+        const idLocalidadLicencia = resolverIdCatalogoDesdeApi(
+          result.direccion.idLocalidadLicencia,
+          result.direccion.nombreLocalidadLicencia,
+          this.OTRO_ID
+        );
+        const idColoniaLicencia = resolverIdCatalogoDesdeApi(
+          result.direccion.idColoniaLicencia,
+          result.direccion.nombreColoniaLicencia,
+          this.OTRO_ID
+        );
+        const idCalleLicencia = resolverIdCatalogoDesdeApi(
+          result.direccion.idCalleLicencia,
+          result.direccion.nombreCalleLicencia,
+          this.OTRO_ID
+        );
+        this.idLocalidadSapac = idLocalidadSapac;
+        this.idColoniaSapac = idColoniaSapac;
+        this.idLocalidadLicencia = idLocalidadLicencia;
+        this.idColoniaLicencia = idColoniaLicencia;
+        if (result.tipoPersona === 2) {
+          this.localForm.patchValue({
+            /**Sapac */
+            NumeroCuenta: result.numeroCuenta,
+            NombreSapac: result.nombreSapac,
+            ApellidoPaternoSapac: result.apellidoPaternoSapac,
+            ApellidoMaternoSapac: result.apellidoMaternoSapac,
+            RfcSapac: result.rfcsapac,
+            IdEntidadFederativaSapac: result.direccionSapac.idEntidadFederativaSapac,
+            IdMunicipioSapac: result.direccionSapac.idMunicipioSapac,
+            IdLocalidadSapac: idLocalidadSapac,
+            NombreLocalidadSapac: result.direccionSapac.nombreLocalidadSapac,
+            IdColoniaSapac: idColoniaSapac,
+            IdColoniaLicencia: idColoniaLicencia,
+            NombreColoniaSapac: result.direccionSapac.nombreColoniaSapac,
+            IdCalleSapac: idCalleSapac,
+            NombreCalleSapac: result.direccionSapac.nombreCalleSapac,
+            NoInteriorSapac: result.direccionSapac.noInteriorSapac,
+            NoExteriorSapac: result.direccionSapac.noExteriorSapac,
+            CPSapac: result.direccionSapac.cpSapac,
+            Sector: result.sector,
+            Ruta: result.ruta,
+            Folio: result.ruta,
+            IdTipoServicio: result.idTipoServicio,
+            Medidor: result.medidor,
+
+            /**Catastral */
+            Clave: result.clave,
+            M2: result.m2,
+            Superficie: result.superficie,
+            UsoSuelo: result.usoSuelo,
+
+            /**Licenciamiento*/
+            Registro: result.registro,
+            RFC: result.rfc,
+            NombreComercial: result.nombreComercial,
+            LicenciaSuelo: result.licenciaSuelo,
+            IdGiro: result.idGiro,
+            Nombre: result.nombre,
+            ApellidoPaterno: result.apellidoPaterno,
+            ApellidoMaterno: result.apellidoMaterno,
+            TipoPersona: result.tipoPersona,
+            IdEntidadFederativaLicencia: result.direccion.idEntidadFederativaLicencia,
+            IdMunicipioLicencia: result.direccion.idMunicipioLicencia,
+            IdLocalidadLicencia: idLocalidadLicencia,
+            NombreLocalidadLicencia: result.direccion.nombreLocalidadLicencia,
+            NombreColoniaLicencia: result.direccion.nombreColoniaLicencia,
+            IdCalleLicencia: idCalleLicencia,
+            NombreCalleLicencia: result.direccion.nombreCalleLicencia,
+            RazonSocial: result.razonSocial,
+            RepresentanteLegalNombre: result.representante.representanteLegalNombre,
+            RepresentanteLegalPaterno: result.representante.representanteLegalPaterno,
+            RepresentanteLegalMaterno: result.representante.representanteLegalMaterno,
+            RepresentanteLegalTelefono: result.representante.representanteLegalTelefono,
+            RepresentanteLegalEmail: result.representante.representanteLegalEmail,
+            ContactoNombre: result.contacto.contactoNombre,
+            ContactoPaterno: result.contacto.contactoPaterno,
+            ContactoMaterno: result.contacto.contactoMaterno,
+            ContactoTelefono: result.contacto.contactoTelefono,
+            ContactoEmail: result.contacto.contactoEmail,
+            FechaExpedicion: result.fechaExpedicion,
+            FechaRefrendo: result.fechaRefrendo,
+            NoInteriorLicencia: result.direccion.noInteriorLicencia,
+            NoExteriorLicencia: result.direccion.noExteriorLicencia,
+            CPLicencia: result.direccion.cpLicencia,
+            TieneEstacionamiento: result.estacionamiento,
+            Lat: result.lat,
+            Lng: result.lng,
+
+            /**P. Civil*/
+            EsEmpresa: result.proteccionCivil.esEmpresa,
+            RfcProteccionCivil: result.proteccionCivil.rfc,
+            RazonSocialProteccionCivil: result.proteccionCivil.razonSocial,
+            NombreProteccionCivil: result.proteccionCivil.nombre,
+            ApellidoPaternoProteccionCivil: result.proteccionCivil.apellidoPaterno,
+            ApellidoMaternoProteccionCivil: result.proteccionCivil.apellidoMaterno,
+            TelefonoProteccionCivil: result.proteccionCivil.telefono,
+            RegistroAcreditacion: result.proteccionCivil.registroAcreditacion,
+            TienePrograma: result.proteccionCivil.tienePrograma,
+          });
+
+          this.obtenerMunicipios(false);
+          this.obtenerLocalidades(result.direccionSapac.idMunicipioSapac);
+          this.obtenerColonias(idLocalidadSapac);
+          this.obtenerCalles(idColoniaSapac);
+          this.obtenerMunicipiosLicencia(false);
+          this.obtenerLocalidadesLicencia(result.direccion.idMunicipioLicencia);
+          this.obtenerColoniasLicencia(idLocalidadLicencia);
+          this.obtenerCallesLicencia(idColoniaLicencia);
+          this.cargandoDireccionEdicion = false;
+        }
+
+        else
+          this.localForm.patchValue({
+            /**Sapac */
+            NumeroCuenta: result.numeroCuenta,
+            NombreSapac: result.nombreSapac,
+            ApellidoPaternoSapac: result.apellidoPaternoSapac,
+            ApellidoMaternoSapac: result.apellidoMaternoSapac,
+            RfcSapac: result.rfcsapac,
+            IdEntidadFederativaSapac: result.direccionSapac.idEntidadFederativaSapac,
+            IdMunicipioSapac: result.direccionSapac.idMunicipioSapac,
+            IdLocalidadSapac: idLocalidadSapac,
+            NombreLocalidadSapac: result.direccionSapac.nombreLocalidadSapac,
+            IdColoniaSapac: idColoniaSapac,
+            IdColoniaLicencia: idColoniaLicencia,
+            NombreColoniaSapac: result.direccionSapac.nombreColoniaSapac,
+            IdCalleSapac: idCalleSapac,
+            NombreCalleSapac: result.direccionSapac.nombreCalleSapac,
+            NoInteriorSapac: result.direccionSapac.noInteriorSapac,
+            NoExteriorSapac: result.direccionSapac.noExteriorSapac,
+            CPSapac: result.direccionSapac.cpSapac,
+            Sector: result.sector,
+            Ruta: result.ruta,
+            Folio: result.ruta,
+            IdTipoServicio: result.idTipoServicio,
+            Medidor: result.medidor,
+
+            /**Catastral */
+            Clave: result.clave,
+            M2: result.m2,
+            Superficie: result.superficie,
+            UsoSuelo: result.usoSuelo,
+
+            /**Licenciamiento*/
+            Registro: result.registro,
+            RFC: result.rfc,
+            NombreComercial: result.nombreComercial,
+            LicenciaSuelo: result.licenciaSuelo,
+            IdGiro: result.idGiro,
+            Nombre: result.nombre,
+            ApellidoPaterno: result.apellidoPaterno,
+            ApellidoMaterno: result.apellidoMaterno,
+            TipoPersona: result.tipoPersona,
+            IdEntidadFederativaLicencia: result.direccion.idEntidadFederativaLicencia,
+            IdMunicipioLicencia: result.direccion.idMunicipioLicencia,
+            IdLocalidadLicencia: idLocalidadLicencia,
+            NombreLocalidadLicencia: result.direccion.nombreLocalidadLicencia,
+            NombreColoniaLicencia: result.direccion.nombreColoniaLicencia,
+            IdCalleLicencia: idCalleLicencia,
+            NombreCalleLicencia: result.direccion.nombreCalleLicencia,
+            // RazonSocial: result.razonSocial,
+            // RepresentanteLegalNombre: result.representante.representanteLegalNombre,
+            // RepresentanteLegalPaterno: result.representante.representanteLegalPaterno,
+            // RepresentanteLegalMaterno: result.representante.representanteLegalMaterno,
+            // RepresentanteLegalTelefono: result.representante.representanteLegalTelefono,
+            // RepresentanteLegalEmail: result.representante.representanteLegalEmail,
+            ContactoNombre: result.contacto.contactoNombre,
+            ContactoPaterno: result.contacto.contactoPaterno,
+            ContactoMaterno: result.contacto.contactoMaterno,
+            ContactoTelefono: result.contacto.contactoTelefono,
+            ContactoEmail: result.contacto.contactoEmail,
+            FechaExpedicion: result.fechaExpedicion,
+            FechaRefrendo: result.fechaRefrendo,
+            NoInteriorLicencia: result.direccion.noInteriorLicencia,
+            NoExteriorLicencia: result.direccion.noExteriorLicencia,
+            CPLicencia: result.direccion.cpLicencia,
+            TieneEstacionamiento: result.estacionamiento,
+            Lat: result.lat,
+            Lng: result.lng,
+
+            /**P. Civil*/
+            EsEmpresa: result.proteccionCivil.esEmpresa,
+            RfcProteccionCivil: result.proteccionCivil.rfc,
+            RazonSocialProteccionCivil: result.proteccionCivil.razonSocial,
+            NombreProteccionCivil: result.proteccionCivil.nombre,
+            ApellidoPaternoProteccionCivil: result.proteccionCivil.apellidoPaterno,
+            ApellidoMaternoProteccionCivil: result.proteccionCivil.apellidoMaterno,
+            TelefonoProteccionCivil: result.proteccionCivil.telefono,
+            RegistroAcreditacion: result.proteccionCivil.registroAcreditacion,
+            TienePrograma: result.proteccionCivil.tienePrograma,
+          });
+
+        this.obtenerMunicipios(false);
+        this.obtenerLocalidades(result.direccionSapac.idMunicipioSapac);
+        this.obtenerColonias(idLocalidadSapac);
+        this.obtenerCalles(idColoniaSapac);
+        this.obtenerMunicipiosLicencia(false);
+        this.obtenerLocalidadesLicencia(result.direccion.idMunicipioLicencia);
+        this.obtenerColoniasLicencia(idLocalidadLicencia);
+        this.obtenerCallesLicencia(idColoniaLicencia);
+        this.cargandoDireccionEdicion = false;
+        ocultarCargandoLocalComercial();
+      }, err => {
+        this.cargandoDireccionEdicion = false;
+        ocultarCargandoLocalComercial();
+        console.log('Error al consultar:', err)
+      });
+  }
+
+  changeValue(checked) {
+    if (checked) {
+      this.localForm.patchValue({
+        EsEmpresa: true
+      })
+    }
+    else {
+      this.localForm.patchValue({
+        EsEmpresa: false
+      })
+    }
+  }
+
+  checkedBox() {
+    let checked = false;
+    let local = this.localForm.get('EsEmpresa').value;
+
+    if (local == true) {
+      checked = true;
+    }
+    return checked;
+  }
+
+  /**Ubicaciones Licencias */
+  obtenerEstadosLicencia() {
+    this.localComercialService.obtenerEstados().subscribe(
+      (res: FormGenerico[]) => {
+        this.estadoRegistros = res;
+        if (!this.cargandoDireccionEdicion) {
+          const dataTime = this.estadoRegistros.find(c => c.id === 17);
+          if (dataTime) {
+            this.localForm.get('IdEntidadFederativaLicencia').setValue(dataTime.id);
+          }
+        }
+      },
+      (err) => { }
+    );
+  }
+
+  obtenerMunicipiosLicencia(aplicarDefault = true) {
+    this.localComercialService.obtenerMunicipiosEstado().subscribe(
+      (res: FormGenerico[]) => {
+        this.municipioRegistros = res;
+        if (aplicarDefault && !this.cargandoDireccionEdicion) {
+          const dataTime = this.municipioRegistros.find(c => c.id === 906);
+          if (dataTime) {
+            this.localForm.get('IdMunicipioLicencia').setValue(dataTime.id);
+          }
+        }
+        if (!this.cargandoDireccionEdicion) {
+          this.municipiosRegistros = this.municipioRegistros ? [...this.municipioRegistros] : this.municipiosRegistros;
+        }
+      },
+      (err) => { }
+    );
+  }
+
+  obtenerTipoPersona(id) {
+    this.localComercialService.obtenerDetalleLocalComercial(this.id).subscribe(
+      (Response) => {
+        if (Response.tipoPersona === 1 || Response.tipoPersona === 0) {
+          this.fisica = true;
+        }
+      }
+    )
+  }
+
+  obtenerTieneProgram() {
+    this.localComercialService.obtenerDetalleLocalComercial(this.id).subscribe(
+      (Response) => {
+        if (Response.proteccionCivil.tienePrograma === null) {
+          this.tieneprograma = "No";
+        }
+        else
+          this.tieneprograma = "Sí";
+      }
+    )
+  }
+
+  obtenerEstacionamiento() {
+    this.localComercialService.obtenerDetalleLocalComercial(this.id).subscribe(
+      (Response) => {
+        if (Response.estacionamiento === false || Response.estacionamiento === null) {
+          this.tieneestacionamiento = "No";
+        }
+        else
+          this.tieneestacionamiento = "Sí";
+      }
+    )
+  }
+
+  obtenerTipoPersonaSelect(value) {
+    if (value === 1 || value === 0) {
+      this.fisica = true;
+    }
+    if (value === 2) {
+      this.fisica = false;
+    }
+  }
+
+  agregarCalleLicencia() {
+    this.addCalleLicencia = true;
+  }
+  /**Fin ubicaciones */
+
+  /**Actualizar local */
+  actualizarLocal() {
+    this.loadIndicatorVisible = true;
+    const formData = buildLocalComercialFormData(
+      this.localForm,
+      (controlName) => this.valorDocumento(controlName),
+      { id: this.id, usarValorVacioPorDefecto: true }
+    );
+    mostrarCargandoLocalComercial('Actualizando local comercial');
+      this.localComercialService.actualizarLocal(formData).subscribe(
+        () => {
+          ocultarCargandoLocalComercial(() => {
+            Swal.fire({
+              backdrop: ` rgba(19,41,61) `,
+              title: '¡Operación exitosa!',
+              html: `¡Los datos de la <b>Licencia</b> se han modificado de manera exitosa!`,
+              icon: 'success',
+              confirmButtonColor: '#3085d6',
+              confirmButtonText: 'Confirmar',
+            });
+            this.redirigir();
+          });
+        },
+        () => {
+          ocultarCargandoLocalComercial(() => {
+            Swal.fire({
+              backdrop: ` rgba(19,41,61) `,
+              title: '¡Ops!',
+              text: `¡Error al intentar modificar los datos del local!`,
+              icon: 'warning',
+              confirmButtonColor: '#3085d6',
+              confirmButtonText: 'Confirmar',
+            });
+            this.loading = false;
+            this.loadIndicatorVisible = false;
+            this.botonSuccess = 'Guardar';
+            this.primerIcon = true;
+          });
+        }
+      );
+  }
+
+  googleMaps(){
+    window.open("https://www.google.com.mx/maps/preview", "_blank");
+  }
+
+  redirigir() {
+    this.router.navigateByUrl('/local-comercial/lista-local-comercial');
+  }
+
+  onDocumentoSeleccionado(controlName: string, archivo: File): void {
+    const control = this.localForm.get(controlName);
+    control.setValue(archivo);
+    control.setErrors(null);
+    if (archivo.type.startsWith('image/')) {
+      this.documentosExistentes[controlName] = URL.createObjectURL(archivo);
+    }
+    if (controlName === 'FachadaEstablecimiento') {
+      this.actualizarValidacionFachada();
+    }
+  }
+
+  onDocumentoRechazado(_controlName: string): void {
+    Swal.fire({
+      backdrop: ` rgba(19,41,61) `,
+      title: 'Archivo no válido',
+      text: 'Seleccione una imagen o PDF compatible.',
+      icon: 'warning',
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: 'Entendido',
+    });
+  }
+
+  verDocumentoExistente(doc: DocumentoLocalConfig): void {
+    const url = this.documentosExistentes[doc.controlName];
+    if (!url) {
+      return;
+    }
+
+    const data: SubirDocumentoData = {
+      titulo: doc.titulo,
+      controlName: doc.controlName,
+      urlExistente: url,
+      licenciaCargada: true,
+      soloLectura: true,
+    };
+
+    this.dialog.open(SubirDocumentoModalComponent, {
+      width: '720px',
+      maxWidth: '95vw',
+      panelClass: 'documento-modal-panel',
+      data,
+    });
+  }
+
+  private valorDocumento(controlName: string): File | string {
+    return resolverValorDocumentoFormData(
+      this.localForm.get(controlName)?.value,
+      this.documentosExistentes[controlName],
+      true
+    );
+  }
+
+  private validarFachadaEstablecimiento(control: AbstractControl) {
+    return tieneDocumentoAdjunto(control.value, this.documentosExistentes['FachadaEstablecimiento'])
+      ? null
+      : { required: true };
+  }
+
+  private actualizarValidacionFachada(): void {
+    this.localForm.get('FachadaEstablecimiento')?.updateValueAndValidity({ emitEvent: false });
+  }
+
+  private prepararValidacionObligatoria(): void {
+    const nombre = this.localForm.get('NombreComercial');
+    const fachada = this.localForm.get('FachadaEstablecimiento');
+    nombre?.markAsTouched();
+    fachada?.markAsTouched();
+    this.actualizarValidacionFachada();
+    nombre?.updateValueAndValidity();
+  }
+
+  private obtenerCamposObligatoriosFaltantes(): string[] {
+    const faltantes: string[] = [];
+
+    if (this.localForm.get('NombreComercial')?.invalid) {
+      faltantes.push('Nombre Comercial');
+    }
+    if (this.localForm.get('FachadaEstablecimiento')?.invalid) {
+      faltantes.push('Fachada del Establecimiento');
+    }
+
+    return faltantes;
+  }
+
+  private validarCamposObligatorios(): boolean {
+    this.prepararValidacionObligatoria();
+    return this.obtenerCamposObligatoriosFaltantes().length === 0;
+  }
+
+  private irATabLicenciamiento(): void {
+    this.setActiveTab(2);
+  }
+
+  private mostrarAlertaCamposObligatorios(faltantes: string[]): void {
+    Swal.fire({
+      backdrop: ` rgba(19,41,61) `,
+      title: 'Campos Obligatorios',
+      html: construirHtmlCamposObligatorios(faltantes),
+      icon: 'warning',
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: 'Entendido',
+    });
+  }
+
+  submit() {
+    generarJsonEnvioLocalComercial(
+      this.localForm,
+      (controlName) => this.valorDocumento(controlName),
+      'actualizar',
+      { id: this.id, usarValorVacioPorDefecto: true }
+    );
+
+    this.submitted = true;
+    this.loadIndicatorVisible = false;
+    this.primerIcon = true;
+    this.botonSuccess = 'Guardar';
+    this.primerSpan = true;
+    this.validSpan = true;
+
+    this.prepararValidacionObligatoria();
+    const faltanNombreOFachada =
+      this.localForm.get('NombreComercial')?.invalid ||
+      this.localForm.get('FachadaEstablecimiento')?.invalid;
+
+    if (faltanNombreOFachada) {
+      this.irATabLicenciamiento();
+      this.mostrarAlertaCamposObligatorios(this.obtenerCamposObligatoriosFaltantes());
+      return;
+    }
+
+    const dialogRef = this.dialog.open(SeleccionUbicacionModalComponent, {
+      width: '95vw',
+      maxWidth: '960px',
+      maxHeight: '95vh',
+      panelClass: 'ubicacion-modal-panel',
+      autoFocus: false,
+      disableClose: true,
+      data: {
+        lat: this.localForm.get('Lat').value,
+        lng: this.localForm.get('Lng').value
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((ubicacion) => {
+      if (!ubicacion) {
+        return;
+      }
+
+      this.localForm.patchValue({
+        Lat: ubicacion.lat,
+        Lng: ubicacion.lng
+      });
+
+      if (!tieneCoordenadasValidas(ubicacion.lat, ubicacion.lng)) {
+        Swal.fire({
+          backdrop: ` rgba(19,41,61) `,
+          title: 'Campos Obligatorios',
+          html: construirHtmlCamposObligatorios(['Ubicación del Lugar']),
+          icon: 'warning',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Entendido',
+        });
+        return;
+      }
+
+      this.loadIndicatorVisible = true;
+      this.botonSuccess = 'Enviando...';
+      this.primerIcon = false;
+      this.actualizarLocal();
+      this.validSpan = false;
+    });
+  }
+
+  /*Obtener y actualizar Ubicaciones de sapac para Formulario */
+  esOtroSeleccionado(id: any): boolean {
+    return id === this.OTRO_ID;
+  }
+
+  esOtroLocalidadSapac(): boolean {
+    return this.esOtroSeleccionado(this.localForm.get('IdLocalidadSapac')?.value);
+  }
+
+  esOtroColoniaSapac(): boolean {
+    return this.esOtroSeleccionado(this.localForm.get('IdColoniaSapac')?.value);
+  }
+
+  esOtroCalleSapac(): boolean {
+    return this.esOtroSeleccionado(this.localForm.get('IdCalleSapac')?.value);
+  }
+
+  esOtroLocalidadLicencia(): boolean {
+    return this.esOtroSeleccionado(this.localForm.get('IdLocalidadLicencia')?.value);
+  }
+
+  esOtroColoniaLicencia(): boolean {
+    return this.esOtroSeleccionado(this.localForm.get('IdColoniaLicencia')?.value);
+  }
+
+  esOtroCalleLicencia(): boolean {
+    return this.esOtroSeleccionado(this.localForm.get('IdCalleLicencia')?.value);
+  }
+
+  private tieneIdCatalogo(id: any): boolean {
+    return id !== null && id !== undefined && id !== '' && !this.esOtroSeleccionado(id);
+  }
+
+  private agregarOpcionOtro(lista: FormGenerico[]): FormGenerico[] {
+    const copia = (lista || []).map((x) => ({ id: x.id, nombre: x.nombre }));
+    if (!copia.some((x) => x.id === this.OTRO_ID)) {
+      copia.push({ id: this.OTRO_ID, nombre: 'Otro' });
+    }
+    return copia;
+  }
+
+  private nombreDesdeCatalogo(lista: FormGenerico[], id: any): string {
+    if (this.esOtroSeleccionado(id)) {
+      return '';
+    }
+    return lista?.find((x) => x.id === id)?.nombre ?? '';
+  }
+
+  private sincronizarDireccion(desde: 'sapac' | 'licencia'): void {
+    if (this.sincronizandoDireccion || this.cargandoDireccionEdicion) {
+      return;
+    }
+
+    this.sincronizandoDireccion = true;
+    const origen = desde === 'sapac' ? 'Sapac' : 'Licencia';
+    const destino = desde === 'sapac' ? 'Licencia' : 'Sapac';
+
+    this.localForm.patchValue({
+      [`IdEntidadFederativa${destino}`]: this.localForm.get(`IdEntidadFederativa${origen}`).value,
+      [`IdMunicipio${destino}`]: this.localForm.get(`IdMunicipio${origen}`).value,
+      [`IdLocalidad${destino}`]: this.localForm.get(`IdLocalidad${origen}`).value,
+      [`NombreLocalidad${destino}`]: this.localForm.get(`NombreLocalidad${origen}`).value,
+      [`IdColonia${destino}`]: this.localForm.get(`IdColonia${origen}`).value,
+      [`NombreColonia${destino}`]: this.localForm.get(`NombreColonia${origen}`).value,
+      [`IdCalle${destino}`]: this.localForm.get(`IdCalle${origen}`).value,
+      [`NombreCalle${destino}`]: this.localForm.get(`NombreCalle${origen}`).value,
+      [`NoInterior${destino}`]: this.localForm.get(`NoInterior${origen}`).value,
+      [`NoExterior${destino}`]: this.localForm.get(`NoExterior${origen}`).value,
+      [`CP${destino}`]: this.localForm.get(`CP${origen}`).value,
+    }, { emitEvent: false });
+
+    if (desde === 'sapac') {
+      this.municipioRegistros = this.municipiosRegistros ? [...this.municipiosRegistros] : this.municipioRegistros;
+      this.localidadeRegistros = this.localidadesRegistros ? [...this.localidadesRegistros] : this.localidadeRegistros;
+      this.coloniaRegistros = this.coloniasRegistros ? [...this.coloniasRegistros] : this.coloniaRegistros;
+      this.calleRegistros = this.callesRegistros ? [...this.callesRegistros] : this.calleRegistros;
+    } else {
+      this.municipiosRegistros = this.municipioRegistros ? [...this.municipioRegistros] : this.municipiosRegistros;
+      this.localidadesRegistros = this.localidadeRegistros ? [...this.localidadeRegistros] : this.localidadesRegistros;
+      this.coloniasRegistros = this.coloniaRegistros ? [...this.coloniaRegistros] : this.coloniasRegistros;
+      this.callesRegistros = this.calleRegistros ? [...this.calleRegistros] : this.callesRegistros;
+    }
+
+    this.sincronizandoDireccion = false;
+  }
+
+  onEstadoSapacChange(): void {
+    this.obtenerMunicipios(false);
+    if (!this.cargandoDireccionEdicion) {
+      this.localForm.patchValue({
+        IdEntidadFederativaLicencia: this.localForm.get('IdEntidadFederativaSapac').value,
+      }, { emitEvent: false });
+      this.municipioRegistros = this.municipiosRegistros ? [...this.municipiosRegistros] : this.municipioRegistros;
+    }
+  }
+
+  onEstadoLicenciaChange(): void {
+    this.obtenerMunicipiosLicencia(false);
+    if (!this.cargandoDireccionEdicion) {
+      this.localForm.patchValue({
+        IdEntidadFederativaSapac: this.localForm.get('IdEntidadFederativaLicencia').value,
+      }, { emitEvent: false });
+      this.municipiosRegistros = this.municipioRegistros ? [...this.municipioRegistros] : this.municipiosRegistros;
+    }
+  }
+
+  onMunicipioSapacChange(idMunicipio: number): void {
+    this.obtenerLocalidades(idMunicipio);
+  }
+
+  onMunicipioLicenciaChange(idMunicipio: number): void {
+    this.obtenerLocalidadesLicencia(idMunicipio);
+  }
+
+  onLocalidadSapacChange(idLocalidad: any): void {
+    if (this.esOtroSeleccionado(idLocalidad)) {
+      this.localForm.patchValue({ NombreLocalidadSapac: '' }, { emitEvent: false });
+    } else {
+      this.localForm.patchValue({
+        NombreLocalidadSapac: this.nombreDesdeCatalogo(this.localidadesRegistros, idLocalidad),
+      }, { emitEvent: false });
+    }
+    this.obtenerColonias(idLocalidad);
+  }
+
+  onLocalidadLicenciaChange(idLocalidad: any): void {
+    if (this.esOtroSeleccionado(idLocalidad)) {
+      this.localForm.patchValue({ NombreLocalidadLicencia: '' }, { emitEvent: false });
+    } else {
+      this.localForm.patchValue({
+        NombreLocalidadLicencia: this.nombreDesdeCatalogo(this.localidadeRegistros, idLocalidad),
+      }, { emitEvent: false });
+    }
+    this.obtenerColoniasLicencia(idLocalidad);
+  }
+
+  onColoniaSapacChange(idColonia: any): void {
+    if (this.esOtroSeleccionado(idColonia)) {
+      this.localForm.patchValue({ NombreColoniaSapac: '' }, { emitEvent: false });
+    } else {
+      this.localForm.patchValue({
+        NombreColoniaSapac: this.nombreDesdeCatalogo(this.coloniasRegistros, idColonia),
+      }, { emitEvent: false });
+    }
+    this.obtenerCalles(idColonia);
+  }
+
+  onColoniaLicenciaChange(idColonia: any): void {
+    if (this.esOtroSeleccionado(idColonia)) {
+      this.localForm.patchValue({ NombreColoniaLicencia: '' }, { emitEvent: false });
+    } else {
+      this.localForm.patchValue({
+        NombreColoniaLicencia: this.nombreDesdeCatalogo(this.coloniaRegistros, idColonia),
+      }, { emitEvent: false });
+    }
+    this.obtenerCallesLicencia(idColonia);
+  }
+
+  onCalleSapacChange(idCalle: any): void {
+    if (this.esOtroSeleccionado(idCalle)) {
+      this.localForm.patchValue({ NombreCalleSapac: '' }, { emitEvent: false });
+    } else {
+      this.localForm.patchValue({
+        NombreCalleSapac: this.nombreDesdeCatalogo(this.callesRegistros, idCalle),
+      }, { emitEvent: false });
+    }
+    this.obtenerCalle(idCalle, 'sapac');
+  }
+
+  onCalleLicenciaChange(idCalle: any): void {
+    if (this.esOtroSeleccionado(idCalle)) {
+      this.localForm.patchValue({ NombreCalleLicencia: '' }, { emitEvent: false });
+    } else {
+      this.localForm.patchValue({
+        NombreCalleLicencia: this.nombreDesdeCatalogo(this.calleRegistros, idCalle),
+      }, { emitEvent: false });
+    }
+    this.obtenerCalle(idCalle, 'licencia');
+  }
+
+  onNombreLocalidadSapacChange(): void {
+    if (!this.cargandoDireccionEdicion) {
+      this.localForm.patchValue({
+        NombreLocalidadLicencia: this.localForm.get('NombreLocalidadSapac').value,
+      }, { emitEvent: false });
+    }
+  }
+
+  onNombreColoniaSapacChange(): void {
+    if (!this.cargandoDireccionEdicion) {
+      this.localForm.patchValue({
+        NombreColoniaLicencia: this.localForm.get('NombreColoniaSapac').value,
+      }, { emitEvent: false });
+    }
+  }
+
+  onNombreCalleSapacChange(): void {
+    if (!this.cargandoDireccionEdicion) {
+      this.localForm.patchValue({
+        NombreCalleLicencia: this.localForm.get('NombreCalleSapac').value,
+      }, { emitEvent: false });
+    }
+  }
+
+  onNombreLocalidadLicenciaChange(): void {
+    if (!this.cargandoDireccionEdicion) {
+      this.localForm.patchValue({
+        NombreLocalidadSapac: this.localForm.get('NombreLocalidadLicencia').value,
+      }, { emitEvent: false });
+    }
+  }
+
+  onNombreColoniaLicenciaChange(): void {
+    if (!this.cargandoDireccionEdicion) {
+      this.localForm.patchValue({
+        NombreColoniaSapac: this.localForm.get('NombreColoniaLicencia').value,
+      }, { emitEvent: false });
+    }
+  }
+
+  onNombreCalleLicenciaChange(): void {
+    if (!this.cargandoDireccionEdicion) {
+      this.localForm.patchValue({
+        NombreCalleSapac: this.localForm.get('NombreCalleLicencia').value,
+      }, { emitEvent: false });
+    }
+  }
+
+  onChangeEventNI(event: any): void {
+    const valor = event.target.value;
+    this.localForm.patchValue({ NoInteriorSapac: valor });
+    if (!this.cargandoDireccionEdicion) {
+      this.localForm.patchValue({ NoInteriorLicencia: valor });
+    }
+  }
+
+  onChangeEventNE(event: any): void {
+    const valor = event.target.value;
+    this.localForm.patchValue({ NoExteriorSapac: valor });
+    if (!this.cargandoDireccionEdicion) {
+      this.localForm.patchValue({ NoExteriorLicencia: valor });
+    }
+  }
+
+  onChangeEventCP(event: any): void {
+    const valor = sanitizeNumericValue(event.target.value, 5);
+    this.localForm.patchValue({ CPSapac: valor });
+    if (!this.cargandoDireccionEdicion) {
+      this.localForm.patchValue({ CPLicencia: valor });
+    }
+  }
+
+  onChangeEventNILicencia(event: any): void {
+    const valor = event.target.value;
+    this.localForm.patchValue({ NoInteriorLicencia: valor });
+    if (!this.cargandoDireccionEdicion) {
+      this.localForm.patchValue({ NoInteriorSapac: valor });
+    }
+  }
+
+  onChangeEventNELicencia(event: any): void {
+    const valor = event.target.value;
+    this.localForm.patchValue({ NoExteriorLicencia: valor });
+    if (!this.cargandoDireccionEdicion) {
+      this.localForm.patchValue({ NoExteriorSapac: valor });
+    }
+  }
+
+  onChangeEventCPLicencia(event: any): void {
+    const valor = sanitizeNumericValue(event.target.value, 5);
+    this.localForm.patchValue({ CPLicencia: valor });
+    if (!this.cargandoDireccionEdicion) {
+      this.localForm.patchValue({ CPSapac: valor });
+    }
+  }
+
+  onRfcInput(event: Event, controlName: string): void {
+    const input = event.target as HTMLInputElement;
+    const sanitized = sanitizeRfcValue(input.value);
+    if (input.value !== sanitized) {
+      input.value = sanitized;
+    }
+    this.localForm.get(controlName)?.setValue(sanitized, { emitEvent: false });
+  }
+
+  onNumericInput(event: Event, controlName: string, maxLength: number): void {
+    const input = event.target as HTMLInputElement;
+    const sanitized = sanitizeNumericValue(input.value, maxLength);
+    if (input.value !== sanitized) {
+      input.value = sanitized;
+    }
+    this.localForm.get(controlName)?.setValue(sanitized, { emitEvent: false });
+  }
+
+  obtenerEstados() {
+    this.localComercialService.obtenerEstados().subscribe(
+      (res: FormGenerico[]) => {
+        this.estadosRegistros = res;
+        if (!this.cargandoDireccionEdicion) {
+          const dataTime = this.estadosRegistros.find(c => c.id === 17);
+          if (dataTime) {
+            this.localForm.get('IdEntidadFederativaSapac').setValue(dataTime.id);
+          }
+        }
+      }
+    );
+  }
+
+  obtenerMunicipios(aplicarDefault = true) {
+    this.localComercialService.obtenerMunicipiosEstado().subscribe(
+      (res: FormGenerico[]) => {
+        this.municipiosRegistros = res;
+        if (aplicarDefault && !this.cargandoDireccionEdicion) {
+          const dataTime = this.municipiosRegistros.find(c => c.id === 906);
+          if (dataTime) {
+            this.localForm.get('IdMunicipioSapac').setValue(dataTime.id);
+          }
+        }
+        if (!this.cargandoDireccionEdicion) {
+          this.municipioRegistros = this.municipiosRegistros ? [...this.municipiosRegistros] : this.municipioRegistros;
+        }
+      },
+      (err) => { }
+    );
+  }
+
+  obtenerLocalidades(idMunicipio) {
+    if (!this.tieneIdCatalogo(idMunicipio)) {
+      this.localidadesRegistros = this.agregarOpcionOtro([]);
+      this.sincronizarDireccion('sapac');
+      return;
+    }
+
+    this.localComercialService.obtenerLocalidadesMunicipio(idMunicipio).subscribe(
+      (res: FormGenerico[]) => {
+        this.localidadesRegistros = this.agregarOpcionOtro(res);
+        const idLocalidad = this.localForm.get('IdLocalidadSapac').value;
+        if (!this.esOtroSeleccionado(idLocalidad)) {
+          this.localForm.patchValue({
+            NombreLocalidadSapac: this.nombreDesdeCatalogo(this.localidadesRegistros, idLocalidad),
+          }, { emitEvent: false });
+        }
+        this.sincronizarDireccion('sapac');
+      },
+      (err) => {
+        this.localidadesRegistros = this.agregarOpcionOtro([]);
+      }
+    );
+  }
+
+  obtenerLocalidadesLicencia(idMunicipio) {
+    if (!this.tieneIdCatalogo(idMunicipio)) {
+      this.localidadeRegistros = this.agregarOpcionOtro([]);
+      this.sincronizarDireccion('licencia');
+      return;
+    }
+
+    this.localComercialService.obtenerLocalidadesMunicipio(idMunicipio).subscribe(
+      (res: FormGenerico[]) => {
+        this.localidadeRegistros = this.agregarOpcionOtro(res);
+        const idLocalidad = this.localForm.get('IdLocalidadLicencia').value;
+        if (!this.esOtroSeleccionado(idLocalidad)) {
+          this.localForm.patchValue({
+            NombreLocalidadLicencia: this.nombreDesdeCatalogo(this.localidadeRegistros, idLocalidad),
+          }, { emitEvent: false });
+        }
+        this.sincronizarDireccion('licencia');
+      },
+      (err) => {
+        this.localidadeRegistros = this.agregarOpcionOtro([]);
+      }
+    );
+  }
+
+  obtenerCalle(idCalle, origen: 'sapac' | 'licencia' = 'sapac') {
+    if (this.esOtroSeleccionado(idCalle)) {
+      if (origen === 'sapac') {
+        this.localForm.patchValue({ NombreCalleSapac: '' }, { emitEvent: false });
+      } else {
+        this.localForm.patchValue({ NombreCalleLicencia: '' }, { emitEvent: false });
+      }
+      this.sincronizarDireccion(origen);
+      return;
+    }
+
+    const idColonia = origen === 'sapac'
+      ? this.localForm.get('IdColoniaSapac').value
+      : this.localForm.get('IdColoniaLicencia').value;
+
+    if (this.esOtroSeleccionado(idColonia)) {
+      this.sincronizarDireccion(origen);
+      return;
+    }
+
+    if (!this.tieneIdCatalogo(idColonia)) {
+      this.sincronizarDireccion(origen);
+      return;
+    }
+
+    this.localComercialService.obtenerCallesColonia(idColonia).subscribe(
+      (res: FormGenerico[]) => {
+        const calles = this.agregarOpcionOtro(res);
+        if (origen === 'sapac') {
+          this.callesRegistros = calles;
+          this.addCalle = false;
+          if (!this.esOtroSeleccionado(idCalle)) {
+            this.localForm.patchValue({
+              NombreCalleSapac: this.nombreDesdeCatalogo(this.callesRegistros, idCalle),
+            }, { emitEvent: false });
+          }
+          this.sincronizarDireccion('sapac');
+        } else {
+          this.calleRegistros = calles;
+          this.addCalleLicencia = true;
+          if (!this.esOtroSeleccionado(idCalle)) {
+            this.localForm.patchValue({
+              NombreCalleLicencia: this.nombreDesdeCatalogo(this.calleRegistros, idCalle),
+            }, { emitEvent: false });
+          }
+          this.sincronizarDireccion('licencia');
+        }
+      },
+      () => {
+        if (origen === 'sapac') {
+          this.callesRegistros = this.agregarOpcionOtro([]);
+        } else {
+          this.calleRegistros = this.agregarOpcionOtro([]);
+        }
+      });
+  }
+
+  obtenerCalleLicencia(idCalleLicencia) {
+    this.obtenerCalle(idCalleLicencia, 'licencia');
+  }
+
+  private cargarColonias(idLocalidad: any, origen: 'sapac' | 'licencia'): void {
+    if (origen === 'sapac') {
+      this.idLocalidadSapac = idLocalidad;
+    } else {
+      this.idLocalidadLicencia = idLocalidad;
+    }
+
+    if (!this.tieneIdCatalogo(idLocalidad)) {
+      const colonias = this.agregarOpcionOtro([]);
+      if (origen === 'sapac') {
+        this.coloniasRegistros = colonias;
+        this.callesRegistros = this.agregarOpcionOtro([]);
+      } else {
+        this.coloniaRegistros = colonias;
+        this.calleRegistros = this.agregarOpcionOtro([]);
+      }
+      this.sincronizarDireccion(origen);
+      return;
+    }
+
+    this.localComercialService.obtenerColoniasLocalidad(idLocalidad).subscribe(
+      (res: FormGenerico[]) => {
+        const colonias = this.agregarOpcionOtro(res);
+        if (origen === 'sapac') {
+          this.coloniasRegistros = colonias;
+          const idColonia = this.localForm.get('IdColoniaSapac').value;
+          if (!this.esOtroSeleccionado(idColonia)) {
+            this.localForm.patchValue({
+              NombreColoniaSapac: this.nombreDesdeCatalogo(this.coloniasRegistros, idColonia),
+            }, { emitEvent: false });
+          }
+          this.sincronizarDireccion('sapac');
+        } else {
+          this.coloniaRegistros = colonias;
+          const idColonia = this.localForm.get('IdColoniaLicencia').value;
+          if (!this.esOtroSeleccionado(idColonia)) {
+            this.localForm.patchValue({
+              NombreColoniaLicencia: this.nombreDesdeCatalogo(this.coloniaRegistros, idColonia),
+            }, { emitEvent: false });
+          }
+          this.sincronizarDireccion('licencia');
+        }
+      },
+      () => {
+        if (origen === 'sapac') {
+          this.coloniasRegistros = this.agregarOpcionOtro([]);
+        } else {
+          this.coloniaRegistros = this.agregarOpcionOtro([]);
+        }
+      }
+    );
+  }
+
+  obtenerColonias(idLocalidad) {
+    this.cargarColonias(idLocalidad, 'sapac');
+  }
+
+  obtenerColoniasLicencia(idLocalidad) {
+    this.cargarColonias(idLocalidad, 'licencia');
+  }
+
+  private cargarCalles(idColonia: any, origen: 'sapac' | 'licencia'): void {
+    if (origen === 'sapac') {
+      this.idColoniaSapac = idColonia;
+    } else {
+      this.idColoniaLicencia = idColonia;
+    }
+
+    if (!this.tieneIdCatalogo(idColonia)) {
+      const calles = this.agregarOpcionOtro([]);
+      if (origen === 'sapac') {
+        this.callesRegistros = calles;
+      } else {
+        this.calleRegistros = calles;
+      }
+      this.sincronizarDireccion(origen);
+      return;
+    }
+
+    this.localComercialService.obtenerCallesColonia(idColonia).subscribe(
+      (res: FormGenerico[]) => {
+        const calles = this.agregarOpcionOtro(res);
+        if (origen === 'sapac') {
+          this.callesRegistros = calles;
+          this.addCalle = false;
+          const idCalle = this.localForm.get('IdCalleSapac').value;
+          if (!this.esOtroSeleccionado(idCalle)) {
+            this.localForm.patchValue({
+              NombreCalleSapac: this.nombreDesdeCatalogo(this.callesRegistros, idCalle),
+            }, { emitEvent: false });
+          }
+          this.sincronizarDireccion('sapac');
+        } else {
+          this.calleRegistros = calles;
+          this.addCalleLicencia = true;
+          const idCalle = this.localForm.get('IdCalleLicencia').value;
+          if (!this.esOtroSeleccionado(idCalle)) {
+            this.localForm.patchValue({
+              NombreCalleLicencia: this.nombreDesdeCatalogo(this.calleRegistros, idCalle),
+            }, { emitEvent: false });
+          }
+          this.sincronizarDireccion('licencia');
+        }
+      },
+      () => {
+        if (origen === 'sapac') {
+          this.callesRegistros = this.agregarOpcionOtro([]);
+        } else {
+          this.calleRegistros = this.agregarOpcionOtro([]);
+        }
+      });
+  }
+
+  obtenerCalles(idColonia) {
+    this.cargarCalles(idColonia, 'sapac');
+  }
+
+  obtenerCallesLicencia(idColonia) {
+    this.cargarCalles(idColonia, 'licencia');
+  }
+
+  agregarCalle() {
+    this.addCalle = true;
+  }
+  /*Fin de ubicaciones */
+
+  /*Obtener Catalogos */
+  obtenerRoles() {
+    this.localComercialService.obtenerRoles().subscribe((response) => {
+      this.roles = response;
+    });
+  }
+
+  obtenerGrupo() {
+    this.localComercialService.obtenerGrupos().subscribe((response) => {
+      this.grupo = response;
+    });
+  }
+
+  obtenerTipoFoto() {
+    this.localComercialService.obtenerTipoFoto().subscribe((response) => {
+      this.foto = response;
+    });
+  }
+
+  obtenerServicios() {
+    this.localComercialService.obtenerTiposServicios().subscribe((response) => {
+      this.tipos = response;
+    });
+  }
+
+  obtenerEstatus() {
+    this.localComercialService.obtenerEstatus().subscribe((response) => {
+      this.estatus = response;
+    });
+  }
+
+  obtenerGiros() {
+    this.localComercialService.obtenerGiros().subscribe((response) => {
+      this.giros = response;
+    });
+  }
+  /*Fin de Catalogos */
+
+  validarTipoPersona(tipoPersona) {
+    if (tipoPersona == 1) {
+      this.esMoral = false;
+    } else {
+      this.esMoral = true;
+    }
+  }
+
+  validarEstacionamiento(estacionamiento) {
+    if (estacionamiento == 1) {
+      this.estacion = false;
+    } else {
+      this.estacion = true;
+    }
+  }
+
+  validarEmpresa(tipoEmpresa) {
+    if (tipoEmpresa == 1) {
+      this.empresa = false;
+    } else {
+      this.empresa = true;
+    }
+  }
+
+  validarPrograma(tipoPrograma) {
+    if (tipoPrograma == false) {
+      this.programa = false;
+    } else {
+      this.programa = true;
+    }
+  }
+
+}

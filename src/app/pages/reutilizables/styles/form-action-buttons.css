@@ -1,0 +1,43 @@
+/* Botones guardar / cancelar de formularios — referencia: alta-usuario (175x42) */
+.btn.btn-success {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background-color: #52bb56;
+  border: none;
+  width: 175px;
+  height: 42px;
+  color: white;
+  font-size: 1rem;
+}
+
+.btn.btn-success:hover {
+  background-color: #08b80e;
+}
+
+.btn.btn-success:disabled {
+  background-color: #90da93;
+}
+
+.btn.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background-color: #fb434a;
+  border: none;
+  width: 175px;
+  height: 42px;
+  color: white;
+  font-size: 1rem;
+}
+
+.btn.btn-primary:hover {
+  background-color: #a30005;
+}
+
+.btn.btn-success .fas.fa-check,
+.btn.btn-primary .fas.fa-times {
+  color: white;
+}

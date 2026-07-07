@@ -1,0 +1,171 @@
+@import "@angular/material/theming";
+@import "./var-helpers";
+
+// InmueblesWebApp — layout palette (dark)
+$layout-primary: #60a5fa;
+$layout-secondary: #681330;
+$layout-accent: #f43f5e;
+$layout-success: #37a316;
+$layout-warning: #f59e0b;
+$layout-error: #dc2626;
+$layout-body-bg: #141a21;
+$layout-surface: #1c252e;
+$layout-surface-mid: #2b303b;
+$layout-surface-header: #2f343b;
+$layout-page-header-bg: #2b303b !default;
+$layout-text: #e6f1ff;
+$layout-text-muted: rgba(230, 241, 255, 0.70);
+$layout-border: #2e3f50;
+$layout-border-soft: rgba(255, 255, 255, 0.12);
+$layout-border-card-header: #454c56;
+$layout-accent-teal: #14b8aa;
+$layout-accent-blue: #1e40af;
+$layout-secondary-tint: rgba(104, 19, 48, 0.1);
+
+$theme-background: $layout-body-bg !default;
+$theme-card: $layout-surface !default;
+$theme-app-bar: $layout-surface !default;
+$theme-status-bar: $layout-surface !default;
+$theme-text: $layout-text !default;
+$theme-secondary-text: $layout-text-muted !default;
+$theme-hint-text: $layout-text-muted !default;
+$theme-divider: $layout-border-soft !default;
+$theme-icon: $layout-text-muted !default;
+$theme-background-hover: $layout-secondary-tint !default;
+
+// Utilities
+@import "../partials/utilities";
+// Cards
+@import "../partials/cards";
+// Tabs
+@import "../partials/tabs";
+// Quill
+@import "../partials/plugins/quill";
+// Angular Calendar
+@import "../partials/plugins/angular-calendar";
+
+// Sidebar
+$sidebar-width: 330px !default;
+$sidebar-background: $theme-background !default;
+$sidebar-box-shadow: 0 2px 8px 0 rgba(0, 0, 0, .40) !default;
+@import "../../shared/sidebar/sidebar.directive.theme";
+
+// Sidenav
+$sidenav-background: $layout-surface !default;
+$sidenav-color: rgba(255, 255, 255, 0.9) !default;
+$sidenav-box-shadow: 0 2px 8px 0 rgba(0, 0, 0, .40) !default;
+$sidenav-toolbar-background: $layout-surface !default;
+$sidenav-logo-color: $layout-text !default;
+$sidenav-secondary-text: $layout-text-muted !default;
+$sidenav-collapsed-hover-box-shadow: 0 2px 8px 0 rgba(0, 0, 0, .40) !default;
+
+@import "../../../app/layout/sidenav/sidenav.component.theme";
+
+// Sidenav Item
+$sidenav-item-color: $sidenav-color !default;
+$sidenav-item-color-hover: #ffffff !default;
+$sidenav-item-color-active: #ffffff !default;
+$sidenav-item-color-dropdown-open: $layout-secondary !default;
+
+$sidenav-item-background-hover: $layout-secondary !default;
+$sidenav-item-background-active: $layout-secondary !default;
+$sidenav-item-text-icon-color: $layout-text-muted !default;
+
+$sidenav-item-typography-font-family: var(--font-family) !default;
+$sidenav-item-typography-font-size: 14px !default;
+$sidenav-item-typography-font-weight: 400 !default;
+
+$sidenav-item-subheading-color: $layout-text-muted !default;
+$sidenav-item-subheading-typography-font-family: var(--font-family) !default;
+
+$sidenav-item-dropdown-level1: $layout-secondary-tint !default;
+$sidenav-item-dropdown-level2: darken($layout-surface, 2.5) !default;
+$sidenav-item-dropdown-level3: darken($layout-surface, 5) !default;
+$sidenav-item-dropdown-level4: darken($layout-surface, 7.5) !default;
+
+@import "../../../app/layout/sidenav/sidenav-item/sidenav-item.component.theme";
+
+// Toolbar
+$toolbar-background: $layout-secondary !default;
+$toolbar-color: #ffffff !default;
+$toolbar-elevation: 1 !default;
+$toolbar-logo-color: #ffffff !default;
+
+$toolbar-button-separator-color: rgba(255, 255, 255, 0.14) !default;
+
+$toolbar-user-dropdown-elevation: $elevation !default;
+$toolbar-notification-elevation: $elevation !default;
+
+$toolbar-search-background: rgba(255, 255, 255, 0.12) !default;
+$toolbar-search-dropdown-elevation: $elevation !default;
+
+@import "../../../app/layout/toolbar/toolbar.component.theme";
+
+// Navigation
+@import "../../../app/layout/navigation/navigation.component.theme";
+
+// Card tokens
+$card-bg-base: $layout-body-bg !default;
+$card-text: $layout-text !default;
+$card-text-muted: $layout-text-muted !default;
+$card-text-secondary: rgba(255, 255, 255, 0.67) !default;
+$card-elevated-bg: $layout-surface !default;
+$card-surface-mid: $layout-surface-mid !default;
+$card-surface-header: $layout-surface-header !default;
+$card-border-soft: $layout-border-soft !default;
+$card-border: $layout-border !default;
+$card-border-header: $layout-border-card-header !default;
+$card-border-header-soft: rgba(83, 91, 102, 0.7) !default;
+$card-accent-teal: $layout-accent-teal !default;
+$card-accent-blue: $layout-accent-blue !default;
+$card-link-hover: $layout-primary !default;
+$card-inner-bg: mix(#000000, $card-bg-base, 4%) !default;
+
+// Card
+@import "../../shared/card/card.component.theme";
+@import "../partials/cards-inmuebles-theme";
+
+// Footer
+$footer-background: $layout-secondary !default;
+$footer-color: #ffffff !default;
+$footer-border-top: 1px solid rgba(255, 255, 255, 0.14) !default;
+$footer-elevation: 0 !default;
+@import "../../../app/layout/footer/footer.component.theme";
+
+// Title
+@import "../../shared/title/title.directive.theme";
+
+// Page
+@import "../../shared/page/page.directive.theme";
+
+// Page Layout
+@import "../../shared/page-layout/page-layout.directive.theme";
+
+// Backdrop
+@import "../../shared/backdrop/backdrop.directive.theme";
+
+// Breadcrumbs
+@import "../../shared/breadcrumbs/breadcrumbs.component.theme";
+
+// List
+@import "../../shared/list/list.component.theme";
+
+// Widgets
+
+// Advanced Pie Chart Widget
+@import "../../../app/pages/dashboard/widgets/advanced-pie-chart-widget/advanced-pie-chart-widget.component.theme";
+
+// Recent Sales Widget
+@import "../../../app/pages/dashboard/widgets/recent-sales-widget/recent-sales-widget.component.theme";
+
+// Market Widget
+@import "../../../app/pages/dashboard/widgets/market-widget/market-widget.component.theme";
+
+// Sales Summary Widget
+@import "../../../app/pages/dashboard/widgets/sales-summary-widget/sales-summary-widget.component.theme";
+
+// Audience Overview Widget
+@import "../../../app/pages/dashboard/widgets/audience-overview-widget/audience-overview-widget.component.theme";
+
+// Donut Chart Widget
+@import "../../../app/pages/dashboard/widgets/donut-chart-widget/donut-chart-widget.component.theme";

@@ -1,0 +1,142 @@
+<fury-page-layout mode="card">
+  <fury-page-layout-header>
+    <fury-breadcrumbs [@fadeInRight] style="position: fixed;" current="Locales Comerciales" routerLink="local-comercial/lista-local-comercial" link="{{titulo}}">
+    </fury-breadcrumbs>
+  </fury-page-layout-header>
+
+  <fury-page-layout-content [@fadeInUp]>
+    <mat-card>
+      <div class="encabezado">
+        <section class="contenedor-elementos" fxLayout="column">
+          <article class="contenedor-elementos__articulo" fxFlex="grow" fxLayout="row" fxLayoutAlign="space-between center">
+            <div>
+              <span class="h3"> <i class="fas fa-file-alt"></i>&nbsp;Locales Comerciales</span>
+            </div>
+            <div fxLayout="row">
+              <button [@scaleIn] *ngIf="showButtonReload" [buttonDisabled]="isDisabled" (click)="reload()" class="reload">
+                Actualizar
+              </button>&nbsp;&nbsp;&nbsp;&nbsp;
+              <ng-container *ngxPermissionsOnly="[permisoAltaLocales]">
+                <button type="submit" class="agregar" (click)="AgregarLocal()" style="margin-right: 15px;">
+                  <i class="fas fa-plus"></i>&nbsp;&nbsp;Agregar
+                </button>
+              </ng-container>
+              <app-boton-exportar-tabla [tipoBoton]="'grid'" [nombreArchivo]="'Locales_comerciales'"
+                [datos]="datosReporte" [buttonDisabled]="isDisabled">
+              </app-boton-exportar-tabla>
+            </div>
+          </article> <br>
+        </section>
+      </div>
+      <mat-divider></mat-divider><br>
+      <div class="result" fxLayout="column row">
+        <div fxLayout.gt-sm="row margin-left: 2px;" fxLayoutGap.gt-sm="16px" >
+          <dx-validation-group #targetGroup>
+            <div class="result" fxLayout="row">
+              <div fxLayout="row" fxLayoutGap="16px">
+                <div class="col col-sm-12 col-md-3 col-lg-3 mt-2">
+                  <label style="color: #d5238b;">Fecha Inicial</label>
+                  <dx-date-box [(value)]="fechaInicio" type="datetime" style="width: 100%;" displayFormat="yyyy-MM-dd HH:mm:ss">
+                    <dx-validator>
+                      <dxi-validation-rule message="Campo Requerido" type="required">
+                      </dxi-validation-rule>
+                    </dx-validator>
+                  </dx-date-box>
+                </div>
+                <div class="col col-sm-12 col-md-3 col-lg-3 mt-2">
+                  <label style="color: #d5238b;">Fecha Final</label>
+                  <dx-date-box [(value)]="fechaFinal" style="width: 100%;" type="datetime" displayFormat="yyyy-MM-dd HH:mm:ss">
+                    <dx-validator>
+                      <dxi-validation-rule message="Campo Requerido" type="required">
+                      </dxi-validation-rule>
+                    </dx-validator>
+                  </dx-date-box>
+                </div>
+                <div class="col col-sm-12 col-md-12 col-lg-3 mt-3">
+                  <div class="row mt-3">
+                    <button id="boton" type="submit" class="generic" style="margin-top: 7%;"
+                      (click)="obtenerListaLocalesComerciales(fechaInicio, fechaFinal)">
+                      <i class="fas fa-search"></i>&nbsp;&nbsp;Buscar
+                    </button>&nbsp;
+                  </div>
+                </div>
+              </div>
+            </div>
+          </dx-validation-group>
+        </div>
+      </div> <br>
+      <ng-container>
+        <div class="data-grid">
+          <dx-data-grid id="gridContainer" [dataSource]="listaLocales" [columnHidingEnabled]="true" [showBorders]="true" [rowAlternationEnabled]="true">
+            <dxo-paging [pageSize]="5"></dxo-paging>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 50, 100]" [showInfo]="true"> </dxo-pager>
+            <dxo-group-panel [emptyPanelText]="mensajeAgrupar" [visible]="true"> </dxo-group-panel>
+            <dxo-search-panel [(visible)]="showShared" [highlightCaseSensitive]="true"></dxo-search-panel>
+            <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
+            <dxo-header-filter [visible]="showHeaderFilter"> </dxo-header-filter>
+            <ng-container *ngxPermissionsOnly="[permisoActualizarLocales, permisoVisualizarDetalle, permisoEliminarLocales]">
+              <dxi-column caption="Acciones" cellTemplate="acciones" alignment="center" [width]="180"> </dxi-column>
+            </ng-container>
+            <dxi-column dataField="urlLicencia" caption="Licencia de Funcionamiento" alignment="center" cellTemplate="cellTemplate" [width]="190" alignment="center"></dxi-column>
+            <dxi-column dataField="rfc" caption="RFC" alignment="center" cellTemplate="textCell" [width]="130">
+              <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+            </dxi-column>
+            <dxi-column dataField="nombreComercial" caption="Nombre Comercial" alignment="center" cellTemplate="textCell">
+              <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+            </dxi-column>
+            <dxi-column dataField="giro" caption="Giro" alignment="center" cellTemplate="textCell" [width]="230">
+              <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+            </dxi-column>
+            <dxi-column dataField="nombreCapturista" caption="Capturista" alignment="center" cellTemplate="textCell" [width]="190">
+              <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+            </dxi-column>
+            <dxi-column dataField="nombreEstatus" [width]="190" caption="Estatus" alignment="center"
+              cellTemplate="color">
+              <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+            </dxi-column>
+            <dxi-column dataField="fechaHora" caption="Fecha de Expedición" alignment="center" cellTemplate="dateCell" [width]="190" dataType="date">
+              <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+            <div *dxTemplate="let cellData of 'dateCell'">
+              <span [class.grid-sin-informacion]="!cellData.value">{{ cellData.value ? (cellData.value | date: 'yyyy-MM-dd - h:mm a') : 'Sin Información' }}</span>
+            </div>
+            </dxi-column>
+            <div *dxTemplate="let data of 'cellTemplate'" style="display: inline-block;">
+              <img [src]="data.value" (error)="onGridImageError($event)" alt="Licencia" style="max-width: 120px; max-height: 400px;" />
+            </div>
+            <div *dxTemplate="let cell of 'textCell'">
+              <span [class.grid-sin-informacion]="cell.value === 'Sin Información'">{{ cell.value }}</span>
+            </div>
+            <div *dxTemplate="let row of 'acciones'">
+              <ng-container *ngxPermissionsOnly="[permisoActualizarLocales]">
+                <dx-button valueExpr="id" id="actualizarButton" class="btnAcciones" (click)="EditarLocal(row.data.id)">
+                  <i class="fas fa-pen"></i>
+                </dx-button>&nbsp;&nbsp;&nbsp;
+              </ng-container>
+              <ng-container *ngxPermissionsOnly="[permisoVisualizarDetalle]">
+                <dx-button valueExpr="id" id="actualizarButton" class="btnAccion" (click)="detalleLocal(row.data.id)">
+                  <i class="far fa-question-circle"></i>
+                </dx-button>&nbsp;&nbsp;&nbsp;
+              </ng-container>
+              <ng-container *ngxPermissionsOnly="[permisoEliminarLocales]">
+                <dx-button valueExpr="id" matTooltip="Baja" id="bajaBoton" class="btnAccione"
+                  (click)="cambiarEstatuss(row.data.id, 5)">
+                  <i class="fa fa-arrow-down"></i>
+                </dx-button>
+              </ng-container>
+            </div>
+            <div *dxTemplate="let p of 'color'" class="colores" style="align-items: center;">
+              <p *ngIf="p.data.nombreEstatus === 'Rechazo o Sin respuesta'" class="rojo">{{p.data.nombreEstatus}}</p>
+              <p *ngIf="p.data.nombreEstatus === 'Datos Correctos'" class="verde">{{p.data.nombreEstatus}}</p>
+              <p *ngIf="p.data.nombreEstatus === 'Información Faltante'" class="naranja">{{p.data.nombreEstatus}}</p>
+              <p *ngIf="p.data.nombreEstatus === 'Revisión'" class="azul">{{p.data.nombreEstatus}}</p>
+            </div>
+          </dx-data-grid>
+        </div>
+      </ng-container>
+    </mat-card>
+  </fury-page-layout-content>
+</fury-page-layout>
+
+<dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [(visible)]="loadingVisible" [showIndicator]="true"
+  [showPane]="true" [shading]="true" [closeOnOutsideClick]="false" (onShown)="onShown()" [message]="loadingMessage">
+</dx-load-panel>

@@ -1,0 +1,31 @@
+@use '@angular/material' as mat;
+.fury-card {
+  background: $card-elevated-bg;
+  color: $card-text;
+  border: 1px solid $card-border-soft;
+
+  @include mat.elevation($elevation);
+
+  .fury-card-header {
+    background: $card-elevated-bg;
+    color: $card-text;
+  }
+
+  .fury-card-header-heading {
+    color: $card-text;
+  }
+
+  .fury-card-header-subheading {
+    color: $card-text-secondary;
+  }
+
+  .fury-card-content {
+    background: inherit;
+    color: $card-text;
+  }
+
+  .fury-card-actions {
+    background: $card-elevated-bg;
+    border-top: 1px solid $card-border-soft;
+  }
+}

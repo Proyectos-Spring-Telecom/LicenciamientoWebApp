@@ -1,0 +1,212 @@
+<fury-page [fxLayoutGap]="gap" class="dashboard" fxLayout="column">
+  <fury-page-layout-content [@fadeInUp]>
+    <div fxFlex="noshrink" fxLayout="column" [fxLayoutGap]="gap" fxLayout.gt-lg="row">
+      <div fxLayout="column" [fxLayoutGap]="gap" [fxFlex]="col(2)" fxLayout.gt-sm="row">
+        <fury-quick-info-widget class="route-animations-elements" fxFlex="grow"
+          value="{{totalRechazados}} Establecimientos Comerciales" label="Rechazo o Sin Respuesta"
+          [background]="'#fb2121'" color="white" icon="no_sim">
+          <fury-loading-overlay [isLoading]="isLoading"></fury-loading-overlay>
+        </fury-quick-info-widget>
+        <fury-quick-info-widget class="route-animations-elements" fxFlex="grow"
+          value="{{totalRevision}} Establecimientos Comerciales" label="Revisión" [background]="'#438AE3'" color="white"
+          icon="history">
+        </fury-quick-info-widget>
+      </div>
+      <div fxLayout="column" [fxLayoutGap]="gap" [fxFlex]="col(2)" fxLayout.gt-sm="row">
+        <fury-quick-info-widget class="route-animations-elements" fxFlex="grow"
+          value="{{totalFaltante}} Establecimientos Comerciales" label="Información Faltante" [background]="'#f9c300'"
+          color="white" icon="new_releases">
+        </fury-quick-info-widget>
+        <fury-quick-info-widget class="route-animations-elements" fxFlex="grow"
+          value="{{totalValidados}} Establecimientos Comerciales" label="Datos Correctos" [background]="'#3da73d'"
+          color="white" icon="thumb_up">
+        </fury-quick-info-widget>
+      </div>
+    </div>
+  </fury-page-layout-content>
+
+  <fury-page-layout mode="card">
+    <fury-page-layout-content [fxLayoutGap]="gap" fxLayout="column">
+      <div [fxLayoutGap]="gap" fxFlex="noshrink" fxLayout="column" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="start stretch">
+        <fury-card [fxFlex.gt-sm]="col2" class="basic-forms route-animations-elements" [@fadeInUp] fxFlex="grow">
+          <fury-card-header>
+            <fury-card-header-heading>
+              <i class="fas fa-chart-line"></i>&nbsp; Estadística Operativa
+            </fury-card-header-heading>
+          </fury-card-header>
+          <mat-divider></mat-divider>
+          <fury-card-content style="margin-top: 2%;" fxLayout="column">
+            <div class="chart-demo">
+              <dx-chart id="chart" title="Producción Mensual" [dataSource]="datosGrafica"
+                (onInitialized)="onInitializedMonths($event)">
+                <dxo-zoom-and-pan argumentAxis="both" valueAxis="both">
+                  <!-- or "zoom" | "pan" | "none" -->
+                </dxo-zoom-and-pan>
+                <dxo-loading-indicator [show]="true"></dxo-loading-indicator>
+                <dxi-series valueField="statusrevision" name="Revisión" color="#438AE3"></dxi-series>
+                <dxi-series valueField="statusrechazado" name="Rechazo o Sin Respuesta" color="#FB2121"></dxi-series>
+                <dxi-series valueField="statuscorrecto" name="Datos Correctos" color="#3DA73D"></dxi-series>
+                <dxi-series valueField="statusfaltante" name="Información Faltante" color="#F9C300"></dxi-series>
+                <dxo-common-series-settings argumentField="mes" type="bar" hoverMode="allArgumentPoints" selectionMode="allArgumentPoints">
+                  <dxo-label [visible]="true" [format]="{ type: 'fixedPoint', precision: '0'}"></dxo-label>
+                </dxo-common-series-settings>
+                <dxo-legend verticalAlignment="bottom" horizontalAlignment="center"></dxo-legend>
+                <dxo-export [enabled]="true"></dxo-export>
+              </dx-chart>
+            </div>
+          </fury-card-content>
+        </fury-card>
+
+        <fury-card [fxFlex.gt-sm]="col2" class="advanced-forms route-animations-elements" [@fadeInUp] fxFlex="grow">
+          <fury-card-header>
+            <fury-card-header-heading>
+              <i class="fas fa-chart-pie"></i>&nbsp; Estado al Día
+            </fury-card-header-heading>
+          </fury-card-header>
+          <mat-divider></mat-divider>
+          <fury-card-content style="margin-top: 2%;" fxLayout="column">
+            <dx-pie-chart type="doughnut" title="Establecimientos Comerciales en Tránsito" palette="Soft Pastel"
+              [dataSource]="datosPastel" (onInitialized)="onInitializedCake($event)" [customizePoint]="customizePoint">
+              <dxo-loading-indicator [show]="true"></dxo-loading-indicator>
+              <dxo-export [enabled]="true"></dxo-export>
+              <dxo-legend horizontalAlignment="center" verticalAlignment="bottom"></dxo-legend>
+              <dxi-series argumentField="etiqueta" valueField="percent">
+                <dxo-small-values-grouping mode="topN" [topCount]="4"></dxo-small-values-grouping>
+                <dxo-label [visible]="true" format="fixedPoint" [customizeText]="etiquetaPie">
+                  <dxo-connector [visible]="true" [width]="1"></dxo-connector>
+                </dxo-label>
+              </dxi-series>
+            </dx-pie-chart>
+          </fury-card-content>
+        </fury-card>
+      </div>
+    </fury-page-layout-content> <br>
+
+    <fury-page-layout-content [fxLayoutGap]="gap" fxLayout="column">
+      <div [fxLayoutGap]="gap" fxFlex="noshrink" fxLayout="column" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="start stretch">
+        <fury-card [fxFlex.gt-sm]="col2" class="basic-forms route-animations-elements" [@fadeInUp] fxFlex="grow">
+          <fury-card-header>
+            <fury-card-header-heading>
+              <i class="fas fa-calendar-alt"></i>&nbsp; Nivel de Captura por Periódo
+            </fury-card-header-heading>
+          </fury-card-header>
+          <mat-divider></mat-divider>
+          <fury-card-content style="margin-top: 2%;" fxLayout="column">
+            <div class="chart-demo">
+              <div class="dashboard-filters" fxLayout="column" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="end stretch" fxLayoutGap.gt-sm="16px">
+                <mat-form-field class="fury-flex-form-field dashboard-date-field" color="warn" fxFlex.gt-sm>
+                  <mat-label><i class="fas fa-calendar-alt"></i>&nbsp; Fecha inicial</mat-label>
+                  <input matInput [matDatepicker]="pickerInicio" [(ngModel)]="fechainicio" required>
+                  <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerInicio></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field class="fury-flex-form-field dashboard-date-field" color="warn" fxFlex.gt-sm>
+                  <mat-label><i class="fas fa-calendar-alt"></i>&nbsp; Fecha final</mat-label>
+                  <input matInput [matDatepicker]="pickerFin" [(ngModel)]="fechaFin">
+                  <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerFin></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field *ngIf="!showFiltroGrupo" class="fury-flex-form-field" color="warn" fxFlex.gt-sm>
+                  <mat-label><i class="fas fa-users"></i>&nbsp; Grupo</mat-label>
+                  <mat-select [(value)]="grupo" id="Grupo" formControlName="idGrupo" class="form-control" (selectionChange)="obtenerUsuarios($event.value)">
+                    <mat-option *ngFor="let grupo of grupos" [(value)]="grupo.id">{{grupo.nombre}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field *ngIf="!showFiltroUsuario" class="fury-flex-form-field" color="warn" fxFlex.gt-sm>
+                  <mat-label><i class="fas fa-user"></i>&nbsp; Capturista</mat-label>
+                  <mat-select [(value)]="idCapturista" id="Usuario" formControlName="idUsuario" class="form-control">
+                    <mat-option *ngFor="let usuario of resultadoGrupo" [value]="usuario.id">{{usuario.nombre}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <button id="boton" type="button" class="btn btn-success dashboard-search-btn"
+                  (click)="obtenerFiltros()">
+                  <i class="fas fa-search"></i>&nbsp;&nbsp;Buscar
+                </button>&nbsp;
+              </div>
+              <dx-chart id="chart" [dataSource]="item_totals" palette="soft"
+                (onInitialized)="onInitializedFilters($event)">
+                <dxi-series valueField="Revisión" name="Revisión" color="#438AE3"></dxi-series>
+                <dxi-series valueField="Rechazo o Sin respuesta" name="Rechazado" color="#FB2121"></dxi-series>
+                <dxi-series valueField="Datos Correctos" name="Datos correctos" color="#3DA73D"></dxi-series>
+                <dxi-series valueField="Información Faltante" name="Información faltante" color="#F9C300"></dxi-series>
+                <dxo-common-series-settings argumentField="fecha" type="bar" [barPadding]="0.2">
+                </dxo-common-series-settings>
+                <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
+                </dxo-legend>
+                <dxo-export [enabled]="true"></dxo-export>
+                <!-- <dxo-title text="Oil Production">
+                  <dxo-subtitle text="(in millions tonnes)"></dxo-subtitle>
+                </dxo-title> -->
+              </dx-chart>
+            </div>
+          </fury-card-content>
+        </fury-card>
+      </div>
+    </fury-page-layout-content>
+  </fury-page-layout>
+
+  <fury-page-layout-content [@fadeInUp]>
+    <mat-card>
+      <div class="encabezado">
+        <section class="contenedor-elementos" fxLayout="column">
+          <article class="contenedor-elementos__articulo" fxFlex="grow" fxLayout="row" fxLayoutAlign="space-between center">
+            <div>
+              <span class="h3"><i class="fas fa-id-badge"></i>&nbsp;Comparación de Registros por Capturistas</span>
+            </div>
+            <div>
+              <app-boton-exportar-tabla [tipoBoton]="'grid'" [nombreArchivo]="'Capturistas'" [datos]="datosReporte"
+                [buttonDisabled]="isDisabled">
+              </app-boton-exportar-tabla>
+            </div>
+          </article>
+        </section>
+      </div>
+      <mat-divider></mat-divider><br>
+      <div class="data-grid">
+                <dx-data-grid id="gridContainer" [columnHidingEnabled]="true" [dataSource]="listaCapturista"
+                  [showBorders]="true" [rowAlternationEnabled]="true">
+                  <dxo-paging [pageSize]="7"></dxo-paging>
+                  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[7, 10, 50, 100]" [showInfo]="true">
+                  </dxo-pager>
+                  <dxo-group-panel [emptyPanelText]="mensajeAgrupar" [visible]="true"></dxo-group-panel>
+                  <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
+                  <dxo-header-filter [visible]="showHeaderFilter"></dxo-header-filter>
+                  <dxi-column dataField="nombre" caption="Nombre" alignment="center" >
+                    <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+                  </dxi-column>
+                  <dxi-column dataField="apellidoPaterno" caption="Apellido Paterno" alignment="center" >
+                    <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+                  </dxi-column>
+                  <dxi-column dataField="apellidoMaterno" caption="Apellido Materno" alignment="center" >
+                    <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+                  </dxi-column>
+                  <ng-container>
+                    <dxi-column dataField="nombreGrupo" caption="Grupo" alignment="center" >
+                      <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+                    </dxi-column>
+                  </ng-container>
+                  <dxi-column dataField="nombreSupervisor" caption="Supervisor" alignment="center" >
+                    <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+                  </dxi-column>
+                  <dxi-column dataField="totalLicencias" caption="Número Total de Capturas" alignment="center"
+                    [width]="200" [hidingPriority]="10" cellTemplate="capturasCell">
+                    <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+                  </dxi-column>
+                  <div *dxTemplate="let p of 'capturasCell'" class="colores" style="align-items: center;">
+                    <p class="rosa">{{p.data.totalLicencias}} Registros</p>
+                  </div>
+                  <!--No borrarlo, en espera de confirmación -->
+                  <!-- <dxo-summary>
+                    <dxi-total-item style="float: left;" column="totalLicencias" summaryType="sum"
+                      valueFormat="currency" [customizeText]="customizeText">
+                    </dxi-total-item>
+                  </dxo-summary>  -->
+                </dx-data-grid>
+      </div>
+    </mat-card>
+  </fury-page-layout-content>
+</fury-page>
+
+<dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [(visible)]="loadingVisible" [showIndicator]="true"
+	[showPane]="true" [shading]="true" [closeOnOutsideClick]="false" (onShown)="onShown()" [message]="loadingMessage">
+</dx-load-panel>

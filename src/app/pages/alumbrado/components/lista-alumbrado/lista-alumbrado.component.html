@@ -1,0 +1,115 @@
+<fury-page-layout mode="card">
+  <fury-page-layout-header>
+    <fury-breadcrumbs [@fadeInRight] current="Luminarias" link="{{titulo}}"></fury-breadcrumbs>
+  </fury-page-layout-header>
+
+  <fury-page-layout-content [@fadeInUp]>
+    <mat-card>
+      <div class="card-body">
+        <div class="container col-lg-12 col-xl-12 col-sm-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="encabezado">
+                <div class="row Modulo">
+                  <span class="h3"> <mat-icon style="color: #bfbfbf; font-size: 35px;">wb_incandescent</mat-icon>&nbsp;&nbsp;Luminarias</span>
+                  <app-boton-exportar-tabla [tipoBoton]="'grid'" [nombreArchivo]="'Locales_comerciales'"
+                    [datos]="datosReporte" [buttonDisabled]="isDisabled">
+                  </app-boton-exportar-tabla>
+                  <ng-container *ngxPermissionsOnly="[permisoAgregarLuminaria]">
+                    <button type="submit" class="agregar" (click)="agregarLuminaria()" style="margin-right: 15px;">
+                      <i class="fas fa-plus"></i>&nbsp;&nbsp;&nbsp;Agregar
+                    </button>
+                  </ng-container>
+                  <ng-container>
+                    <button type="submit" class="before" (click)="dashboard()" style="margin-right: 15px;">
+                      <img src="http://gtmtec.mx/Licenciamiento/licencias/assets/dist/img/dashboard.png" style="width:22px;height:22px;">&nbsp;&nbsp;&nbsp;Dashboard
+                    </button>
+                  </ng-container>
+                  <!-- <ng-container *ngxPermissionsOnly="[permisoVisualizarDetalleLuminaria]">
+                    <button type="submit" class="Another" (click)="detalleLocal()" style="margin-right: 15px;">
+                      <img src="http://gtmtec.mx/Licenciamiento/licencias/assets/dist/img/info.png" style="width:22px;height:22px;">&nbsp;&nbsp;&nbsp;Detalle
+                    </button>
+                  </ng-container> -->
+                </div>
+              </div>
+              <br> <mat-divider></mat-divider> <br>
+            </div>
+
+            <ng-container *ngxPermissionsOnly="[permisoConsultarLuminarias]">
+            <div class="data-grid">
+              <dx-data-grid id="gridContainer" [dataSource]="customers" [columnHidingEnabled]="true"
+                  [showBorders]="true" [rowAlternationEnabled]="true">
+                  <dxo-paging [pageSize]="5"></dxo-paging>
+                  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 50, 100]" [showInfo]="true">
+                  </dxo-pager>
+                  <dxo-group-panel [emptyPanelText]="mensajeAgrupar" [visible]="true"> </dxo-group-panel>
+                  <dxo-search-panel [(visible)]="showShared" [highlightCaseSensitive]="true"></dxo-search-panel>
+                  <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
+                  <dxo-header-filter [visible]="showHeaderFilter"> </dxo-header-filter>
+                <ng-container *ngxPermissionsOnly="[permisoActualizarLuminarias, permisoVisualizarDetalleLuminaria, permisoEliminarLuminaria]">
+                  <dxi-column caption="Acciones" cellTemplate="acciones" alignment="center" [width]="150">
+                  </dxi-column>
+                </ng-container>
+                <dxi-column dataField="CompanyName" caption="Imagen" alignment="center" cellTemplate="cellTemplate" [width]="190" alignment="center">
+                </dxi-column>
+                <dxi-column dataField="Phone" caption="Contrato" alignment="center" [width]="130">
+                  <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+                </dxi-column>
+                <dxi-column dataField="Fax" caption="Cliente" alignment="center" [width]="300">
+                  <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+                </dxi-column>
+                <dxi-column dataField="City" caption="Email" alignment="center">
+                  <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+                </dxi-column>
+                <dxi-column dataField="State" caption="Última Potencia" alignment="center">
+                  <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+                </dxi-column>
+                <dxi-column dataField="Address" [width]="190" caption="Último Estado" alignment="center" cellTemplate="color">
+                  <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+                </dxi-column>
+                <div *dxTemplate="let data of 'cellTemplate'" style="display: inline-block;">
+                  <img [src]="data.value" style="max-width: 120px; max-height: 400px;" />
+                </div>
+                <div *dxTemplate="let row of 'acciones'">
+                  <ng-container *ngxPermissionsOnly="[permisoActualizarLuminarias]">
+                    <dx-button valueExpr="id" id="actualizarButton" class="btnAcciones"
+                      (click)="EditarLocal(row.data.id)">
+                      <i class="fas fa-pen"></i>
+                    </dx-button>&nbsp;&nbsp;&nbsp;
+                  </ng-container>
+                  <ng-container *ngxPermissionsOnly="[permisoVisualizarDetalleLuminaria]">
+                    <dx-button valueExpr="id" id="actualizarButton" class="btnAccion"
+                      (click)="detalleLocal(row.data.id)">
+                      <i class="far fa-question-circle"></i>
+                    </dx-button>&nbsp;&nbsp;&nbsp;
+                  </ng-container>
+                  <ng-container *ngxPermissionsOnly="[permisoEliminarLuminaria]">
+                    <dx-button valueExpr="id" id="deleteButton" class="btnAccione" (click)="eliminarLocal(row.data)">
+                      <i class="fa fa-trash"></i>
+                    </dx-button>
+                  </ng-container>
+                  <!-- <ng-container *ngxPermissionsOnly="[permisoBajaLocal]">
+                    <dx-button valueExpr="id" id="bajaBoton" class="btnAccione" (click)="eliminarLocal(row.data)">
+                      <i class="fa fa-arrow-down"></i>
+                    </dx-button>
+                  </ng-container> -->
+                </div>
+                <div *dxTemplate="let p of 'color'" class="colores" style="align-items: center;">
+                  <p *ngIf="p.data.Address === 'Apagada'" class="rojo">{{p.data.Address}}</p>
+                  <p *ngIf="p.data.Addressone === 'Encendida'" class="verde">{{p.data.Addressone}}</p>
+                  <p *ngIf="p.data.nombreEstatus === 'Información Faltante'" class="naranja">{{p.data.nombreEstatus}}</p>
+                  <p *ngIf="p.data.nombreEstatus === 'Revisión'" class="azul">{{p.data.nombreEstatus}}</p>
+                </div>
+              </dx-data-grid>
+            </div>
+          </ng-container>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </fury-page-layout-content>
+</fury-page-layout>
+
+<!-- <dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [(visible)]="loadingVisible" [showIndicator]="true"
+    [showPane]="true" [shading]="true" [closeOnOutsideClick]="false" [message]="loadingMessage">
+</dx-load-panel> -->

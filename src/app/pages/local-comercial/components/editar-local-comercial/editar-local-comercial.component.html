@@ -1,0 +1,660 @@
+<fury-page-layout mode="card">
+  <fury-page-layout-header>
+    <fury-breadcrumbs [@fadeInRight] style="position: fixed;" current="{{titulo}}" link="{{title}}"></fury-breadcrumbs>
+  </fury-page-layout-header>
+
+  <fury-page-layout-content [@fadeInUp]>
+    <mat-card class="local-form-card">
+      <fury-card-header>
+        <fury-card-header-heading class="h3" style="color: #d5238b; font-size: 35px;">
+          <i class="fas fa-edit" style="color: #bfbfbf; font-size: 33px;"></i>&nbsp; {{titulo}}
+        </fury-card-header-heading>
+        <fury-card-header-subheading></fury-card-header-subheading>
+      </fury-card-header>
+      <fury-card-content fxLayout="column">
+        <form [formGroup]="localForm">
+          <div class="local-form-tabs" role="tablist">
+          <button type="button" class="local-form-tab local-form-tab--sapac" role="tab"
+            [class.is-active]="activeTab === 0" [attr.aria-selected]="activeTab === 0"
+            (click)="setActiveTab(0)">
+            <span class="local-form-tab__step">1</span>
+            <span class="local-form-tab__label">Sapac</span>
+          </button>
+          <button type="button" class="local-form-tab local-form-tab--catastral" role="tab"
+            [class.is-active]="activeTab === 1" [attr.aria-selected]="activeTab === 1"
+            (click)="setActiveTab(1)">
+            <span class="local-form-tab__step">2</span>
+            <span class="local-form-tab__label">Catastral</span>
+          </button>
+          <button type="button" class="local-form-tab local-form-tab--licenciamiento" role="tab"
+            [class.is-active]="activeTab === 2" [attr.aria-selected]="activeTab === 2"
+            (click)="setActiveTab(2)">
+            <span class="local-form-tab__step">3</span>
+            <span class="local-form-tab__label">Licenciamiento</span>
+          </button>
+          <button type="button" class="local-form-tab local-form-tab--proteccion" role="tab"
+            [class.is-active]="activeTab === 3" [attr.aria-selected]="activeTab === 3"
+            (click)="setActiveTab(3)">
+            <span class="local-form-tab__step">4</span>
+            <span class="local-form-tab__label">Protección Civil</span>
+          </button>
+        </div>
+
+        <div #tabPanels class="local-form-tab-panels" [@localFormTabPanel]="activeTab"
+          (@localFormTabPanel.done)="onTabPanelAnimationDone()"
+          [style.min-height.px]="activeTabPanelMinHeight || null">
+
+          <!-- TAB 0: Sapac -->
+          <div class="local-form-tab-panel" role="tabpanel" *ngIf="activeTab === 0">
+            <div class="local-tab-header local-tab-header--sapac">
+              <div class="local-tab-header__title"><u>Sapac</u></div>
+              <div class="local-tab-header__subtitle">Sistema de Agua Potable y Alcantarillado</div>
+            </div>
+            <div class="local-tab-header__section-label">Datos del Solicitante:</div>
+            <fury-card-content class="local-form-tab-content" fxLayout="column">
+              <div class="result" fxLayout="column">
+                <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-hashtag"></i>&nbsp;Número de Cuenta</mat-label>
+                    <input type="number" formControlName="NumeroCuenta" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-user"></i>&nbsp;Nombre</mat-label>
+                    <input formControlName="NombreSapac" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-id-card-alt"></i>&nbsp;Apellido Paterno</mat-label>
+                    <input formControlName="ApellidoPaternoSapac" class="form-control" matInput>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="result" fxLayout="column">
+                <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-id-card-alt"></i>&nbsp;Apellido Materno</mat-label>
+                    <input formControlName="ApellidoMaternoSapac" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-portrait"></i>&nbsp;RFC</mat-label>
+                    <input formControlName="RfcSapac" class="form-control" maxlength="13" matInput
+                      (keypress)="blockNonAlphanumericKey($event)" (input)="onRfcInput($event, 'RfcSapac')">
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label for="estado"><i class="fas fa-map-marked-alt"></i>&nbsp;Estado</mat-label>
+                    <mat-select id="estado" formControlName="IdEntidadFederativaSapac" class="form-control"
+                      (selectionChange)="onEstadoSapacChange()" #EstadoSapac>
+                      <mat-option *ngFor="let estado of estadosRegistros" [value]="estado.id">{{estado.nombre}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="result" fxLayout="column">
+                <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label for="municipio"><i class="fas fa-map-signs"></i>&nbsp;Municipio</mat-label>
+                    <mat-select id="municipio" formControlName="IdMunicipioSapac" class="form-control"
+                      (selectionChange)="onMunicipioSapacChange(MunicipioSapac.value)" #MunicipioSapac>
+                      <mat-option *ngFor="let municipio of municipiosRegistros" [value]="municipio.id">{{municipio.nombre}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label for="localidad"><i class="fas fa-flag"></i>&nbsp;Localidad</mat-label>
+                    <mat-select id="localidad" formControlName="IdLocalidadSapac" class="form-control"
+                      (selectionChange)="onLocalidadSapacChange(LocalidadSapac.value)" #LocalidadSapac>
+                      <mat-option *ngFor="let localidad of localidadesRegistros" [value]="localidad.id">{{localidad.nombre}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm *ngIf="esOtroLocalidadSapac()">
+                    <mat-label><i class="fas fa-flag"></i>&nbsp;Localidad</mat-label>
+                    <input formControlName="NombreLocalidadSapac" class="form-control" matInput (input)="onNombreLocalidadSapacChange()">
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-map-pin"></i>&nbsp;Colonia</mat-label>
+                    <mat-select id="colonia" formControlName="IdColoniaSapac" class="form-control"
+                      (selectionChange)="onColoniaSapacChange(ColoniaSapac.value)" #ColoniaSapac>
+                      <mat-option *ngFor="let colonia of coloniasRegistros" [value]="colonia.id">{{colonia.nombre}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm *ngIf="esOtroColoniaSapac()">
+                    <mat-label><i class="fas fa-map-pin"></i>&nbsp;Colonia</mat-label>
+                    <input formControlName="NombreColoniaSapac" class="form-control" matInput (input)="onNombreColoniaSapacChange()">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="result" fxLayout="column">
+                <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label for="calle"><i class="fas fa-road"></i>&nbsp;Calle</mat-label>
+                    <mat-select id="calle" formControlName="IdCalleSapac" class="form-control"
+                      (selectionChange)="onCalleSapacChange(CalleSapac.value)" #CalleSapac>
+                      <mat-option *ngFor="let calle of callesRegistros" [value]="calle.id">{{calle.nombre}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm *ngIf="esOtroCalleSapac()">
+                    <mat-label><i class="fas fa-road"></i>&nbsp;Calle</mat-label>
+                    <input formControlName="NombreCalleSapac" class="form-control" matInput (input)="onNombreCalleSapacChange()">
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-sort-numeric-down"></i>&nbsp;No. Interior</mat-label>
+                    <input (change)="onChangeEventNI($event)" formControlName="NoInteriorSapac" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-sort-numeric-up"></i>&nbsp;No. Exterior</mat-label>
+                    <input (change)="onChangeEventNE($event)" formControlName="NoExteriorSapac" class="form-control" matInput>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="result" fxLayout="column">
+                <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-hashtag"></i>&nbsp;Código Postal</mat-label>
+                    <input maxlength="5" inputmode="numeric" (keypress)="blockNonNumericKey($event)"
+                      (input)="onNumericInput($event, 'CPSapac', 5)" (change)="onChangeEventCP($event)"
+                      formControlName="CPSapac" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-map-marker-alt"></i>&nbsp;Sector</mat-label>
+                    <input type="number" formControlName="Sector" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-location-arrow"></i>&nbsp;Ruta</mat-label>
+                    <input type="number" formControlName="Ruta" class="form-control" matInput>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="result" fxLayout="column">
+                <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-envelope-open-text"></i>&nbsp;Folio:</mat-label>
+                    <input type="number" formControlName="Folio" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-briefcase"></i>&nbsp;Tipo de Servicio</mat-label>
+                    <mat-select id="IdTipoServicio" formControlName="IdTipoServicio" class="form-control">
+                      <mat-option *ngFor="let tipo of tipos" [value]="tipo.id">{{tipo.nombre}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-barcode"></i>&nbsp;Medidor</mat-label>
+                    <input type="number" formControlName="Medidor" class="form-control" matInput>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="local-tab-header__section-label local-tab-header__section-label--images">
+                <i class="fas fa-images"></i>&nbsp;Imágenes
+              </div>
+              <div class="local-form-uploaders">
+                <app-file-uploader-card
+                  *ngFor="let doc of documentosSapac"
+                  [label]="doc.titulo"
+                  [accept]="doc.accept"
+                  [uploadTitle]="doc.uploadTitle"
+                  [icon]="doc.icon"
+                  [badgeDefault]="doc.badgeDefault"
+                  [colorVariant]="doc.buttonClass"
+                  [remoteUrl]="documentosExistentes[doc.controlName]"
+                  (fileSelected)="onDocumentoSeleccionado(doc.controlName, $event)"
+                  (fileRejected)="onDocumentoRechazado(doc.controlName)"
+                  (remoteFileClick)="verDocumentoExistente(doc)">
+                </app-file-uploader-card>
+              </div>
+              <div class="local-form-tab-nav local-form-tab-nav--next-only">
+                <button mat-raised-button class="btn btn-primary" type="button" (click)="redirigir()">
+                  <span class="dx-button-text"><i class="fas fa-times"></i>&nbsp;&nbsp;Cancelar</span>
+                </button>
+                <button mat-raised-button class="btn btn-success" type="button" (click)="submit()" [disabled]="loading">
+                  <span class="loader" *ngIf="loadIndicatorVisible"></span>
+                  <span class="dx-button-text"><i class="fas fa-check"></i>&nbsp;&nbsp;Guardar</span>
+                </button>
+                <button type="button" class="local-form-tab-nav__btn local-form-tab-nav__btn--next" (click)="nextTab()">
+                  Siguiente <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+            </fury-card-content>
+          </div>
+
+          <!-- TAB 1: Catastral -->
+          <div class="local-form-tab-panel" role="tabpanel" *ngIf="activeTab === 1">
+            <div class="local-tab-header local-tab-header--catastral">
+              <div class="local-tab-header__title"><u>Catastral</u></div>
+              <div class="local-tab-header__subtitle">Predial de Cuernavaca</div>
+            </div>
+            <div class="local-tab-header__section-label">Domicilio de la Unidad Económica</div>
+            <fury-card-content class="local-form-tab-content" fxLayout="column">
+              <div class="result" fxLayout="column">
+                <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-lock"></i>&nbsp;Clave Catastral:</mat-label>
+                    <input type="number" formControlName="Clave" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-ruler"></i>&nbsp;Metros Cuadrados:</mat-label>
+                    <input type="number" formControlName="M2" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-mountain"></i>&nbsp;Superficie</mat-label>
+                    <input type="number" formControlName="Superficie" class="form-control" matInput>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="result">
+                <div fxLayoutGap.gt-sm="16px">
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-user-lock"></i>&nbsp;Uso de Suelo:</mat-label>
+                    <input formControlName="UsoSuelo" class="form-control" matInput>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="local-tab-header__section-label local-tab-header__section-label--images">
+                <i class="fas fa-images"></i>&nbsp;Imágenes
+              </div>
+              <div class="local-form-uploaders">
+                <app-file-uploader-card
+                  *ngFor="let doc of documentosCatastral"
+                  [label]="doc.titulo"
+                  [accept]="doc.accept"
+                  [uploadTitle]="doc.uploadTitle"
+                  [icon]="doc.icon"
+                  [badgeDefault]="doc.badgeDefault"
+                  [colorVariant]="doc.buttonClass"
+                  [remoteUrl]="documentosExistentes[doc.controlName]"
+                  (fileSelected)="onDocumentoSeleccionado(doc.controlName, $event)"
+                  (fileRejected)="onDocumentoRechazado(doc.controlName)"
+                  (remoteFileClick)="verDocumentoExistente(doc)">
+                </app-file-uploader-card>
+              </div>
+              <div class="local-form-tab-nav">
+                <button type="button" class="local-form-tab-nav__btn" (click)="prevTab()">
+                  <i class="fas fa-chevron-left"></i> Anterior
+                </button>
+                <button mat-raised-button class="btn btn-primary" type="button" (click)="redirigir()">
+                  <span class="dx-button-text"><i class="fas fa-times"></i>&nbsp;&nbsp;Cancelar</span>
+                </button>
+                <button mat-raised-button class="btn btn-success" type="button" (click)="submit()" [disabled]="loading">
+                  <span class="loader" *ngIf="loadIndicatorVisible"></span>
+                  <span class="dx-button-text"><i class="fas fa-check"></i>&nbsp;&nbsp;Guardar</span>
+                </button>
+                <button type="button" class="local-form-tab-nav__btn local-form-tab-nav__btn--next" (click)="nextTab()">
+                  Siguiente <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+            </fury-card-content>
+          </div>
+
+          <!-- TAB 2: Licenciamiento -->
+          <div class="local-form-tab-panel" role="tabpanel" *ngIf="activeTab === 2">
+            <div class="local-tab-header local-tab-header--licenciamiento">
+              <div class="local-tab-header__title"><u>Licenciamiento</u></div>
+              <div class="local-tab-header__subtitle">Licencias de Funcionamiento de Establecimientos Comerciales</div>
+            </div>
+            <div class="local-tab-header__section-label">Domicilio de la Unidad Económica</div>
+            <fury-card-content class="local-form-tab-content" fxLayout="column">
+              <div class="result" fxLayout="column">
+                <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-credit-card"></i>&nbsp;Registro Municipal:</mat-label>
+                    <input type="number" formControlName="Registro" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-address-card"></i>&nbsp;Nombre Comercial:</mat-label>
+                    <input formControlName="NombreComercial" class="form-control" matInput required>
+                    <mat-error *ngIf="localForm.get('NombreComercial')?.invalid && (localForm.get('NombreComercial')?.touched || submitted)">
+                      Campo requerido
+                    </mat-error>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-store"></i>&nbsp;Giro:</mat-label>
+                    <mat-select id="tipo" aria-placeholder="Giro" formControlName="IdGiro" class="form-control">
+                      <mat-option *ngFor="let giro of giros" [value]="giro.id">{{giro.nombre}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="result" fxLayout="column">
+                <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-id-card"></i>&nbsp;Licencias de Uso de Suelo:</mat-label>
+                    <input formControlName="LicenciaSuelo" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-user"></i>&nbsp;Nombre del Propietario:</mat-label>
+                    <input formControlName="Nombre" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-id-card-alt"></i>&nbsp;Apellido Paterno del Propietario:</mat-label>
+                    <input formControlName="ApellidoPaterno" class="form-control" matInput>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="result" fxLayout="column">
+                <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-id-card-alt"></i>&nbsp;Apellido Materno del Propietario:</mat-label>
+                    <input formControlName="ApellidoMaterno" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label for="tipoPersona"><i class="fas fa-user-cog"></i>&nbsp;Tipo Persona:</mat-label>
+                    <mat-select id="tipoPersona" formControlName="TipoPersona"
+                      (change)="validarTipoPersona(TipoPersona.value)"
+                      (selectionChange)="obtenerTipoPersonaSelect($event.value)" class="form-control" #TipoPersona>
+                      <mat-option *ngFor="let persona of tipoPersona" [value]="persona.valor">{{persona.tipo}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-credit-card"></i>&nbsp;RFC:</mat-label>
+                    <input formControlName="RFC" class="form-control" maxlength="13" matInput
+                      (keypress)="blockNonAlphanumericKey($event)" (input)="onRfcInput($event, 'RFC')">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="result" fxLayout="column" *ngIf="!fisica">
+                <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-file-invoice"></i>&nbsp;Razón Social:</mat-label>
+                    <input formControlName="RazonSocial" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-id-card-alt"></i>&nbsp;Representante Legal Nombre:</mat-label>
+                    <input formControlName="RepresentanteLegalNombre" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-id-card"></i>&nbsp;Representante Legal Apellido Paterno:</mat-label>
+                    <input formControlName="RepresentanteLegalPaterno" class="form-control" matInput>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="result" fxLayout="column" *ngIf="!fisica">
+                <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-id-card"></i>&nbsp;Representante Legal Apellido Materno:</mat-label>
+                    <input formControlName="RepresentanteLegalMaterno" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-phone"></i>&nbsp;Representante Legal Teléfono:</mat-label>
+                    <input maxlength="10" inputmode="numeric" (keypress)="blockNonNumericKey($event)"
+                      (input)="onNumericInput($event, 'RepresentanteLegalTelefono', 10)"
+                      formControlName="RepresentanteLegalTelefono" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-inbox"></i>&nbsp;Representante Legal Correo Electrónico:</mat-label>
+                    <input formControlName="RepresentanteLegalEmail" class="form-control" matInput>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="result" fxLayout="column">
+                <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-user"></i>&nbsp;Nombre del Contacto:</mat-label>
+                    <input formControlName="ContactoNombre" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-address-card"></i>&nbsp;Apellido Paterno del Contacto:</mat-label>
+                    <input formControlName="ContactoPaterno" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-address-card"></i>&nbsp;Apellido Materno del Contacto:</mat-label>
+                    <input formControlName="ContactoMaterno" class="form-control" matInput>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="result" fxLayout="column">
+                <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-phone"></i>&nbsp;Teléfono del Contacto:</mat-label>
+                    <input maxlength="10" inputmode="numeric" (keypress)="blockNonNumericKey($event)"
+                      (input)="onNumericInput($event, 'ContactoTelefono', 10)"
+                      formControlName="ContactoTelefono" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-envelope"></i>&nbsp;Correo Electrónico del Contacto:</mat-label>
+                    <input formControlName="ContactoEmail" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-calendar-week"></i>&nbsp;Fecha de Expedición:</mat-label>
+                    <input matInput [matDatepicker]="pickerExpedicion" formControlName="FechaExpedicion">
+                    <mat-datepicker-toggle matSuffix [for]="pickerExpedicion"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerExpedicion></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="result" fxLayout="column">
+                <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-calendar-week"></i>&nbsp;Fecha de Refrendo:</mat-label>
+                    <input matInput [matDatepicker]="pickerRefrendo" formControlName="FechaRefrendo">
+                    <mat-datepicker-toggle matSuffix [for]="pickerRefrendo"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerRefrendo></mat-datepicker>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-map-marked-alt"></i>&nbsp;Estado</mat-label>
+                    <mat-select id="estadoLicencia" formControlName="IdEntidadFederativaLicencia" class="form-control"
+                      (selectionChange)="onEstadoLicenciaChange()" #EstadoLicencia>
+                      <mat-option *ngFor="let estado of estadosRegistros" [value]="estado.id">{{estado.nombre}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-map-signs"></i>&nbsp;Municipio</mat-label>
+                    <mat-select id="municipioLicencia" formControlName="IdMunicipioLicencia" class="form-control"
+                      (selectionChange)="onMunicipioLicenciaChange(MunicipioLicencia.value)" #MunicipioLicencia>
+                      <mat-option *ngFor="let municipio of municipioRegistros" [value]="municipio.id">{{municipio.nombre}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="result" fxLayout="column">
+                <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-flag"></i>&nbsp;Localidad</mat-label>
+                    <mat-select id="localidadLicencia" formControlName="IdLocalidadLicencia" class="form-control"
+                      (selectionChange)="onLocalidadLicenciaChange(LocalidadLicencia.value)" #LocalidadLicencia>
+                      <mat-option *ngFor="let localidad of localidadeRegistros" [value]="localidad.id">{{localidad.nombre}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm *ngIf="esOtroLocalidadLicencia()">
+                    <mat-label><i class="fas fa-flag"></i>&nbsp;Localidad</mat-label>
+                    <input formControlName="NombreLocalidadLicencia" class="form-control" matInput (input)="onNombreLocalidadLicenciaChange()">
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-map-pin"></i>&nbsp;Colonia</mat-label>
+                    <mat-select id="coloniaLicencia" formControlName="IdColoniaLicencia" class="form-control"
+                      (selectionChange)="onColoniaLicenciaChange(ColoniaLicencia.value)" #ColoniaLicencia>
+                      <mat-option *ngFor="let colonia of coloniaRegistros" [value]="colonia.id">{{colonia.nombre}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm *ngIf="esOtroColoniaLicencia()">
+                    <mat-label><i class="fas fa-map-pin"></i>&nbsp;Colonia</mat-label>
+                    <input formControlName="NombreColoniaLicencia" class="form-control" matInput (input)="onNombreColoniaLicenciaChange()">
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-road"></i>&nbsp;Calle</mat-label>
+                    <mat-select id="calleLicencia" formControlName="IdCalleLicencia" class="form-control"
+                      (selectionChange)="onCalleLicenciaChange(CalleLicencia.value)" #CalleLicencia>
+                      <mat-option *ngFor="let calle of calleRegistros" [value]="calle.id">{{calle.nombre}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm *ngIf="esOtroCalleLicencia()">
+                    <mat-label><i class="fas fa-road"></i>&nbsp;Calle</mat-label>
+                    <input formControlName="NombreCalleLicencia" class="form-control" matInput (input)="onNombreCalleLicenciaChange()">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="result" fxLayout="column">
+                <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-sort-numeric-down"></i>&nbsp;No. Interior:</mat-label>
+                    <input id="nointerior" (change)="onChangeEventNILicencia($event)" formControlName="NoInteriorLicencia" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-sort-numeric-up"></i>&nbsp;No. Exterior:</mat-label>
+                    <input id="noexterior" (change)="onChangeEventNELicencia($event)" formControlName="NoExteriorLicencia" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-hashtag"></i>&nbsp;Código Postal:</mat-label>
+                    <input maxlength="5" inputmode="numeric" (keypress)="blockNonNumericKey($event)"
+                      (input)="onNumericInput($event, 'CPLicencia', 5)" id="cplicencia"
+                      (change)="onChangeEventCPLicencia($event)" formControlName="CPLicencia" class="form-control" matInput>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="result" fxLayout="column">
+                <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-car"></i>&nbsp;Cuenta con Estacionamiento:</mat-label>
+                    <mat-select id="Estacionamiento" formControlName="TieneEstacionamiento"
+                      (change)="validarEstacionamiento(Estacionamiento.value)" class="form-control" #Estacionamiento>
+                      <mat-option *ngFor="let est of estacionamiento" [value]="est.valor">{{est.tipo}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="local-tab-header__section-label local-tab-header__section-label--images">
+                <i class="fas fa-images"></i>&nbsp;Imágenes
+              </div>
+              <p class="local-form-required-hint">**Es obligatorio insertar la imagen de la fachada del establecimiento</p>
+              <div class="local-form-uploaders">
+                <app-file-uploader-card
+                  *ngFor="let doc of documentosLicenciamiento"
+                  [label]="doc.titulo"
+                  [accept]="doc.accept"
+                  [uploadTitle]="doc.uploadTitle"
+                  [icon]="doc.icon"
+                  [badgeDefault]="doc.badgeDefault"
+                  [colorVariant]="doc.buttonClass"
+                  [remoteUrl]="documentosExistentes[doc.controlName]"
+                  (fileSelected)="onDocumentoSeleccionado(doc.controlName, $event)"
+                  (fileRejected)="onDocumentoRechazado(doc.controlName)"
+                  (remoteFileClick)="verDocumentoExistente(doc)">
+                </app-file-uploader-card>
+              </div>
+              <p class="local-form-required-hint"
+                *ngIf="(submitted || localForm.get('FachadaEstablecimiento')?.touched) && localForm.get('FachadaEstablecimiento')?.invalid">
+                La fachada del establecimiento es obligatoria.
+              </p>
+              <div class="local-form-tab-nav">
+                <button type="button" class="local-form-tab-nav__btn" (click)="prevTab()">
+                  <i class="fas fa-chevron-left"></i> Anterior
+                </button>
+                <button mat-raised-button class="btn btn-primary" type="button" (click)="redirigir()">
+                  <span class="dx-button-text"><i class="fas fa-times"></i>&nbsp;&nbsp;Cancelar</span>
+                </button>
+                <button mat-raised-button class="btn btn-success" type="button" (click)="submit()" [disabled]="loading">
+                  <span class="loader" *ngIf="loadIndicatorVisible"></span>
+                  <span class="dx-button-text"><i class="fas fa-check"></i>&nbsp;&nbsp;Guardar</span>
+                </button>
+                <button type="button" class="local-form-tab-nav__btn local-form-tab-nav__btn--next" (click)="nextTab()">
+                  Siguiente <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+            </fury-card-content>
+          </div>
+
+          <!-- TAB 3: Protección Civil -->
+          <div class="local-form-tab-panel" role="tabpanel" *ngIf="activeTab === 3">
+            <div class="local-tab-header local-tab-header--proteccion">
+              <div class="local-tab-header__title"><u>Protección Civil</u></div>
+              <div class="local-tab-header__subtitle">Coordinación estatal de protección civil morelos</div>
+            </div>
+            <fury-card-content class="local-form-tab-content" fxLayout="column">
+              <div class="result" fxLayout="column">
+                <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-user-lock"></i>&nbsp;Nombre del Representante Legal:</mat-label>
+                    <input formControlName="NombreProteccionCivil" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-id-card-alt"></i>&nbsp;Apellido Paterno del Representante Legal:</mat-label>
+                    <input formControlName="ApellidoPaternoProteccionCivil" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-id-card-alt"></i>&nbsp;Apellido Materno del Representante Legal:</mat-label>
+                    <input formControlName="ApellidoMaternoProteccionCivil" class="form-control" matInput>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="result local-form-row-gap" fxLayout="column">
+                <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-phone"></i>&nbsp;Teléfono del Representante Legal:</mat-label>
+                    <input maxlength="10" inputmode="numeric" (keypress)="blockNonNumericKey($event)"
+                      (input)="onNumericInput($event, 'TelefonoProteccionCivil', 10)"
+                      formControlName="TelefonoProteccionCivil" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-folder"></i>&nbsp;Registro Acreditación:</mat-label>
+                    <input formControlName="RegistroAcreditacion" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-digital-tachograph"></i>&nbsp;¿Cuenta con Programa Civil?:</mat-label>
+                    <mat-select id="TienePrograma" formControlName="TienePrograma"
+                      (change)="validarPrograma(programa.value)" class="form-control" #programa>
+                      <mat-option *ngFor="let prog of tipoPrograma" [value]="prog.valor">{{prog.tipo}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="result local-form-row-gap" fxLayout="column">
+                <div class="local-proteccion-empresa-row" fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                  <div class="proteccion-empresa-field fury-flex-form-field" fxFlex.gt-sm>
+                    <span class="proteccion-empresa-title">
+                      <i class="fas fa-store"></i>&nbsp;¿La gestión la realiza una Empresa?
+                    </span>
+                    <div class="checkbox-wrapper-14">
+                      <input
+                        id="es-empresa-proteccion"
+                        type="checkbox"
+                        class="switch"
+                        [checked]="checkedBox()"
+                        (change)="changeValue($any($event.target).checked)">
+                      <label for="es-empresa-proteccion"></label>
+                    </div>
+                  </div>
+                  <mat-form-field *ngIf="localForm.get('EsEmpresa').value == true" @proteccionEmpresaFields class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-portrait"></i>&nbsp;Razón Social:</mat-label>
+                    <input formControlName="RazonSocialProteccionCivil" class="form-control" matInput>
+                  </mat-form-field>
+                  <mat-form-field *ngIf="localForm.get('EsEmpresa').value == true" @proteccionEmpresaFields class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                    <mat-label><i class="fas fa-user-lock"></i>&nbsp;RFC:</mat-label>
+                    <input formControlName="RfcProteccionCivil" class="form-control" maxlength="13" matInput
+                      (keypress)="blockNonAlphanumericKey($event)" (input)="onRfcInput($event, 'RfcProteccionCivil')">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="local-tab-header__section-label local-tab-header__section-label--images">
+                <i class="fas fa-images"></i>&nbsp;Imágenes
+              </div>
+              <div class="local-form-uploaders">
+                <app-file-uploader-card
+                  *ngFor="let doc of documentosProteccion"
+                  [label]="doc.titulo"
+                  [accept]="doc.accept"
+                  [uploadTitle]="doc.uploadTitle"
+                  [icon]="doc.icon"
+                  [badgeDefault]="doc.badgeDefault"
+                  [colorVariant]="doc.buttonClass"
+                  [remoteUrl]="documentosExistentes[doc.controlName]"
+                  (fileSelected)="onDocumentoSeleccionado(doc.controlName, $event)"
+                  (fileRejected)="onDocumentoRechazado(doc.controlName)"
+                  (remoteFileClick)="verDocumentoExistente(doc)">
+                </app-file-uploader-card>
+              </div>
+              <div class="local-form-tab-nav local-form-tab-nav--end">
+                <button type="button" class="local-form-tab-nav__btn" (click)="prevTab()">
+                  <i class="fas fa-chevron-left"></i> Anterior
+                </button>
+                <button mat-raised-button class="btn btn-primary" type="button" (click)="redirigir()">
+                  <span class="dx-button-text"><i class="fas fa-times"></i>&nbsp;&nbsp;Cancelar</span>
+                </button>
+                <button mat-raised-button class="btn btn-success" type="button" (click)="submit()" [disabled]="loading">
+                  <span class="loader" *ngIf="loadIndicatorVisible"></span>
+                  <span class="dx-button-text"><i class="fas fa-check"></i>&nbsp;&nbsp;Guardar</span>
+                </button>
+              </div>
+            </fury-card-content>
+          </div>
+
+          </div>
+        </form>
+      </fury-card-content>
+    </mat-card>
+  </fury-page-layout-content>
+</fury-page-layout>

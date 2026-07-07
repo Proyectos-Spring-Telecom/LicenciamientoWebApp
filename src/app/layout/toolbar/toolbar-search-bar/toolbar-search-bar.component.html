@@ -1,0 +1,58 @@
+<div class="search-wrapper" fxLayout="row" [ngClass]="{ 'focus': focused, 'has-input': input }" fxFlex
+     (furyClickOutside)="closeDropdown()">
+  <mat-icon class="search-icon">search</mat-icon>
+  <input type="search"
+         autocomplete="off"
+         spellcheck="false"
+         class="search-input"
+         [(ngModel)]="input"
+         margin-left="10px"
+         (focus)="openDropdown()"
+         placeholder="Buscar...">
+         
+
+  <div class="search-dropdown">
+    <div class="content results" *ngIf="input" fxLayout="column">
+      <div class="heading" fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon class="icon">search</mat-icon>
+        Search results for: {{ input }}
+      </div>
+      <div class="items">
+        <div class="item" matRipple [routerLink]="['/dashboard']">Tablero</div>
+          <div class="item" matRipple [routerLink]="['/dashboard/monitoreo/mapa']">Monitoreo</div>
+          <div class="item" matRipple [routerLink]="['/dashboard/local-comercial/lista-local-comercial']">Locales Comerciales</div>
+          <div class="item" matRipple [routerLink]="['/dashboard/usuario/lista-usuario']">Usuarios</div>
+          <div class="item" matRipple [routerLink]="['/dashboard/permiso/lista-permiso']">Permisos</div>
+          <div class="item" matRipple [routerLink]="['/dashboard/modulo/lista-modulo']">Módulos</div>
+      </div>
+    </div>
+
+    <div class="content recents" fxLayout="row" *ngIf="!input">
+      <div class="recently" fxLayout="column" fxFlex>
+        <div class="heading" fxLayout="row" fxLayoutAlign="start center">
+          <mat-icon class="icon">restore</mat-icon>
+          Recien Visitado
+        </div>
+        <div class="items">
+          <div class="item" matRipple *ngFor="let item of recentlyVisited" [routerLink]="item.routeOrFunction"
+               (click)="closeDropdown()">{{ item.name }}
+          </div>
+        </div>
+      </div>
+      <div class="frequently" fxLayout="column" fxFlex fxFlexOffset="16px">
+        <div class="heading" fxLayout="row" fxLayoutAlign="start center">
+          <mat-icon class="icon">youtube_searched_for</mat-icon>
+          Visita Frecuente
+        </div>
+        <div class="items">
+          <div class="item" matRipple [routerLink]="['/dashboard']">Tablero</div>
+          <div class="item" matRipple [routerLink]="['/dashboard/monitoreo/mapa']">Monitoreo</div>
+          <div class="item" matRipple [routerLink]="['/dashboard/local-comercial/lista-local-comercial']">Locales Comerciales</div>
+          <div class="item" matRipple [routerLink]="['/dashboard/usuario/lista-usuario']">Usuarios</div>
+          <div class="item" matRipple [routerLink]="['/dashboard/permiso/lista-permiso']">Permisos</div>
+          <div class="item" matRipple [routerLink]="['/dashboard/modulo/lista-modulo']">Módulos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

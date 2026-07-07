@@ -1,0 +1,170 @@
+@use 'sass:math';
+@import "var";
+
+.toolbar-user {
+  position: relative;
+  display: flex;
+  height: 100%;
+
+  .button {
+    min-width: $toolbar-button-width;
+    height: 100%;
+    border-radius: 0;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+
+    ::ng-deep .mat-button-wrapper {
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+
+    .button-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      min-height: $toolbar-height;
+    }
+
+    .avatar-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 48px;
+      height: 40px;
+      padding: 4px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      box-sizing: border-box;
+    }
+
+    .avatar {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center center;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      min-width: 0;
+      line-height: 1.25;
+    }
+
+    .name {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 180px;
+    }
+
+    .nombreRol {
+      margin: 2px 0 0;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.25;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .icon {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+      line-height: 20px;
+      transform: rotate(0);
+      transition: transform .25s cubic-bezier(.25,.8,.25,1);
+    }
+
+    &.open {
+      background: rgba(255, 255, 255, 0.12);
+
+      .icon {
+        transform: rotate(-180deg);
+      }
+    }
+  }
+
+  .dropdown {
+    position: absolute;
+    top: $toolbar-height;
+    right: 0;
+    width: 86%;
+    min-width: 200px;
+    right: 32px;
+    z-index: -1;
+    transform: translateY(-110%);
+    visibility: hidden;
+    transition: transform .4s cubic-bezier(.25,.8,.25,1), visibility .4s cubic-bezier(.25,.8,.25,1);
+    border-bottom-left-radius: $border-radius;
+    border-bottom-right-radius: $border-radius;
+    background: #1c252e;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #e6f1ff;
+
+    .list {
+      padding-top: math.div($spacing, 3);
+
+      .list-item {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        align-content: center;
+        height: 48px;
+        padding: 0 math.div($spacing, 1.5);
+        position: relative;
+        cursor: pointer;
+        outline: none;
+        color: #e6f1ff;
+
+        &:hover {
+          background: rgba(104, 19, 48, 0.35);
+        }
+
+        .list-item-icon {
+          padding-right: math.div($spacing, 1.5);
+          color: rgba(255, 255, 255, 0.67);
+        }
+      }
+
+      .list-iteme {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        align-content: center;
+        min-height: 48px;
+        padding: 8px math.div($spacing, 1.5);
+        position: relative;
+        outline: none;
+
+        .grupo {
+          font-size: 14px;
+          color: rgba(230, 241, 255, 0.85);
+          line-height: 1.4;
+        }
+      }
+
+      mat-divider {
+        border-top-color: rgba(255, 255, 255, 0.12);
+      }
+    }
+
+    &.open {
+      transform: translateY(0);
+      visibility: visible;
+    }
+  }
+}

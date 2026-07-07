@@ -1,0 +1,17 @@
+fury-coming-soon {
+  .card {
+    background: $card-bg-base;
+    color: $card-text;
+    border-color: $card-border-soft;
+  }
+
+  .card-footer {
+    background: $card-bg-base;
+    color: $card-text;
+    border-color: $card-border-soft;
+  }
+
+  .logo svg {
+    fill: $theme-text;
+  }
+}

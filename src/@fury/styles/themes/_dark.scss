@@ -1,0 +1,70 @@
+@import "./var-helpers";
+
+$layout-primary: #60a5fa;
+$layout-secondary: #681330;
+$layout-body-bg: #141a21;
+$layout-surface: #1c252e;
+$layout-surface-mid: #2b303b;
+$layout-surface-header: #2f343b;
+$layout-text: #e6f1ff;
+$layout-text-muted: rgba(230, 241, 255, 0.70);
+$layout-border-soft: rgba(255, 255, 255, 0.12);
+$layout-border-card-header: #454c56;
+$layout-accent-teal: #14b8aa;
+$layout-accent-blue: #1e40af;
+$layout-secondary-tint: rgba(104, 19, 48, 0.1);
+$layout-page-header-bg: #2b303b;
+
+$theme-background: $layout-body-bg;
+$theme-card: $layout-surface;
+$theme-app-bar: $layout-surface;
+$theme-status-bar: $layout-surface;
+$theme-text: $layout-text;
+$theme-secondary-text: $layout-text-muted;
+$theme-hint-text: $layout-text-muted;
+$theme-divider: $layout-border-soft;
+$theme-icon: $layout-text-muted;
+$theme-background-hover: $layout-secondary-tint;
+
+$card-bg-base: $layout-body-bg;
+$card-text: $layout-text;
+$card-text-muted: $layout-text-muted;
+$card-text-secondary: rgba(255, 255, 255, 0.67);
+$card-elevated-bg: $layout-surface;
+$card-surface-mid: $layout-surface-mid;
+$card-surface-header: $layout-surface-header;
+$card-border-soft: $layout-border-soft;
+$card-border: #2e3f50;
+$card-border-header: $layout-border-card-header;
+$card-border-header-soft: rgba(83, 91, 102, 0.7);
+$card-accent-teal: $layout-accent-teal;
+$card-accent-blue: $layout-accent-blue;
+$card-link-hover: $layout-primary;
+$card-inner-bg: mix(#000000, $card-bg-base, 4%);
+
+$sidenav-background: $layout-surface;
+$sidenav-color: rgba(255, 255, 255, 0.9);
+$sidenav-toolbar-background: $layout-surface;
+$sidenav-logo-color: $layout-text;
+
+$sidenav-item-color: $sidenav-color;
+$sidenav-item-color-hover: #ffffff;
+$sidenav-item-color-active: #ffffff;
+$sidenav-item-color-dropdown-open: $layout-secondary;
+$sidenav-item-background-hover: $layout-secondary;
+$sidenav-item-background-active: $layout-secondary;
+$sidenav-item-text-icon-color: $layout-text-muted;
+$sidenav-item-subheading-color: $layout-text-muted;
+$sidenav-item-dropdown-level1: $layout-secondary-tint;
+
+$toolbar-background: $layout-secondary;
+$toolbar-color: #ffffff;
+$toolbar-logo-color: #ffffff;
+$toolbar-button-separator-color: rgba(255, 255, 255, 0.14);
+$toolbar-search-background: rgba(255, 255, 255, 0.12);
+
+$footer-background: $layout-secondary;
+$footer-color: #ffffff;
+$footer-border-top: 1px solid rgba(255, 255, 255, 0.14);
+
+@import "./default";

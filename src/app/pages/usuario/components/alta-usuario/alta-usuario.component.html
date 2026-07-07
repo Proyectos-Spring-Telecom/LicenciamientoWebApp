@@ -1,0 +1,213 @@
+<fury-page-layout mode="card">
+  <fury-page-layout-header>
+    <fury-breadcrumbs [@fadeInRight] style="position: fixed;" current="{{titulo}}" link="{{title}}"></fury-breadcrumbs>
+  </fury-page-layout-header>
+
+  <fury-page-layout-content [@fadeInUp] style="margin-top: -2%;">
+    <form [formGroup]="usuarioForm" autocomplete="off">
+      <input type="text" tabindex="-1" autocomplete="username" class="usuario-form-autofill-trap" aria-hidden="true">
+      <input type="password" tabindex="-1" autocomplete="current-password" class="usuario-form-autofill-trap" aria-hidden="true">
+
+      <fury-card [fxFlex.gt-sm]="col2" class="advanced-forms route-animations-elements" [@fadeInUp] fxFlex="grow">
+        <fury-card-header>
+          <fury-card-header-heading style="color: #d5238b; font-size: 35px;">
+            <i class="fas fa-file-alt" style="color: #bfbfbf; font-size: 33px;"></i>&nbsp; {{titulo}}
+          </fury-card-header-heading>
+          <fury-card-header-subheading></fury-card-header-subheading>
+        </fury-card-header>
+
+        <fury-card-content fxLayout="column" style="margin-top: 1%;">
+          <div class="result" fxLayout="column">
+            <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+              <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                <mat-label><i class="fas fa-user"></i>&nbsp;Nombre</mat-label>
+                <input formControlName="nombre" class="form-control" matInput autocomplete="off">
+                <mat-error *ngIf="usuarioForm.get('nombre').invalid">Campo requerido</mat-error>
+              </mat-form-field>
+              <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                <mat-label><i class="fas fa-id-card-alt"></i>&nbsp;Apellido Paterno</mat-label>
+                <input formControlName="apellidoPaterno" class="form-control" matInput autocomplete="off">
+                <mat-error *ngIf="usuarioForm.get('apellidoPaterno').invalid">Campo requerido</mat-error>
+              </mat-form-field>
+              <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                <mat-label><i class="fas fa-id-card-alt"></i>&nbsp;Apellido Materno</mat-label>
+                <input formControlName="apellidoMaterno" class="form-control" matInput autocomplete="off">
+                <mat-error *ngIf="usuarioForm.get('apellidoMaterno').invalid">Campo requerido</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="result" fxLayout="column">
+            <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+              <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm *ngIf="!idUsuario">
+                <mat-label><i class="fas fa-envelope"></i>&nbsp;Correo Eléctronico</mat-label>
+                <input
+                  formControlName="correo"
+                  class="form-control"
+                  matInput
+                  autocomplete="off"
+                  readonly
+                  (focus)="clearAutofillOnFocus($event)">
+                <mat-error *ngIf="usuarioForm.get('correo').invalid">Campo requerido</mat-error>
+              </mat-form-field>
+
+              <div class="password-field-wrap" fxFlex.gt-sm *ngIf="!idUsuario">
+                <mat-form-field class="fury-flex-form-field password-field" color="accent">
+                  <mat-label><i class="fas fa-key"></i>&nbsp;Contraseña</mat-label>
+                  <input
+                    [type]="type"
+                    formControlName="password"
+                    class="form-control"
+                    matInput
+                    autocomplete="new-password"
+                    readonly
+                    (focus)="onPasswordFocus($event)"
+                    (input)="onPasswordInput()">
+                  <span *ngIf="type == 'password'" style="cursor: pointer; color: #ffffff"
+                    (click)="myFunctionPasswordCurrent()" matSuffix>
+                    <i class="fas fa-eye" style="color: #bfbfbf;"></i>
+                  </span>
+                  <span *ngIf="type == 'text'" style="cursor: pointer; color: #ffffff"
+                    (click)="myFunctionPasswordCurrent()" matSuffix>
+                    <i class="fas fa-eye-slash" style="color: #bfbfbf;"></i>
+                  </span>
+                  <mat-error *ngIf="usuarioForm.get('password').hasError('required')">Campo requerido</mat-error>
+                  <mat-error *ngIf="usuarioForm.get('password').value && usuarioForm.get('password').invalid && !usuarioForm.get('password').hasError('required')">
+                    La contraseña no cumple los requisitos de seguridad
+                  </mat-error>
+                </mat-form-field>
+
+                <div class="password-requirements" *ngIf="showPwdHints">
+                  <ng-container [ngSwitch]="currentPasswordRuleKey">
+                    <p *ngSwitchCase="'case'" class="pwd-hint pwd-hint--error" [@fadeIn]>
+                      <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                      <span>Al menos una mayúscula y minúsculas.</span>
+                    </p>
+                    <p *ngSwitchCase="'special'" class="pwd-hint pwd-hint--error" [@fadeIn]>
+                      <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                      <span>Un caracter no alfanumérico (ejemplo: #?!&amp;).</span>
+                    </p>
+                    <p *ngSwitchCase="'number'" class="pwd-hint pwd-hint--error" [@fadeIn]>
+                      <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                      <span>Un número.</span>
+                    </p>
+                    <p *ngSwitchCase="'length'" class="pwd-hint pwd-hint--error" [@fadeIn]>
+                      <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                      <span>La contraseña debe tener más de 6 caracteres y menos de 16.</span>
+                    </p>
+                    <p *ngSwitchCase="'ok'" class="pwd-hint pwd-hint--success" [@fadeIn]>
+                      <i class="fa fa-check-circle" aria-hidden="true"></i>
+                      <span>Contraseña válida y segura.</span>
+                    </p>
+                  </ng-container>
+                </div>
+              </div>
+
+              <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm *ngIf="!idUsuario">
+                <mat-label><i class="fas fa-key"></i>&nbsp;Confirmar Contraseña</mat-label>
+                <input
+                  [type]="types"
+                  matInput
+                  formControlName="confirmPassword"
+                  class="form-control"
+                  autocomplete="new-password"
+                  readonly
+                  (focus)="clearAutofillOnFocus($event)">
+                <span *ngIf="types == 'password'" style="cursor: pointer; color: #ffffff"
+                  (click)="myFunctionPasswordNew()" matSuffix>
+                  <i class="fas fa-eye" style="color: #bfbfbf;"></i>
+                </span>
+                <span *ngIf="types == 'text'" style="cursor: pointer; color: #ffffff"
+                  (click)="myFunctionPasswordNew()" matSuffix>
+                  <i class="fas fa-eye-slash" style="color: #bfbfbf;"></i>
+                </span>
+                <mat-error *ngIf="usuarioForm.get('confirmPassword').hasError('required')">Campo requerido</mat-error>
+                <mat-error *ngIf="confirmPasswordMismatch">Las contraseñas no coinciden</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="result" fxLayout="column">
+            <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+              <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                <mat-label><i class="fas fa-tasks"></i>&nbsp;Rol</mat-label>
+                <mat-select id="rol" formControlName="idRol" class="form-control">
+                  <mat-option *ngFor="let rol of roles" [value]="rol.id">{{rol.nombre}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="usuarioForm.get('idRol')">Campo requerido</mat-error>
+              </mat-form-field>
+              <mat-form-field class="fury-flex-form-field" color="accent" fxFlex.gt-sm>
+                <mat-label><i class="fas fa-cube"></i>&nbsp;Grupo</mat-label>
+                <mat-select id="Grupo" formControlName="idGrupo" class="form-control">
+                  <mat-option *ngFor="let grupo of grupos" [value]="grupo.id">{{grupo.nombre}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="usuarioForm.get('idGrupo')">Campo requerido</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </fury-card-content>
+
+        <mat-divider class="permisos-divider"></mat-divider>
+
+        <div class="permisos-section">
+          <h3 class="permisos-section__title">
+            <i class="fas fa-money-check"></i>&nbsp;Permisos
+          </h3>
+
+          <div class="permisos-grid">
+            <div class="permiso-card" *ngFor="let modulo of modulosPermisos; let modIdx = index">
+              <div class="permiso-card__header">
+                <span class="permiso-card__title">{{ modulo.nombre }}</span>
+                <div class="checkbox-wrapper-14">
+                  <input
+                    [id]="'mod-all-' + modIdx"
+                    type="checkbox"
+                    class="switch"
+                    [checked]="isModuloFullyChecked(modulo)"
+                    (change)="toggleModulo(modulo, $event)">
+                  <label [for]="'mod-all-' + modIdx" class="permiso-card__toggle-label">Todos</label>
+                </div>
+              </div>
+
+              <div class="permiso-card__body">
+                <div class="permiso-item" *ngFor="let permiso of modulo.permisos; let permIdx = index">
+                  <span class="permiso-item__label">{{ permiso.descripcion }}</span>
+                  <div class="checkbox-wrapper-14">
+                    <input
+                      [id]="'perm-' + modIdx + '-' + permIdx"
+                      type="checkbox"
+                      class="switch"
+                      [checked]="checkedBox(permiso)"
+                      (change)="changeValue($any($event.target).checked, permiso)">
+                    <label [for]="'perm-' + modIdx + '-' + permIdx"></label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <fury-card-content class="form-actions" fxLayout="column">
+          <div fxLayout="row">
+            <button mat-raised-button class="btn btn-success" [disabled]="usuarioForm.invalid || loading" id="guardarBoton" (click)="onSubmit()">
+              <span class="loader" *ngIf="true"></span>
+              <span class="dx-button-text">
+                <i class="fas fa-check" *ngIf="iconSuccess"></i>&nbsp;&nbsp;{{ buttonText }}
+              </span>
+            </button>&nbsp;&nbsp;&nbsp;
+            <button mat-raised-button class="btn btn-primary" (click)="redirigir()">
+              <span class="dx-button-text">
+                <i class="fas fa-times"></i>&nbsp;&nbsp;{{ buttonTextCancel }}
+              </span>
+            </button>
+          </div>
+        </fury-card-content>
+      </fury-card>
+      <mat-divider></mat-divider>
+    </form>
+  </fury-page-layout-content>
+</fury-page-layout>
+
+<dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [(visible)]="loadingVisible" [showIndicator]="true"
+  [showPane]="true" [shading]="true" [closeOnOutsideClick]="false" (onShown)="onShown()" [message]="loadingMessage">
+</dx-load-panel>

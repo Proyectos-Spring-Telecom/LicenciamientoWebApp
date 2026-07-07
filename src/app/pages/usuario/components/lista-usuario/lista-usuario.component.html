@@ -1,0 +1,65 @@
+<fury-page-layout mode="card">
+  <fury-page-layout-header>
+    <fury-breadcrumbs [@fadeInRight] style="position: fixed;" current="Usuarios" link="{{titulo}}"></fury-breadcrumbs>
+  </fury-page-layout-header>
+
+  <fury-page-layout-content [@fadeInUp]>
+    <mat-card>
+      <div class="encabezado">
+        <div class="row Modulo">
+          <span class="h3"> <i i class="fas fa-users" style="color: #bfbfbf;"></i>&nbsp;Usuarios</span>
+          <app-boton-exportar-tabla [tipoBoton]="'grid'" [nombreArchivo]="'Usuarios'" [datos]="datosReporte"
+            [buttonDisabled]="isDisabled">
+          </app-boton-exportar-tabla>
+          <button *ngxPermissionsOnly="[permisoAltaUsuarios]" type="submit" class="agregar" (click)="AgregarUsuario()"
+            style="margin-right: 15px;"><i class="fas fa-plus"></i>&nbsp;&nbsp;Agregar
+          </button>
+        </div>
+      </div>
+      <br> <mat-divider class="mt-3"></mat-divider> <br>
+      <div class="data-grid">
+        <dx-data-grid id="gridContainer" [columnHidingEnabled]="true" [dataSource]="listaUsuarios" [showBorders]="true" [rowAlternationEnabled]="true">
+          <dxo-paging [pageSize]="7"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[7, 10, 50, 100]" [showInfo]="true"></dxo-pager>
+          <dxo-group-panel [emptyPanelText]="mensajeAgrupar" [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
+          <dxo-header-filter [visible]="showHeaderFilter"></dxo-header-filter>
+          <ng-container *ngxPermissionsOnly="[permisoActualizarUsuarios, permisoEliminarUsuarios]">
+            <dxi-column caption="Acciones" cellTemplate="acciones" alignment="center" [width]="150">
+            </dxi-column>
+          </ng-container>
+          <dxi-column dataField="nombre" caption="Nombre" alignment="center">
+            <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+          </dxi-column>
+          <dxi-column dataField="apellidoPaterno" caption="Apellido Paterno" alignment="center">
+            <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+          </dxi-column>
+          <dxi-column dataField="apellidoMaterno" caption="Apellido Materno" alignment="center">
+            <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+          </dxi-column>
+          <dxi-column dataField="rol" caption="Rol" alignment="center">
+            <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+          </dxi-column>
+          <dxi-column dataField="grupo" caption="Grupo" alignment="center">
+            <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+          </dxi-column>
+          <dxi-column dataField="correo" caption="Correo Electrónico" alignment="center">
+            <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+          </dxi-column>
+          <div *dxTemplate="let row of 'acciones'">
+            <ng-container *ngxPermissionsOnly="[permisoActualizarUsuarios]">
+              <dx-button valueExpr="id" id="actualizarButton" class="btnAcciones"(click)="actualizarUsuario(row.data.id)">
+                <i class="fas fa-pen"></i>
+              </dx-button>&nbsp;&nbsp;
+            </ng-container>
+            <ng-container *ngxPermissionsOnly="[permisoEliminarUsuarios]">
+              <dx-button valueExpr="id" id="botonWhiteBlue" class="btnAccione" (click)="cambiarEstatus(row.data.id, 0)" matTooltip="Baja">
+                <i class="fa fa-arrow-down"></i>
+              </dx-button>
+            </ng-container>
+          </div>
+        </dx-data-grid>
+      </div>
+    </mat-card>
+  </fury-page-layout-content>
+</fury-page-layout>

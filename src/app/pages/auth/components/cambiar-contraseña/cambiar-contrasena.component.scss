@@ -1,0 +1,84 @@
+@import '../../styles/auth-layout';
+
+$sidebar-surface: #1c252e;
+$sidebar-surface-mid: #2b303b;
+$sidebar-surface-header: #2f343b;
+
+:host {
+  display: block;
+}
+
+:host ::ng-deep .ul-card {
+  background:
+    radial-gradient(900px 340px at 10% 10%, rgba($sidebar-surface-mid, 0.45), rgba($sidebar-surface-mid, 0) 55%),
+    radial-gradient(700px 300px at 90% 90%, rgba($brandWine, 0.16), rgba($brandWine, 0) 55%),
+    rgba($sidebar-surface, 0.98);
+}
+
+:host ::ng-deep .ul-card button.ul-submit:not(.ul-submit--secondary).mat-mdc-unelevated-button,
+:host ::ng-deep .ul-card button.ul-submit:not(.ul-submit--secondary).mat-mdc-raised-button,
+:host ::ng-deep .ul-card button.ul-submit:not(.ul-submit--secondary).mat-flat-button,
+:host ::ng-deep .ul-card button.ul-submit:not(.ul-submit--secondary) {
+  background: linear-gradient(135deg, rgba($brandBlue, 0.96), rgba($brandWine, 0.88)) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: #ffffff !important;
+
+  .mdc-button__label,
+  span,
+  mat-icon {
+    color: #ffffff !important;
+  }
+}
+
+:host ::ng-deep .ul-card button.ul-submit:not(.ul-submit--secondary):hover:not(:disabled) {
+  box-shadow:
+    0 16px 34px rgba($brandBlue, 0.22),
+    0 18px 44px rgba($brandWine, 0.18);
+}
+
+.ul-card--dialog:hover {
+  transform: none;
+  box-shadow:
+    0 36px 100px rgba(0, 0, 0, 0.42),
+    0 3px 14px rgba(0, 0, 0, 0.10);
+}
+
+:host ::ng-deep .ul-form {
+  gap: 4px;
+}
+
+:host ::ng-deep .ul-indication {
+  margin-top: -2px;
+  margin-bottom: 2px;
+}
+
+:host ::ng-deep .ul-btn-row {
+  margin-top: 8px;
+}
+
+:host ::ng-deep .ul-field {
+  margin-bottom: 6px;
+}
+
+:host ::ng-deep .ul-field:last-of-type {
+  margin-bottom: 0;
+}
+
+:host ::ng-deep .ul-field .mat-mdc-form-field,
+:host ::ng-deep .ul-field .mat-form-field {
+  width: 100%;
+}
+
+:host ::ng-deep .ul-field .mat-mdc-form-field-subscript-wrapper,
+:host ::ng-deep .ul-field .mat-form-field-subscript-wrapper {
+  position: static;
+  min-height: 18px;
+  padding: 0;
+  margin-top: 2px;
+}
+
+:host ::ng-deep .ul-field .mat-mdc-form-field-error,
+:host ::ng-deep .ul-field .mat-error {
+  display: block;
+  line-height: 1.2;
+}

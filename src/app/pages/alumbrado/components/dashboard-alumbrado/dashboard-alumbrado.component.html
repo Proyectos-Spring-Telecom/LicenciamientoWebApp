@@ -1,0 +1,211 @@
+<fury-page [fxLayoutGap]="gap" class="dashboard" fxLayout="column">
+
+  <div style="display:flex; flex-direction: row;" [@fadeInUp]>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <div class="example-card">
+      <div class="card gradient-blue card-150">
+        <div class="card-body">
+          <div class="sales-tile3">
+            <div class="sales-tile3-block">
+              <div class="sales-tile3-icon green"><i>
+                  <mat-icon style="font-size: 50px; width: 49px;">wb_incandescent</mat-icon>
+                </i>
+              </div>
+              <div class="sales-tile3-details">
+                <h3>&nbsp;&nbsp;&nbsp;Total Luminarias</h3>
+                <h3>&nbsp;&nbsp;&nbsp;&nbsp;Luminarias en campo</h3>
+                <h1 style="font-weight: 1000;">&nbsp;&nbsp;350</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    &nbsp;&nbsp;
+    <div class="example-card">
+      <div class="card gradient-green card-150">
+        <div class="card-body">
+          <div class="sales-tile3">
+            <div class="sales-tile3-block">
+              <div class="sales-tile3-icon green"><i>
+                  <mat-icon style="font-size: 50px; width: 49px;">check_circle</mat-icon>
+                </i>
+              </div>
+              <div class="sales-tile3-details">
+                <h3>&nbsp;&nbsp;&nbsp;Total de Ahorro</h3>
+                <h3>&nbsp;&nbsp;&nbsp;&nbsp;Se ahorra hasta un</h3>
+                <h1 style="font-weight: 1000;">&nbsp;&nbsp;56%</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    &nbsp;&nbsp;
+    <div class="example-card">
+      <div class="card gradient-yellow card-150">
+        <div class="card-body">
+          <div class="sales-tile3">
+            <div class="sales-tile3-block">
+              <div class="sales-tile3-icon green"><i>
+                  <mat-icon style="font-size: 50px; width: 49px;">flash_on</mat-icon>
+                </i>
+              </div>
+              <div class="sales-tile3-details">
+                <h3>&nbsp;&nbsp;&nbsp;Nodos en Funciomaniento</h3>
+                <!-- <h3>&nbsp;&nbsp;&nbsp;&nbsp;Se ahorra hasta un</h3> -->
+                <h3>&nbsp;&nbsp;&nbsp;&nbsp;Activos al día</h3>
+                <h1 style="font-weight: 1000;">&nbsp;&nbsp;384</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>&nbsp;&nbsp;&nbsp;
+  </div>
+
+  <fury-page-layout mode="card">
+    <fury-page-layout-content [fxLayoutGap]="gap" fxLayout="column">
+      <div [fxLayoutGap]="gap" fxFlex="noshrink" fxLayout="column" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="start stretch">
+        <fury-card [fxFlex.gt-sm]="col2" class="advanced-forms route-animations-elements" [@fadeInUp] fxFlex="grow">
+          <fury-card-header>
+            <fury-card-header-heading style="font-size: 28px; color: #d5238b">
+              <i class="fas fa-chart-pie" style="color: #bfbfbf;"></i>&nbsp;Ahorro Mensual
+            </fury-card-header-heading>
+          </fury-card-header>
+          <mat-divider></mat-divider>
+          <fury-card-content style="margin-top: 2%;" fxLayout="column">
+            <dx-pie-chart type="doughnut" title="" palette="Soft Pastel" [dataSource]="internetLanguages"
+              (onInitialized)="onInitializedCake($event)" [customizePoint]="customizePoint">
+              <dxo-loading-indicator [show]="true"></dxo-loading-indicator>
+              <dxo-export [enabled]="true"></dxo-export>
+              <dxo-legend horizontalAlignment="center" verticalAlignment="bottom"></dxo-legend>
+              <dxi-series argumentField="language" valueField="percent">
+                <dxo-small-values-grouping mode="topN" [topCount]="4"></dxo-small-values-grouping>
+                <dxo-label [visible]="true" format="fixedPoint" [customizeText]="etiquetaPie">
+                  <dxo-connector [visible]="true" [width]="1"></dxo-connector>
+                </dxo-label>
+              </dxi-series>
+            </dx-pie-chart>
+          </fury-card-content>
+        </fury-card>
+
+        <fury-card [fxFlex.gt-sm]="col2" class="basic-forms route-animations-elements" [@fadeInUp] fxFlex="grow">
+          <fury-card-header>
+            <fury-card-header-heading style="font-size: 28px; color: #d5238b">
+              <i class="fas fa-clock" style="color: #bfbfbf;"></i>&nbsp;Identificación Estado En Tiempo Real
+            </fury-card-header-heading>
+          </fury-card-header>
+          <mat-divider></mat-divider>
+          <fury-card-content style="margin-top: 2%;" fxLayout="column">
+            <div class="chart-demo">
+              <dx-chart id="chart" [dataSource]="countriesInfo" (onInitialized)="onInitializedMonths($event)"
+                palette="soft" title="">
+                <!-- <dxo-loading-indicator [show]="true"></dxo-loading-indicator> -->
+                <dxi-series valueField="oil" name="Encendidas" color="#0fc20f"></dxi-series>
+                <dxi-series valueField="gas" name="Apagadas" color="#e21309"></dxi-series>
+                <dxo-common-series-settings argumentField="state" type="bar" [ignoreEmptyPoints]="true">
+                </dxo-common-series-settings>
+                <dxo-legend verticalAlignment="top" horizontalAlignment="center" itemTextPosition="right">
+                </dxo-legend>
+                <dxo-export [enabled]="true"></dxo-export>
+              </dx-chart>
+            </div>
+          </fury-card-content>
+        </fury-card>
+      </div>
+    </fury-page-layout-content><br>
+
+    <fury-page-layout-content [fxLayoutGap]="gap" fxLayout="column">
+      <div [fxLayoutGap]="gap" fxFlex="noshrink" fxLayout="column" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="start stretch">
+
+        <fury-card [fxFlex.gt-sm]="col2" class="basic-forms route-animations-elements" [@fadeInUp] fxFlex="grow">
+          <!-- <fury-card-header>
+                        <fury-card-header-heading style="font-size: 28px; color: #646C9A;"><mat-icon style="margin-left: 0%; color: #646c9a; font-size: 30px; align-items: center;">power_settings_new</mat-icon>&nbsp;&nbsp;Identificación estado por
+                            periodos
+                        </fury-card-header-heading>
+                    </fury-card-header> -->
+          <!-- <div [@fadeInUp] fxLayout="row" style="align-items: center;">
+                        <mat-icon
+                            style="margin-left: 1%; margin-top: -1%; color: #646c9a; font-size: 37px; align-items: center;">
+                            power_settings_new</mat-icon>&nbsp;&nbsp;
+                        <h1 style="margin-left: 2%; color: #646c9a; align-items: center;">Identificación Estado Por
+                            Periodos</h1>
+                    </div> -->
+          <fury-card-header>
+            <fury-card-header-heading style="font-size: 34px; color: #d5238b">
+              <i class="fas fa-calendar-alt" style="color: #bfbfbf;"></i>&nbsp;Identificación Estado Por Periodos
+            </fury-card-header-heading>
+          </fury-card-header>
+          <mat-divider></mat-divider>
+          <fury-card-content fxLayout="column" style="margin-top: 1.5%;">
+            <div class="chart-demo">
+              <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                <div class="dx-field">
+                  <div class="dx-field-label">Fecha inicial</div>
+                  <div class="dx-field-value">
+                    <dx-date-box [(value)]="fechainicio" type="date"> </dx-date-box>
+                    <dx-validator>
+                      <dxi-validation-rule message="Campo requerido" type="required">
+                      </dxi-validation-rule>
+                    </dx-validator>
+                  </div>
+                </div>
+                <div class="dx-field">
+                  <div class="dx-field-label">Fecha final</div>
+                  <div class="dx-field-value">
+                    <dx-date-box [(value)]="fechaFin" type="date"> </dx-date-box>
+                  </div>
+                </div>
+                <mat-form-field *ngIf="!showFiltroGrupo" class="fury-flex-form-field" color="warn" fxFlex.gt-sm>
+                  <mat-label><i class=""></i>&nbsp; Selecciona una opción</mat-label>
+                  <mat-select [(value)]="grupo" id="Grupo" formControlName="idGrupo" class="form-control"
+                    (selectionChange)="obtenerUsuarios($event.value)">
+                    <mat-option *ngFor="let grupo of grupos" [(value)]="grupo.id">{{grupo.nombre}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <!-- <mat-form-field *ngIf="!showFiltroUsuario" class="fury-flex-form-field" color="warn" fxFlex.gt-sm>
+                  <mat-label><i class="fas fa-user"></i>&nbsp; Capturista</mat-label>
+                  <mat-select [(value)]="idCapturista" id="Usuario" formControlName="idUsuario" class="form-control">
+                    <mat-option *ngFor="let usuario of resultadoGrupo" [value]="usuario.id">{{usuario.nombre}}</mat-option>
+                  </mat-select>
+                </mat-form-field> -->
+                <button id="boton" type="submit" class="btn btn-success" style="margin-top: 7%;"
+                  (click)="obtenerFiltros()">
+                  <i class="fas fa-search"></i>&nbsp;&nbsp;Buscar
+                </button>&nbsp;
+              </div>
+              <dx-chart id="chart" [dataSource]="item_totals" palette="soft"
+                (onInitialized)="onInitializedFilters($event)">
+                <!-- <dxi-series valueField="Revisión" name="Revisión" color="#438AE3"></dxi-series> -->
+                <dxi-series valueField="Datos Correctos" name="Encendidas" color="#0fc20f"></dxi-series>
+                <dxi-series valueField="Rechazo o Sin respuesta" name="Apagadas" color="#e21309">
+                </dxi-series>
+                <!-- <dxi-series valueField="Información Faltante" name="Información faltante" color="#F9C300"></dxi-series> -->
+                <dxo-common-series-settings argumentField="fecha" type="bar" [barPadding]="0.2">
+                </dxo-common-series-settings>
+                <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
+                </dxo-legend>
+                <dxo-export [enabled]="true"></dxo-export>
+                <!-- <dxo-title text="Oil Production">
+                  <dxo-subtitle text="(in millions tonnes)"></dxo-subtitle>
+                </dxo-title> -->
+              </dx-chart>
+            </div>
+          </fury-card-content>
+        </fury-card>
+      </div>
+    </fury-page-layout-content>
+  </fury-page-layout>
+  
+  <div style="background-color: #fafafa; text-align: center; align-items: center;">
+    <div class="result" fxLayout="column row" style="text-align: center; align-items: center;">
+      <div fxLayout.gt-sm="row margin-left: 2px;" fxLayoutGap.gt-sm="16px" style="text-align: center; align-items: center;">
+        <button mat-raised-button class="mt-3 btn btn-secondary" (click)="regresar()">
+          <i class="fas fa-angle-left"></i>&nbsp;Volver
+        </button>&nbsp;
+      </div>
+    </div>
+  </div>
+</fury-page>
