@@ -303,6 +303,134 @@
   white-space: normal;
 }
 
+#detalle .detalle-estatus-wrap {
+  display: block;
+  margin-top: 10px;
+  white-space: normal;
+  font-size: inherit;
+  color: inherit;
+}
+
+#detalle .detalle-estatus-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  color: #ffffff;
+  box-shadow:
+    rgba(255, 255, 255, 0.2) 0 1px 2px inset,
+    0 4px 14px rgba(0, 0, 0, 0.22);
+}
+
+#detalle .detalle-estatus-badge__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: detalle-estatus-pulse 1.8s ease-in-out infinite;
+}
+
+#detalle .detalle-estatus-badge__label {
+  font-weight: 600;
+  opacity: 0.92;
+}
+
+#detalle .detalle-estatus-badge__text {
+  font-weight: 800;
+}
+
+#detalle .detalle-estatus-badge--correcto {
+  background: rgba(80, 220, 80, 0.42);
+  border: 1px solid rgba(140, 255, 140, 0.9);
+}
+
+#detalle .detalle-estatus-badge--correcto .detalle-estatus-badge__dot {
+  background: #7dff7d;
+}
+
+#detalle .detalle-estatus-badge--revision {
+  background: rgba(100, 170, 255, 0.42);
+  border: 1px solid rgba(160, 205, 255, 0.9);
+}
+
+#detalle .detalle-estatus-badge--revision .detalle-estatus-badge__dot {
+  background: #8ec5ff;
+}
+
+#detalle .detalle-estatus-badge--faltante {
+  background: rgba(255, 210, 60, 0.42);
+  border: 1px solid rgba(255, 235, 130, 0.9);
+}
+
+#detalle .detalle-estatus-badge--faltante .detalle-estatus-badge__dot {
+  background: #ffe066;
+}
+
+#detalle .detalle-estatus-badge--rechazo {
+  background: rgba(255, 90, 90, 0.42);
+  border: 1px solid rgba(255, 150, 150, 0.9);
+}
+
+#detalle .detalle-estatus-badge--rechazo .detalle-estatus-badge__dot {
+  background: #ff8a8a;
+}
+
+#detalle .detalle-estatus-badge--desconocido {
+  background: rgba(148, 163, 184, 0.42);
+  border: 1px solid rgba(203, 213, 225, 0.9);
+}
+
+#detalle .detalle-estatus-badge--desconocido .detalle-estatus-badge__dot {
+  background: #cbd5e1;
+}
+
+@keyframes detalle-estatus-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.15);
+    opacity: 0.75;
+  }
+}
+
+@media (max-width: 599px) {
+  #detalle .detalle-estatus-badge {
+    font-size: 13px;
+    padding: 9px 14px;
+    white-space: normal;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+#detalle .detalle-regresar-btn.btn.btn-primary {
+  background: rgba(255, 90, 90, 0.38);
+  border: 1px solid rgba(255, 150, 150, 0.85);
+  box-shadow:
+    rgba(255, 255, 255, 0.22) 0 1px 2px inset,
+    0 0 0 1px rgba(255, 90, 90, 0.28);
+  color: #ffffff;
+  border-radius: 5px;
+  transition: 0.3s ease all;
+}
+
+#detalle .detalle-regresar-btn.btn.btn-primary:hover {
+  background: rgba(255, 90, 90, 0.55);
+  border-color: rgba(255, 150, 150, 0.95);
+  color: #ffffff;
+}
+
 #detalle fury-card.detalle-info-card > fury-card-header {
   align-items: center;
   overflow: visible;
@@ -503,9 +631,11 @@
   max-width: 100%;
   padding: 0 14px;
   margin: 0;
-  border: none;
   box-sizing: border-box;
   font-size: 1rem;
+  border-radius: 5px;
+  transition: 0.3s ease all;
+  color: #ffffff;
 }
 
 #detalle .detalle-acciones__inner .mt-3.btn.btn-warning,
@@ -805,56 +935,73 @@
   font-size: 0.95rem;
 }
 
-.mt-3.btn.btn-warning {
-  background-color: #f9c300;
-  width: auto;
-  color: white;
-}
-.mt-3.btn.btn-warning:hover {
-  background-color: #bd8e02;
-  color: white;
+#detalle .detalle-acciones__inner .mt-3.btn.btn-warning {
+  background: rgba(249, 195, 0, 0.38);
+  border: 1px solid rgba(255, 220, 100, 0.85);
+  box-shadow:
+    rgba(255, 255, 255, 0.22) 0 1px 2px inset,
+    0 0 0 1px rgba(249, 195, 0, 0.28);
 }
 
-.mt-3.btn.btn-primary {
-  background-color: #438AE3;
-  width: auto;
-  color: white;
-}
-.mt-3.btn.btn-primary:hover {
-  background-color: #0f396d;
-  color: white;
+#detalle .detalle-acciones__inner .mt-3.btn.btn-warning:hover {
+  background: rgba(249, 195, 0, 0.55);
+  border-color: rgba(255, 220, 100, 0.95);
+  color: #ffffff;
 }
 
-.mt-3.btn.btn-danger {
-  background-color: #eb1919;
-  width: auto;
-  color: white;
+#detalle .detalle-acciones__inner .mt-3.btn.btn-primary {
+  background: rgba(67, 138, 227, 0.38);
+  border: 1px solid rgba(140, 185, 245, 0.85);
+  box-shadow:
+    rgba(255, 255, 255, 0.22) 0 1px 2px inset,
+    0 0 0 1px rgba(67, 138, 227, 0.28);
 }
 
-.mt-3.btn.btn-danger:hover {
-  background-color: #74070a;
-  color: white; 
+#detalle .detalle-acciones__inner .mt-3.btn.btn-primary:hover {
+  background: rgba(67, 138, 227, 0.55);
+  border-color: rgba(140, 185, 245, 0.95);
+  color: #ffffff;
 }
 
-.mt-3.btn.btn-sucess {
-  background-color: #52bb56;
-  width: auto;
-  color: white;
+#detalle .detalle-acciones__inner .mt-3.btn.btn-danger {
+  background: rgba(235, 25, 25, 0.38);
+  border: 1px solid rgba(255, 120, 120, 0.85);
+  box-shadow:
+    rgba(255, 255, 255, 0.22) 0 1px 2px inset,
+    0 0 0 1px rgba(235, 25, 25, 0.28);
 }
 
-.mt-3.btn.btn-sucess:hover {
-  background-color: #008300;
-  color: white;
+#detalle .detalle-acciones__inner .mt-3.btn.btn-danger:hover {
+  background: rgba(235, 25, 25, 0.55);
+  border-color: rgba(255, 120, 120, 0.95);
+  color: #ffffff;
 }
 
-.mt-3.btn.btn-secondary {
-  background-color: #606060;
-  width: auto;
+#detalle .detalle-acciones__inner .mt-3.btn.btn-sucess {
+  background: rgba(82, 187, 86, 0.38);
+  border: 1px solid rgba(140, 230, 145, 0.85);
+  box-shadow:
+    rgba(255, 255, 255, 0.22) 0 1px 2px inset,
+    0 0 0 1px rgba(82, 187, 86, 0.28);
+}
+
+#detalle .detalle-acciones__inner .mt-3.btn.btn-sucess:hover {
+  background: rgba(82, 187, 86, 0.55);
+  border-color: rgba(140, 230, 145, 0.95);
+  color: #ffffff;
+}
+
+#detalle .detalle-acciones__inner .mt-3.btn.btn-secondary {
+  background: rgba(96, 96, 96, 0.38);
+  border: 1px solid rgba(180, 180, 180, 0.85);
+  box-shadow:
+    rgba(255, 255, 255, 0.22) 0 1px 2px inset,
+    0 0 0 1px rgba(96, 96, 96, 0.28);
   font-weight: normal;
-  color: white;
 }
 
-.mt-3.btn.btn-secondary:hover {
-  background-color: #3f3d3d;
-  color: white;
+#detalle .detalle-acciones__inner .mt-3.btn.btn-secondary:hover {
+  background: rgba(96, 96, 96, 0.55);
+  border-color: rgba(180, 180, 180, 0.95);
+  color: #ffffff;
 }

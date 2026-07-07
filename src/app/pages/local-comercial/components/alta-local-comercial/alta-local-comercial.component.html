@@ -528,7 +528,7 @@
                 <div class="local-tab-header__section-label local-tab-header__section-label--images">
                   <i class="fas fa-images"></i>&nbsp;Imágenes
                 </div>
-                <p class="local-form-required-hint">**Es obligatorio insertar la imagen de la fachada del
+                <p class="local-form-required-hint" *ngIf="(submitted || localForm.get('FachadaEstablecimiento')?.touched) && localForm.get('FachadaEstablecimiento')?.invalid">**Es obligatorio insertar la imagen de la fachada del
                   establecimiento</p>
                 <div class="local-form-uploaders">
                   <app-file-uploader-card *ngFor="let doc of documentosLicenciamiento" [label]="doc.titulo"
@@ -540,10 +540,10 @@
                     (remoteFileClick)="verDocumentoExistente(doc)">
                   </app-file-uploader-card>
                 </div>
-                <p class="local-form-required-hint"
+                <!-- <p class="local-form-required-hint"
                   *ngIf="(submitted || localForm.get('FachadaEstablecimiento')?.touched) && localForm.get('FachadaEstablecimiento')?.invalid">
                   La fachada del establecimiento es obligatoria.
-                </p>
+                </p> -->
                 <div class="local-form-tab-nav">
                   <button type="button" class="local-form-tab-nav__btn" (click)="prevTab()">
                     <i class="fas fa-chevron-left"></i> Anterior

@@ -16,6 +16,18 @@
               Sin Nombre Comercial
             </span>
           </fury-card-header-heading>
+          <fury-card-header-subheading class="detalle-estatus-wrap">
+            <div
+              class="detalle-estatus-badge"
+              [ngClass]="estatusBadgeClass"
+              role="status"
+              [attr.aria-label]="'Estatus del local: ' + estatusLabel">
+              <span class="detalle-estatus-badge__dot" aria-hidden="true"></span>
+              <i class="fas" [ngClass]="estatusIconClass" aria-hidden="true"></i>
+              <span class="detalle-estatus-badge__label">Estatus:</span>
+              <span class="detalle-estatus-badge__text">{{ estatusLabel }}</span>
+            </div>
+          </fury-card-header-subheading>
           <fury-card-header-actions>
             <button mat-raised-button class="btn btn-primary detalle-regresar-btn" type="button" (click)="regresar()">
               <span class="dx-button-text"><i class="fas fa-arrow-left"></i>&nbsp;&nbsp;Regresar</span>

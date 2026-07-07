@@ -38,9 +38,9 @@ body.swal2-shown .swal2-container {
 }
 
 .btn-success:disabled{
-  background-color: #8fd392 !important;
-  border-color: #28a745 !important;
-  color: white !important;
+  background: rgba(80, 220, 80, 0.22) !important;
+  border-color: rgba(140, 255, 140, 0.55) !important;
+  color: rgba(255, 255, 255, 0.75) !important;
   cursor: no-drop;
 }
 
