@@ -81,8 +81,6 @@ export class AltaUsuarioComponent implements OnInit {
       	params => {
 			this.idUsuario = params['idUsuario'];
 			if (this.idUsuario) {
-				this.loadingVisible = true;
-				this.loadingMessage = 'Cargando...';
 				this.titulo = 'Editar Usuario';
 				this.obtenerUsuario(this.idUsuario);
 			}
@@ -92,21 +90,22 @@ export class AltaUsuarioComponent implements OnInit {
 		this.obtenerGrupo();
   	}
 
-	onShown() {
-		setTimeout(() => {
-			this.loadingVisible = false;
-		}, 2000);
-  	}
-
   	ngOnDestroy(): void {
 		this.param.unsubscribe();
 	}
 
 	obtenerUsuario(idUsuario: string) {
 		this.loadingMessage = 'Cargando...';
+		this.loadingVisible = true;
 		this.usuarioService.obtenerUsuario(idUsuario).subscribe(
-			res => this.displayUsuario(res),
-			err => Swal.fire('Ocurrió un error al intentar obtener el usuario', 'Error en la Operación')
+			res => {
+				this.displayUsuario(res);
+				this.loadingVisible = false;
+			},
+			err => {
+				this.loadingVisible = false;
+				Swal.fire('Ocurrió un error al intentar obtener el usuario', 'Error en la Operación');
+			}
 		);
 	}
 
@@ -397,16 +396,16 @@ export class AltaUsuarioComponent implements OnInit {
 			this.loadIndicatorVisible = false;
 			this.buttonText = 'Guardar';
 			this.iconSuccess = true;
-				Swal.fire({
-					backdrop: ` rgba(19,41,61) `,
-					title: '¡Ops!',
-					text: `¡Error al agregar el usuario!`,
-					icon: 'warning',
-					confirmButtonColor: '#C70039',
-					confirmButtonText: 'Confirmar',
-				  });
-				this.loading = false;
-			}, () => this.onSubmitComplete());
+			this.loading = false;
+			Swal.fire({
+				backdrop: ` rgba(19,41,61) `,
+				title: '¡Ops!',
+				text: `¡Error al agregar el usuario!`,
+				icon: 'warning',
+				confirmButtonColor: '#C70039',
+				confirmButtonText: 'Confirmar',
+			});
+		});
 	}
 
 	actualizarUsuario() {
@@ -426,6 +425,7 @@ export class AltaUsuarioComponent implements OnInit {
 				this.loadIndicatorVisible = false;
 				this.buttonText = 'Guardar';
 				this.iconSuccess = true;
+				this.loading = false;
 				Swal.fire({
 					backdrop: ` rgba(19,41,61) `,
 					title: '¡Ops!',
@@ -433,14 +433,8 @@ export class AltaUsuarioComponent implements OnInit {
 					icon: 'warning',
 					confirmButtonColor: '#C70039',
 					confirmButtonText: 'Confirmar',
-				  });
-				this.loading = false;
-			},
-			() => this.onSubmitComplete());
-	}
-
-	onSubmitComplete() {
-		this.loading = false;
+				});
+			});
 	}
 
 	changeValue(checked, permiso) {

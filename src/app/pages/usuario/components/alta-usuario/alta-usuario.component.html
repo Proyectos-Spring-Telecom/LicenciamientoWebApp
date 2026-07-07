@@ -190,7 +190,7 @@
         <fury-card-content class="form-actions" fxLayout="column">
           <div fxLayout="row">
             <button mat-raised-button class="btn btn-success" [disabled]="usuarioForm.invalid || loading" id="guardarBoton" (click)="onSubmit()">
-              <span class="loader" *ngIf="true"></span>
+              <span class="loader" *ngIf="loadIndicatorVisible"></span>
               <span class="dx-button-text">
                 <i class="fas fa-check" *ngIf="iconSuccess"></i>&nbsp;&nbsp;{{ buttonText }}
               </span>
@@ -209,5 +209,5 @@
 </fury-page-layout>
 
 <dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [(visible)]="loadingVisible" [showIndicator]="true"
-  [showPane]="true" [shading]="true" [closeOnOutsideClick]="false" (onShown)="onShown()" [message]="loadingMessage">
+  [showPane]="true" [shading]="true" [closeOnOutsideClick]="false" [message]="loadingMessage">
 </dx-load-panel>

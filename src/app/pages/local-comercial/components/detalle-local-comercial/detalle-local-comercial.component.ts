@@ -359,6 +359,74 @@ export class DetalleLocalComercialComponent implements OnInit {
     };
   }
 
+  get estatusLabel(): string {
+    const nombre = this.informacion?.nombreEstatus?.trim();
+    if (nombre) {
+      return nombre;
+    }
+    return this.getEstatusLabelById(this.informacion?.estatus) ?? 'Sin estatus';
+  }
+
+  get estatusBadgeClass(): string {
+    const nombre = (this.informacion?.nombreEstatus || '').toLowerCase();
+
+    if (nombre.includes('correcto')) {
+      return 'detalle-estatus-badge--correcto';
+    }
+    if (nombre.includes('revisión') || nombre.includes('revision')) {
+      return 'detalle-estatus-badge--revision';
+    }
+    if (nombre.includes('faltante')) {
+      return 'detalle-estatus-badge--faltante';
+    }
+    if (nombre.includes('rechazo')) {
+      return 'detalle-estatus-badge--rechazo';
+    }
+
+    switch (this.informacion?.estatus) {
+      case 3:
+        return 'detalle-estatus-badge--correcto';
+      case 4:
+        return 'detalle-estatus-badge--revision';
+      case 1:
+        return 'detalle-estatus-badge--faltante';
+      case 2:
+        return 'detalle-estatus-badge--rechazo';
+      default:
+        return 'detalle-estatus-badge--desconocido';
+    }
+  }
+
+  get estatusIconClass(): string {
+    switch (this.estatusBadgeClass) {
+      case 'detalle-estatus-badge--correcto':
+        return 'fa-check-circle';
+      case 'detalle-estatus-badge--revision':
+        return 'fa-file-signature';
+      case 'detalle-estatus-badge--faltante':
+        return 'fa-folder-open';
+      case 'detalle-estatus-badge--rechazo':
+        return 'fa-ban';
+      default:
+        return 'fa-question-circle';
+    }
+  }
+
+  private getEstatusLabelById(estatus?: number): string | null {
+    switch (estatus) {
+      case 1:
+        return 'Información Faltante';
+      case 2:
+        return 'Rechazo o Sin respuesta';
+      case 3:
+        return 'Datos Correctos';
+      case 4:
+        return 'Revisión';
+      default:
+        return null;
+    }
+  }
+
   private buildInfoWindowContent(imgUrl: string): string {
     const urlImagen = this.escapeHtml(imgUrl.replace(/\\/g, '/'));
     const defaultImg = this.escapeHtml(this.defaultImage);
