@@ -198,6 +198,17 @@
   cursor: pointer;
   color: inherit;
   text-decoration: none;
+  outline: none;
+  border: none;
+  box-shadow: none;
+
+  &:focus,
+  &:focus-visible,
+  &:active {
+    outline: none;
+    border: none;
+    box-shadow: none;
+  }
 
   mat-icon {
     flex-shrink: 0;
@@ -215,6 +226,9 @@
   &.active-link {
     background-color: #681330;
     color: #ffffff;
+    outline: none;
+    border: none;
+    box-shadow: none;
 
     .customSpan {
       color: #ffffff;
@@ -222,6 +236,14 @@
 
     &:hover {
       background-color: #681330;
+    }
+
+    &:focus,
+    &:focus-visible,
+    &:active {
+      outline: none;
+      border: none;
+      box-shadow: none;
     }
   }
 }

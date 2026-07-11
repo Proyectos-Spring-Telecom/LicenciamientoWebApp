@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import Swal from 'sweetalert2';
 import { AuthService } from './../../../auth/services/auth.service';
 import { User } from './../../../../_entities/User';
@@ -23,7 +23,7 @@ import { Local } from 'protractor/built/driverProviders';
   animations: [fadeInRightAnimation, fadeInUpAnimation, fadeOutAnimation, scaleInAnimation, routeAnimations]
 })
 
-export class ListaLocalComercialComponent implements OnInit {
+export class ListaLocalComercialComponent implements OnInit, AfterViewInit {
   @ViewChild('targetGroup', { static: false }) validationGroup: DxValidationGroupComponent;
   public listaLocales: LocalComercial[];
   public datosReporte = [];
@@ -125,8 +125,20 @@ export class ListaLocalComercialComponent implements OnInit {
   	}
 
 	ngOnInit() {
-		this.obtenerListaLocalComercial();
+		this.inicializarRangoFechas();
 		this.obtenerPermisos();
+	}
+
+	ngAfterViewInit() {
+		setTimeout(() => {
+			this.obtenerListaLocalesComerciales(this.fechaInicio, this.fechaFinal);
+		});
+	}
+
+	private inicializarRangoFechas(): void {
+		const hoy = new Date();
+		this.fechaInicio = new Date(hoy.getFullYear(), hoy.getMonth(), 1, 0, 0, 0);
+		this.fechaFinal = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate(), 23, 59, 59);
 	}
 	
 /*-------------------------------
@@ -153,7 +165,7 @@ export class ListaLocalComercialComponent implements OnInit {
 	Obtención de Información en grids
 ------------------------------------*/
     obtenerListaLocalesComerciales(fechaInicio, fechaFinal) {
-	 	if (this.validationGroup.instance.validate().isValid) {
+	 	if (this.validationGroup?.instance?.validate().isValid) {
 			this.loadingMessage = 'Cargando...'
 	 		this.loadingVisible = true;
 			this.showTable = false;

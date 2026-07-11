@@ -300,11 +300,11 @@ transition: all 0.2s ease;
 }
 
 
-.flexContainer { 
+/* Utilidad de layout (mapas / info windows) — no usar en el sidebar */
+.iw-flex-container {
   width: 255px;
-  /* margin: 50px 50px; */
   display: flex;
-} 
+}
 
 .left {
   flex-basis : 100%;

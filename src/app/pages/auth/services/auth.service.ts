@@ -128,7 +128,7 @@ export class AuthService extends BaseService{
 	}
 
 	public authenticate(body): Observable<User> {
-		return this.http.post<User>('http://www.gtmtec.mx/licenciamiento/licenciasapi/api/Authentication/Token', body)
+		return this.http.post<User>('https://springtelecom.mx/licenciamiento/licenciasapi/api/Authentication/Token', body)
 			//.pipe(catchError(this.handleError));
 	}
 }

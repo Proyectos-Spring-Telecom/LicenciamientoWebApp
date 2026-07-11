@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
   googleMapsApiKey: '',
-  API_SECURITY:'http://www.gtmtec.mx/licenciamiento/licenciasapi',
+  API_SECURITY:'https://springtelecom.mx/licenciamiento/licenciasapi',
   backend: '', // Put your backend here
 };
